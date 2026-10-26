@@ -1,0 +1,7 @@
+# ETL del tablero SCR de Acuacar (Python 3.11+)
+pandas>=2.0
+numpy>=1.24
+psycopg2-binary>=2.9
+shapely>=2.0
+python-dotenv>=1.0
+# openpyxl solo hace falta para regenerar config/tarifas.json desde el Excel (ver README)

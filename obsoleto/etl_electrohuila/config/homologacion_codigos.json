@@ -1,0 +1,2473 @@
+{
+ "origen": "Diccionario_codigos_electrohuila.xlsx",
+ "campos": {
+  "observacion_suspension": {
+   "UC": {
+    "significado": "USUARIO YA CANCELO",
+    "resultado": "PAGÓ",
+    "decide_solo": true,
+    "actas_diccionario": 37024,
+    "operacion": "",
+    "brigada": "CUALQUIERA",
+    "uso_cartera": true,
+    "contexto": "La obligación pendiente fue saldada antes del arribo del personal de suspensión."
+   },
+   "SY": {
+    "significado": "SUSPENSION REALIZADA",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 12125,
+    "operacion": "Suspensión",
+    "brigada": "MOTO",
+    "uso_cartera": true,
+    "contexto": "SUSPENSION",
+    "connotacion": "Retiro de material de gabinete o pin de corte"
+   },
+   "EP": {
+    "significado": "PERSUASION ESPECIAL",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 8873,
+    "operacion": "",
+    "brigada": "PERSONAL DE PSS ESPECIAL - STEFANIA TIQUE",
+    "uso_cartera": false,
+    "contexto": "Gestión técnica o social en LLAMADA para lograr cobro o acuerdo antes de proceder al corte."
+   },
+   "NI": {
+    "significado": "(no está en el catálogo)",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 7354
+   },
+   "AA": {
+    "significado": "ACTA ANULADA",
+    "resultado": "SIN INFORMACIÓN",
+    "decide_solo": true,
+    "actas_diccionario": 4464,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "SN": {
+    "significado": "SUSPENDIDO SIN RETIRO DE MATERIAL",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 3104,
+    "operacion": "Suspensión",
+    "brigada": "CAMIONETA",
+    "uso_cartera": true,
+    "contexto": "SUSPENSION",
+    "connotacion": "Sin retiro de material, en camioneta"
+   },
+   "YC": {
+    "significado": "USUARIO CON FACTURA PAGA",
+    "resultado": "PAGÓ",
+    "decide_solo": true,
+    "actas_diccionario": 2577,
+    "operacion": "Suspensión",
+    "brigada": "CUALQUIERA",
+    "uso_cartera": true,
+    "contexto": "El usuario exhibe o comprueba el comprobante de pago de la factura objeto de suspensión."
+   },
+   "AV": {
+    "significado": "Elaboración de Acta de Visita",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 1692,
+    "operacion": "Suspensión y reconexión",
+    "brigada": "CUALQUIERA",
+    "uso_cartera": true,
+    "contexto": "Formato oficial diligenciado en sitio notificando las hallazgos o la actuación de la cuadrilla."
+   },
+   "SA": {
+    "significado": "SIN ACCESO",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 1564,
+    "operacion": "Suspensión y reconexión",
+    "brigada": "CUALQUIERA",
+    "uso_cartera": true,
+    "contexto": "Impedimento físico (rejas, portones cerrados, terreno inasequible) para llegar al punto de corte."
+   },
+   "MR": {
+    "significado": "SUSPENSION EN MOTO CON RETIRO",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 1108,
+    "operacion": "Suspensión",
+    "brigada": "MOTO - DOBLE MOTO",
+    "uso_cartera": true,
+    "contexto": "SUSPENSION",
+    "connotacion": "Retiro de material en gabinete"
+   },
+   "SS": {
+    "significado": "SE ENCONTRO SUSPENDIDO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 1098,
+    "operacion": "Suspensión",
+    "brigada": "CUALQUIERA",
+    "uso_cartera": true,
+    "contexto": "El servicio ya se encontraba físicamente suspendido previa llegada de la cuadrilla."
+   },
+   "NS": {
+    "significado": "NO DEJO SUSPENDER",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 710,
+    "operacion": "Suspensión",
+    "brigada": "CUALQUIERA",
+    "uso_cartera": true,
+    "contexto": "Oposición física, verbal o intimidación directa por parte del usuario u ocupante para evitar el corte."
+   },
+   "ES": {
+    "significado": "SUSPENSION ACOMETIDA EN SUPERFICIE",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 551,
+    "operacion": "Suspensión",
+    "brigada": "CAMIONETA",
+    "uso_cartera": true,
+    "contexto": "SUSPENSION"
+   },
+   "MD": {
+    "significado": "SUSPENDIDO EN DOBLE MOTO",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 220,
+    "operacion": "Suspensión",
+    "brigada": "DOBLE MOTO",
+    "uso_cartera": true,
+    "contexto": "SUSPENSION",
+    "connotacion": "Doble moto"
+   },
+   "SM": {
+    "significado": "SUSPENDIDO CON RETIRO DE MATERIAL",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 211,
+    "operacion": "Suspensión",
+    "brigada": "CAMIONETA",
+    "uso_cartera": true,
+    "contexto": "SUSPENSION",
+    "connotacion": "Retiro de material en camioneta"
+   },
+   "SO": {
+    "significado": "SUSPENSION CON RETIRO DE OTRO MATERIAL",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 163,
+    "operacion": "Suspensión",
+    "brigada": "CAMIONETA",
+    "uso_cartera": true,
+    "contexto": "SUSPENSION"
+   },
+   "AM": {
+    "significado": "Suspension AMI",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 64,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "VN": {
+    "significado": "VIGILANTE NO PERMITE INGRESO",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 24,
+    "operacion": "Suspensión y reconexión",
+    "brigada": "CUALQUIERA",
+    "uso_cartera": true,
+    "contexto": "La seguridad privada del conjunto residencial o edificación impidió el paso de la cuadrilla."
+   },
+   "EN": {
+    "significado": "RECONEXION SIN INSTALACION MATERIAL",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 11,
+    "operacion": "Reconexión",
+    "brigada": "CAMIONETA",
+    "uso_cartera": true,
+    "contexto": "RECONEXION"
+   },
+   "UO": {
+    "significado": "USUARIO OXIGENO-ENFERMO",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 11,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "UR": {
+    "significado": "USUARIO EN RECLAMO",
+    "resultado": "GESTIÓN DE COBRO",
+    "decide_solo": true,
+    "actas_diccionario": 9,
+    "operacion": "Suspensión",
+    "brigada": "CUALQUIERA",
+    "uso_cartera": true,
+    "contexto": "Cuenta con una PQR o recurso administrativo en trámite que suspende la ejecución del corte."
+   },
+   "EE": {
+    "significado": "RECONEXION REALIZADA",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 6,
+    "operacion": "Reconexión",
+    "brigada": "MOTO",
+    "uso_cartera": true,
+    "contexto": "RECONEXION"
+   },
+   "EU": {
+    "significado": "RECONEXION ACOMETIDA EN SUPERFICIE",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 3,
+    "operacion": "Reconexión",
+    "brigada": "CAMIONETA",
+    "uso_cartera": true,
+    "contexto": "RECONEXION"
+   },
+   "11": {
+    "significado": "SUSPENSION EN LINEA NO REALIZADA",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 2,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "12": {
+    "significado": "RECONEXION EN LINEA NO REALIZADA",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 2,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "CV": {
+    "significado": "CASA VACIA",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 2,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "AN": {
+    "significado": "Avanzada Nodo",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 1,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "NN": {
+    "significado": "CASA SOLA",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 1,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "0": {
+    "significado": "NO TIENE OBSERVACIONES",
+    "resultado": "SIN INFORMACIÓN",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "",
+    "brigada": "NA",
+    "uso_cartera": true,
+    "contexto": "NO SE HA EJECUTADO EL LA ORDEN"
+   },
+   "10": {
+    "significado": "SUSPENSION EN LINEA REALIZADA",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "13": {
+    "significado": "RECONEXION EN LINEA SI REALIZADA",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "BC": {
+    "significado": "BIENES CONSTITUCIONALMENTE PROTEGIDO",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "CA": {
+    "significado": "CONTADOR ADENTRO DEL INMUEBLE",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "DE": {
+    "significado": "DIRECCION ERRADA",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": "Error en la nomenclatura, numeración o vía registrada en la orden de trabajo."
+   },
+   "DG": {
+    "significado": "CUENTA DE DIFICIL GESTION",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": "Predio de alto riesgo social, zona de conflicto u oposición violenta recurrente que impide la operativa normal."
+   },
+   "DI": {
+    "significado": "DISPONIBILIDAD",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "Suspensión",
+    "brigada": "CAMIONETA",
+    "uso_cartera": true,
+    "contexto": "SUSPENSION"
+   },
+   "ED": {
+    "significado": "RECONEXION EN DOBLE MOTO",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "Reconexión",
+    "brigada": "DOBLE MOTO",
+    "uso_cartera": true,
+    "contexto": "RECONEXION"
+   },
+   "EM": {
+    "significado": "RECONEXION CON INSTALACION MATERIAL",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "Reconexión",
+    "brigada": "CAMIONETA",
+    "uso_cartera": true,
+    "contexto": "RECONEXION"
+   },
+   "EO": {
+    "significado": "RECONEXION CON INSTALACION OTRO MATERIAL",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "Reconexión",
+    "brigada": "CAMIONETA",
+    "uso_cartera": true,
+    "contexto": "RECONEXION"
+   },
+   "ER": {
+    "significado": "RECONEXION EN MOTO CON INSTALACION",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "Reconexión",
+    "brigada": "MOTO - DOBLE MOTO",
+    "uso_cartera": true,
+    "contexto": "RECONEXION"
+   },
+   "FN": {
+    "significado": "Elaboración de Crédito",
+    "resultado": "PAGÓ",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "IA": {
+    "significado": "INMUEBLE ABANDONADO",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "LS": {
+    "significado": "LOTE, SIN VIVIENDA",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "NE": {
+    "significado": "NO EXISTE PREDIO",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "OP": {
+    "significado": "ORDEN PUBLICO",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": "Alteración de la seguridad en la zona (asonadas, delincuencia, paros) que pone en riesgo a la cuadrilla."
+   },
+   "PD": {
+    "significado": "PAGOS DESPUES DE SUSPENSION",
+    "resultado": "PAGÓ",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "PQ": {
+    "significado": "VISITA PQR",
+    "resultado": "GESTIÓN DE COBRO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "RV": {
+    "significado": "RECONEXION CON VEHICULO",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "SI": {
+    "significado": "SUSPENSION INMEDIATA",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "TE": {
+    "significado": "SUSPENSION MEDIANTE TELE-GESTION",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": true,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "RD": {
+    "significado": "REVISION DESTACADOS",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "DR": {
+    "significado": "ADECUACION DE REDES",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "RT": {
+    "significado": "RETIRO MEDIDOR TESTIGO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "CR": {
+    "significado": "CASETA RETIRADA",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "AP": {
+    "significado": "ACCION SOBRE ALUMBRADO PUBLICO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "SD": {
+    "significado": "SOLICITUD CAMBIO DE ACOMETIDA",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "CM": {
+    "significado": "CAMBIO DE MEDIDOR",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "CD": {
+    "significado": "CAMBIO DE RUTA",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "CF": {
+    "significado": "CONTADOR FRENADO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "CS": {
+    "significado": "CONTADOR SELLADO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "AD": {
+    "significado": "ACTUALIZAR DATOS",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "RM": {
+    "significado": "RETIRO MEDIDOR",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "UN": {
+    "significado": "USUARIO NUEVO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "SR": {
+    "significado": "SE RECONETO EL USUARIO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "PM": {
+    "significado": "POSTE EN MAL ESTADO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "US": {
+    "significado": "USUARIO SIN CONTADOR",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "DC": {
+    "significado": "DOBLE CUENTA",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "SL": {
+    "significado": "SIN LEGALIZAR",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "TC": {
+    "significado": "TRASLADO CONTA. POSTE",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "RA": {
+    "significado": "RETIRO ACOMETIDA",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "TL": {
+    "significado": "TOMA DE LECTURA",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "CT": {
+    "significado": "CAMBIO DE TARIFA",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "VE": {
+    "significado": "VERIFICACION EQUIPO DE MEDIDA",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "IT": {
+    "significado": "INTEGRADOR",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "MT": {
+    "significado": "MEDIDOR TESTIGO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "UU": {
+    "significado": "USUARIO NUEVO (CEDULA EXISTE)",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "AR": {
+    "significado": "ADECUACION DE REDES",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "AE": {
+    "significado": "ANOMALIA ENCONTRADA",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "M1": {
+    "significado": "MATERIAL INSTALADO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "IS": {
+    "significado": "INTERVENTORIA SELLOS",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "DM": {
+    "significado": "DEVOLUCION DE MEDIDOR",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "CO": {
+    "significado": "ACOMETIDA CONTADOR",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "VC": {
+    "significado": "VISITA DE CONTROL (CUENTAS NUEVAS)",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "NR": {
+    "significado": "NOTIFICACION RETIE",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "NC": {
+    "significado": "NOTIFICACION CAMBIO MEDIDOR",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "NF": {
+    "significado": "NOTIFICACION EDF",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   },
+   "DV": {
+    "significado": "DEVOLUCION MEDIDOR USUARIO",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 0,
+    "operacion": "No se usa",
+    "brigada": "NA",
+    "uso_cartera": false,
+    "contexto": ""
+   }
+  },
+  "causal_suspension": {
+   "NP": {
+    "significado": "No pagó: la orden se trabaja en campo",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 44543
+   },
+   "FP": {
+    "significado": "Factura pagada: la orden se cierra sin suspender",
+    "resultado": "PAGÓ",
+    "decide_solo": true,
+    "actas_diccionario": 37041
+   },
+   "OE": {
+    "significado": "Caso especial, se comporta como NP",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 697
+   },
+   "VE": {
+    "significado": "Caso especial, se comporta como NP",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 693
+   }
+  },
+  "suspension_en": {
+   "NO": {
+    "significado": "No se intentó la suspensión",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 50875
+   },
+   "GA": {
+    "significado": "Ejecutada en gabinete",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": false,
+    "actas_diccionario": 13843
+   },
+   "PO": {
+    "significado": "Ejecutada en poste",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": false,
+    "actas_diccionario": 10487
+   },
+   "NM": {
+    "significado": "Se visitó y no se pudo ejecutar",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": false,
+    "actas_diccionario": 4729
+   },
+   "NC": {
+    "significado": "Se visitó y no se pudo ejecutar",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": false,
+    "actas_diccionario": 2789
+   },
+   "ND": {
+    "significado": "Se visitó y no se pudo ejecutar",
+    "resultado": "NO ES POSIBLE SUSPENDER",
+    "decide_solo": false,
+    "actas_diccionario": 126
+   },
+   "CA": {
+    "significado": "Ejecutada en cañuela",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": false,
+    "actas_diccionario": 101
+   },
+   "PI": {
+    "significado": "Ejecutada en pin de corte",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": false,
+    "actas_diccionario": 21
+   },
+   "CO": {
+    "significado": "Ejecutada (caso aislado)",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": false,
+    "actas_diccionario": 2
+   },
+   "CR": {
+    "significado": "Ejecutada (caso aislado)",
+    "resultado": "SUSPENDIDO",
+    "decide_solo": false,
+    "actas_diccionario": 1
+   }
+  },
+  "estado": {
+   "S": {
+    "significado": "Suspendido",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 60945
+   },
+   "R": {
+    "significado": "Reconectado",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 14708
+   },
+   "A": {
+    "significado": "Orden sin ejecutar",
+    "resultado": "SIN INFORMACIÓN",
+    "decide_solo": true,
+    "actas_diccionario": 5010
+   },
+   "N": {
+    "significado": "Normal",
+    "resultado": null,
+    "decide_solo": false,
+    "actas_diccionario": 2311
+   }
+  }
+ },
+ "combinaciones": [
+  {
+   "causal": "FP",
+   "suspension_en": "NO",
+   "observacion": "UC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 37022,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 11850,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 99.8,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NO",
+   "observacion": "EP",
+   "resultado": "GESTIÓN DE COBRO",
+   "actas_diccionario": 8866,
+   "resultado_texto": "GESTIÓN DE COBRO",
+   "acuerdo_pct": 80.1,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "NI",
+   "resultado": "(varía por Estado)",
+   "actas_diccionario": 6665,
+   "resultado_texto": "SIN INFORMACIÓN",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NO",
+   "observacion": "AA",
+   "resultado": "SIN INFORMACIÓN",
+   "actas_diccionario": 4368,
+   "resultado_texto": "SIN INFORMACIÓN",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 2356,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 99.7,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 1472,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 98,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 1220,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 94.5,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 1044,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 99.4,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "MR",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1007,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "AV",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 948,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 75.9,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 513,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 98.4,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NO",
+   "observacion": "NI",
+   "resultado": "ACTA DE RECONEXIÓN",
+   "actas_diccionario": 500,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 91,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "ES",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 468,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 98.9,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "AV",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 466,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 81.5,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "NS",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 435,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 62.3,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 409,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 94.1,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 387,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 92,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 296,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 99,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "NS",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 247,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 58.7,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "MD",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 185,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "SO",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 139,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "GA",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 134,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PO",
+   "observacion": "NI",
+   "resultado": "(varía por Estado)",
+   "actas_diccionario": 124,
+   "resultado_texto": "SIN INFORMACIÓN",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "PO",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 110,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "ND",
+   "observacion": "AV",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 102,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 85.3,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NC",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 99,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 99,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NC",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 83,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 90.4,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NO",
+   "observacion": "AA",
+   "resultado": "SIN INFORMACIÓN",
+   "actas_diccionario": 81,
+   "resultado_texto": "SIN INFORMACIÓN",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 75,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 97.3,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 66,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "GA",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 66,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 98.5,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "PO",
+   "observacion": "ES",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 66,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NM",
+   "observacion": "AV",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 66,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 68.2,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CA",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 65,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "AM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 64,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "GA",
+   "observacion": "MR",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 60,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NC",
+   "observacion": "AV",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 60,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 76.7,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "PO",
+   "observacion": "NI",
+   "resultado": "(varía por Estado)",
+   "actas_diccionario": 54,
+   "resultado_texto": "SIN INFORMACIÓN",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NM",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 53,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 92.5,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NM",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 48,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 89.6,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "VN",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 24,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 23,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PO",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 23,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 22,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 50,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "MD",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 21,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "MR",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 18,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PO",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 18,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 94.4,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PO",
+   "observacion": "ES",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 17,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NO",
+   "observacion": "AV",
+   "resultado": "SIN INFORMACIÓN",
+   "actas_diccionario": 17,
+   "resultado_texto": "GESTIÓN DE COBRO",
+   "acuerdo_pct": 94.1,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CA",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 16,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 16,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 75,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NO",
+   "observacion": "AA",
+   "resultado": "SIN INFORMACIÓN",
+   "actas_diccionario": 15,
+   "resultado_texto": "SIN INFORMACIÓN",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NM",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 14,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "GA",
+   "observacion": "MR",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 14,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PO",
+   "observacion": "MD",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 13,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PI",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 13,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "PO",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 12,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NC",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 12,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NM",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 12,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "PO",
+   "observacion": "SO",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 11,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 11,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 90.9,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "GA",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 10,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "SO",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 10,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NC",
+   "observacion": "AV",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 10,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 80,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 10,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 30,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "NI",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 9,
+   "resultado_texto": "SIN INFORMACIÓN",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "GA",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 9,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NM",
+   "observacion": "NS",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 9,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 88.9,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "UO",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 9,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 88.9,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "CA",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 9,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 8,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "UR",
+   "resultado": "GESTIÓN DE COBRO",
+   "actas_diccionario": 8,
+   "resultado_texto": "GESTIÓN DE COBRO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NC",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 8,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NM",
+   "observacion": "AV",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 7,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 71.4,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PO",
+   "observacion": "MR",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 7,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 7,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 85.7,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 7,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "ND",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 6,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "ND",
+   "observacion": "AV",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 6,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "FP",
+   "suspension_en": "NC",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 6,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "FP",
+   "suspension_en": "GA",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 5,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "CA",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 5,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "EN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 5,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "AV",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 5,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 60,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "EN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 5,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "ND",
+   "observacion": "NS",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 5,
+   "resultado_texto": "COMPROMISO DE PAGO",
+   "acuerdo_pct": 40,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NO",
+   "observacion": "EP",
+   "resultado": "GESTIÓN DE COBRO",
+   "actas_diccionario": 5,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "GA",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 5,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "NS",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 4,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 50,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "EE",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 4,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NC",
+   "observacion": "NS",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 4,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 50,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "GA",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 4,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "ND",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 4,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PI",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 4,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "FP",
+   "suspension_en": "PO",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 4,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PO",
+   "observacion": "SO",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 3,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "AV",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 3,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 66.7,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NC",
+   "observacion": "NS",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 3,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 66.7,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NC",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 3,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 3,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "EU",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 3,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "NS",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 3,
+   "resultado_texto": "COMPROMISO DE PAGO",
+   "acuerdo_pct": 66.7,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "CV",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 2,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "ND",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 2,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "11",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 2,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 50,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 2,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NC",
+   "observacion": "UO",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 2,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "FP",
+   "suspension_en": "NM",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 1,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CA",
+   "observacion": "EN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "FP",
+   "suspension_en": "PO",
+   "observacion": "UC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 1,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "FP",
+   "suspension_en": "NM",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 1,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "FP",
+   "suspension_en": "PI",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CA",
+   "observacion": "MR",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CA",
+   "observacion": "NI",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SIN INFORMACIÓN",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "GA",
+   "observacion": "12",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CR",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CO",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CO",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CA",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 1,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "CA",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "EE",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "12",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "NI",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 1,
+   "resultado_texto": "SIN INFORMACIÓN",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NC",
+   "observacion": "AN",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 1,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PO",
+   "observacion": "EP",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "GESTIÓN DE COBRO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "NN",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "UC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 1,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "MR",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "NM",
+   "observacion": "UR",
+   "resultado": "GESTIÓN DE COBRO",
+   "actas_diccionario": 1,
+   "resultado_texto": "GESTIÓN DE COBRO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "NP",
+   "suspension_en": "PI",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PI",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "NO",
+   "observacion": "EP",
+   "resultado": "GESTIÓN DE COBRO",
+   "actas_diccionario": 1,
+   "resultado_texto": "COMPROMISO DE PAGO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PO",
+   "observacion": "AV",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "ND",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "GA",
+   "observacion": "EE",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "GA",
+   "observacion": "MD",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "GA",
+   "observacion": "AV",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": false
+  },
+  {
+   "causal": "OE",
+   "suspension_en": "PO",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NC",
+   "observacion": "SN",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NC",
+   "observacion": "SA",
+   "resultado": "NO ES POSIBLE SUSPENDER",
+   "actas_diccionario": 1,
+   "resultado_texto": "NO ES POSIBLE SUSPENDER",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "GA",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "CA",
+   "observacion": "SM",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "NM",
+   "observacion": "YC",
+   "resultado": "PAGÓ",
+   "actas_diccionario": 1,
+   "resultado_texto": "PAGÓ",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "PI",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "PO",
+   "observacion": "SS",
+   "resultado": "SE MANTIENE SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SE MANTIENE SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  },
+  {
+   "causal": "VE",
+   "suspension_en": "PO",
+   "observacion": "SY",
+   "resultado": "SUSPENDIDO",
+   "actas_diccionario": 1,
+   "resultado_texto": "SUSPENDIDO",
+   "acuerdo_pct": 100,
+   "coincide_con_texto": true
+  }
+ ],
+ "vocabulario": [
+  "ACTA DE RECONEXIÓN",
+  "GESTIÓN DE COBRO",
+  "NO ES POSIBLE SUSPENDER",
+  "PAGÓ",
+  "SE MANTIENE SUSPENDIDO",
+  "SIN INFORMACIÓN",
+  "SUSPENDIDO"
+ ]
+}

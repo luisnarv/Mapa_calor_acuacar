@@ -1,0 +1,960 @@
+{
+ "origen": [
+  "Ciclos de Suspensión.xlsx",
+  "SECTORES-2.xlsx"
+ ],
+ "ciclos": {
+  "1": {
+   "zona": "Norte",
+   "usuarios": 165,
+   "descripcion": "NO REGULADOS TODO DEPARTAMENTO DEL HUILA",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "2": {
+   "zona": "Norte",
+   "usuarios": 69,
+   "descripcion": "AUTOCONSUMOS ZONA NEIVA-NORTE",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA",
+    "PALERMO",
+    "YAGUARA"
+   ]
+  },
+  "3": {
+   "zona": "Norte",
+   "usuarios": 5631,
+   "descripcion": "CARRERAS CENTRO",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "4": {
+   "zona": "Norte",
+   "usuarios": 6501,
+   "descripcion": "CARRERAS 10 A 22 CALLES 1 A 2B",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "5": {
+   "zona": "Norte",
+   "usuarios": 8230,
+   "descripcion": "CALLES 3 A 11",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "6": {
+   "zona": "Norte",
+   "usuarios": 8259,
+   "descripcion": "CALLES 12 A 25C",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA",
+    "PALERMO"
+   ]
+  },
+  "7": {
+   "zona": "Norte",
+   "usuarios": 5685,
+   "descripcion": "CANDIDO-STA INES-MERCEDES",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "8": {
+   "zona": "Norte",
+   "usuarios": 6540,
+   "descripcion": "GRANJAS- CAMBULOS",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "9": {
+   "zona": "Norte",
+   "usuarios": 8987,
+   "descripcion": "VIRGILIO BARCO-GALINDO",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "10": {
+   "zona": "Norte",
+   "usuarios": 7284,
+   "descripcion": "JARDIN-BUGANVILES-VERGEL-RIOJA",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "11": {
+   "zona": "Norte",
+   "usuarios": 7411,
+   "descripcion": "SURORIENTALES",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "12": {
+   "zona": "Norte",
+   "usuarios": 7510,
+   "descripcion": "BARRIOS DEL SUR",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "13": {
+   "zona": "Norte",
+   "usuarios": 8157,
+   "descripcion": "SUR-OFICIAL Y FINCAS",
+   "ubicacion": "U",
+   "municipios": [
+    "CAMPOALEGRE",
+    "NEIVA",
+    "PALERMO",
+    "RIVERA",
+    "YAGUARA"
+   ]
+  },
+  "14": {
+   "zona": "Norte",
+   "usuarios": 6959,
+   "descripcion": "TIMANCO",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "15": {
+   "zona": "Norte",
+   "usuarios": 266,
+   "descripcion": "ALUMBRADO PUBLICO ZONA NORTE",
+   "ubicacion": "U",
+   "municipios": [
+    "AIPE",
+    "ALGECIRAS",
+    "BARAYA",
+    "CAMPOALEGRE",
+    "COLOMBIA",
+    "HOBO",
+    "IQUIRA",
+    "PALERMO",
+    "RIVERA",
+    "SANTAMARIA",
+    "TELLO",
+    "TERUEL",
+    "VILLAVIEJA",
+    "YAGUARA"
+   ]
+  },
+  "16": {
+   "zona": "Norte",
+   "usuarios": 1188,
+   "descripcion": "PANORAMA",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "17": {
+   "zona": "Norte",
+   "usuarios": 5603,
+   "descripcion": "LAS PALMAS",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "19": {
+   "zona": "Norte",
+   "usuarios": 207,
+   "descripcion": "ALUMBRADO PUBLICO ZONA NEIVA",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "20": {
+   "zona": "Norte",
+   "usuarios": 8012,
+   "descripcion": "CAMPOALEGRE",
+   "ubicacion": "U",
+   "municipios": [
+    "CAMPOALEGRE"
+   ]
+  },
+  "21": {
+   "zona": "Norte",
+   "usuarios": 9452,
+   "descripcion": "PALERMO-SANTAMARIA",
+   "ubicacion": "U",
+   "municipios": [
+    "PALERMO",
+    "SANTAMARIA"
+   ]
+  },
+  "22": {
+   "zona": "Norte",
+   "usuarios": 9333,
+   "descripcion": "AIPE-BARAYA-TELLO-VILLAVIEJA-COLOMBIA",
+   "ubicacion": "U",
+   "municipios": [
+    "AIPE",
+    "BARAYA",
+    "COLOMBIA",
+    "TELLO",
+    "VILLAVIEJA"
+   ]
+  },
+  "23": {
+   "zona": "Norte",
+   "usuarios": 7022,
+   "descripcion": "HOBO-ALGECIRAS",
+   "ubicacion": "U",
+   "municipios": [
+    "ALGECIRAS",
+    "HOBO"
+   ]
+  },
+  "24": {
+   "zona": "Norte",
+   "usuarios": 2707,
+   "descripcion": "RURAL RIVERA- CAMPOALEGRE-CERRO NEIVA",
+   "ubicacion": "R",
+   "municipios": [
+    "CAMPOALEGRE",
+    "NEIVA",
+    "RIVERA"
+   ]
+  },
+  "25": {
+   "zona": "Norte",
+   "usuarios": 3248,
+   "descripcion": "RURAL PALERMO-TERUEL-IQUIRA",
+   "ubicacion": "R",
+   "municipios": [
+    "IQUIRA",
+    "PALERMO",
+    "TERUEL"
+   ]
+  },
+  "26": {
+   "zona": "Norte",
+   "usuarios": 3268,
+   "descripcion": "RURAL VILLAVIEJA-BARAYA-COLOMBIA",
+   "ubicacion": "R",
+   "municipios": [
+    "ALPUJARRA",
+    "BARAYA",
+    "COLOMBIA",
+    "VILLAVIEJA"
+   ]
+  },
+  "27": {
+   "zona": "Norte",
+   "usuarios": 2575,
+   "descripcion": "RURAL ALGECIRAS-HOBO-YAGUARA",
+   "ubicacion": "R",
+   "municipios": [
+    "ALGECIRAS",
+    "HOBO",
+    "YAGUARA"
+   ]
+  },
+  "28": {
+   "zona": "Norte",
+   "usuarios": 2356,
+   "descripcion": "RURAL NEIVA ORIENTE-TELLO-VEGALARGA",
+   "ubicacion": "R",
+   "municipios": [
+    "BARAYA",
+    "NEIVA",
+    "SANVICENTEDELCAGUAN",
+    "TELLO"
+   ]
+  },
+  "29": {
+   "zona": "Norte",
+   "usuarios": 3561,
+   "descripcion": "RURAL SANTAMARIA-NEIVA-AIPE",
+   "ubicacion": "R",
+   "municipios": [
+    "AIPE",
+    "ATACO",
+    "NEIVA",
+    "PLANADAS",
+    "SANTAMARIA"
+   ]
+  },
+  "30": {
+   "zona": "Norte",
+   "usuarios": 21,
+   "descripcion": "TV CABLES ZONA NEIVA",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "31": {
+   "zona": "Centro",
+   "usuarios": 7833,
+   "descripcion": "AGRADO-PITAL-TARQUI",
+   "ubicacion": "U",
+   "municipios": [
+    "AGRADO",
+    "PITAL",
+    "TARQUI"
+   ]
+  },
+  "33": {
+   "zona": "Norte",
+   "usuarios": 9545,
+   "descripcion": "SERV COMPLEMENT ZONA NEIVA-NORTE",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "36": {
+   "zona": "Centro",
+   "usuarios": 3281,
+   "descripcion": "GARZON NUCLEADO",
+   "ubicacion": "U",
+   "municipios": [
+    "GARZON"
+   ]
+  },
+  "37": {
+   "zona": "Centro",
+   "usuarios": 6214,
+   "descripcion": "GIGANTE",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "38": {
+   "zona": "Centro",
+   "usuarios": 197,
+   "descripcion": "ALUMBRADO PUBLICO ZONA CENTRO",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "40": {
+   "zona": "Centro",
+   "usuarios": 8384,
+   "descripcion": "GARZON",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "41": {
+   "zona": "Centro",
+   "usuarios": 7062,
+   "descripcion": "ALTAMIRA-GUADALUPE-SUAZA",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "42": {
+   "zona": "Centro",
+   "usuarios": 4722,
+   "descripcion": "RURAL GARZON-GIGANTE ORIENTE",
+   "ubicacion": "R",
+   "municipios": []
+  },
+  "43": {
+   "zona": "Centro",
+   "usuarios": 7819,
+   "descripcion": "GARZON",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "44": {
+   "zona": "Centro",
+   "usuarios": 19,
+   "descripcion": "SERV COMPLEMENTARIOS ZONA CENTRO",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "45": {
+   "zona": "Centro",
+   "usuarios": 4271,
+   "descripcion": "RURAL GARZON ORIENTE",
+   "ubicacion": "R",
+   "municipios": []
+  },
+  "46": {
+   "zona": "Centro",
+   "usuarios": 2620,
+   "descripcion": "RURAL GARZON-GIGANTE OCCIDENTE",
+   "ubicacion": "R",
+   "municipios": []
+  },
+  "47": {
+   "zona": "Centro",
+   "usuarios": 6114,
+   "descripcion": "RURAL SUAZA-GUADALUPE",
+   "ubicacion": "R",
+   "municipios": []
+  },
+  "48": {
+   "zona": "Centro",
+   "usuarios": 4525,
+   "descripcion": "RURAL ALTAMIRA-TARQUI",
+   "ubicacion": "R",
+   "municipios": []
+  },
+  "49": {
+   "zona": "Centro",
+   "usuarios": 1930,
+   "descripcion": "RURAL PITAL-AGRADO",
+   "ubicacion": "R",
+   "municipios": []
+  },
+  "50": {
+   "zona": "Sur",
+   "usuarios": 10033,
+   "descripcion": "RURAL PITALITO-TIMANA",
+   "ubicacion": "U",
+   "municipios": [
+    "PITALITO",
+    "TIMANA"
+   ]
+  },
+  "51": {
+   "zona": "Sur",
+   "usuarios": 12,
+   "descripcion": "TV CABLES ZONA 2",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "52": {
+   "zona": "Sur",
+   "usuarios": 7112,
+   "descripcion": "RURAL ISNOS-SALADOBLANCO",
+   "ubicacion": "R",
+   "municipios": [
+    "ISNOS",
+    "SALADOBLANCO"
+   ]
+  },
+  "53": {
+   "zona": "Sur",
+   "usuarios": 5200,
+   "descripcion": "RURAL PALESTINA-SAN AGUSTIN",
+   "ubicacion": "R",
+   "municipios": [
+    "PALESTINA",
+    "SANAGUSTIN"
+   ]
+  },
+  "54": {
+   "zona": "Sur",
+   "usuarios": 3997,
+   "descripcion": "RURAL SAN AGUSTIN",
+   "ubicacion": "R",
+   "municipios": [
+    "SANAGUSTIN"
+   ]
+  },
+  "55": {
+   "zona": "Sur",
+   "usuarios": 5695,
+   "descripcion": "INS PTTO-ACVD-OPPA-SBLCO-TAR-TIM",
+   "ubicacion": "U",
+   "municipios": [
+    "ACEVEDO",
+    "ELIAS",
+    "OPORAPA",
+    "PITALITO",
+    "SALADOBLANCO",
+    "TARQUI",
+    "TIMANA"
+   ]
+  },
+  "56": {
+   "zona": "Sur",
+   "usuarios": 4191,
+   "descripcion": "PITALITO",
+   "ubicacion": "U",
+   "municipios": [
+    "PITALITO"
+   ]
+  },
+  "57": {
+   "zona": "Sur",
+   "usuarios": 5776,
+   "descripcion": "PITALITO",
+   "ubicacion": "U",
+   "municipios": [
+    "PITALITO"
+   ]
+  },
+  "58": {
+   "zona": "Sur",
+   "usuarios": 8162,
+   "descripcion": "ELIAS-ISNOS-PALES-SAN AGUS-TIMAN",
+   "ubicacion": "U",
+   "municipios": [
+    "ELIAS",
+    "ISNOS",
+    "PALESTINA",
+    "SANAGUSTIN",
+    "TIMANA"
+   ]
+  },
+  "59": {
+   "zona": "Sur",
+   "usuarios": 64,
+   "descripcion": "ALUMBRADO PUBLICO SUR",
+   "ubicacion": "U",
+   "municipios": [
+    "ACEVEDO",
+    "ELIAS",
+    "ISNOS",
+    "OPORAPA",
+    "PALESTINA",
+    "PITALITO",
+    "SALADOBLANCO",
+    "SANAGUSTIN",
+    "TARQUI",
+    "TIMANA"
+   ]
+  },
+  "60": {
+   "zona": "Norte",
+   "usuarios": 114,
+   "descripcion": "DESTACADO, ZONA SUR,OCCIDENTE,CENTRO",
+   "ubicacion": "U",
+   "municipios": [
+    "ACEVEDO",
+    "ELIAS",
+    "ISNOS",
+    "OPORAPA",
+    "PALESTINA",
+    "PITALITO",
+    "SALADOBLANCO",
+    "SANAGUSTIN",
+    "TIMANA"
+   ]
+  },
+  "61": {
+   "zona": "Sur",
+   "usuarios": 8357,
+   "descripcion": "PITALITO",
+   "ubicacion": "U",
+   "municipios": [
+    "PITALITO"
+   ]
+  },
+  "62": {
+   "zona": "Sur",
+   "usuarios": 4763,
+   "descripcion": "PITALITO",
+   "ubicacion": "U",
+   "municipios": [
+    "PITALITO"
+   ]
+  },
+  "63": {
+   "zona": "Sur",
+   "usuarios": 6369,
+   "descripcion": "RURAL ACEVEDO",
+   "ubicacion": "U",
+   "municipios": [
+    "ACEVEDO",
+    "SUAZA"
+   ]
+  },
+  "64": {
+   "zona": "Sur",
+   "usuarios": 9175,
+   "descripcion": "RUR PITALITO-TIMAN-ELIAS-OPORAPA",
+   "ubicacion": "U",
+   "municipios": [
+    "ELIAS",
+    "OPORAPA",
+    "PITALITO",
+    "SUAZA",
+    "TARQUI",
+    "TIMANA"
+   ]
+  },
+  "66": {
+   "zona": "Centro",
+   "usuarios": 26,
+   "descripcion": "TV CABLES ZONA 3",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "69": {
+   "zona": "Sur",
+   "usuarios": 5229,
+   "descripcion": "SERV COMPLEMENTARIOS ZONA SUR",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "70": {
+   "zona": "Occidente",
+   "usuarios": 3334,
+   "descripcion": "RURAL LA PLATA-LA ARGENTINA",
+   "ubicacion": "R",
+   "municipios": [
+    "LAARGENTINA",
+    "LAPLATA"
+   ]
+  },
+  "71": {
+   "zona": "Occidente",
+   "usuarios": 6482,
+   "descripcion": "ARGENTINA-NATAGA-PAICOL-TESALIA",
+   "ubicacion": "U",
+   "municipios": [
+    "LAARGENTINA",
+    "NATAGA",
+    "PAICOL",
+    "TESALIA"
+   ]
+  },
+  "72": {
+   "zona": "Occidente",
+   "usuarios": 3224,
+   "descripcion": "INSPECCIÓN BELARCAZAR-IQUIRA-ARGENTINA-PLATA-PITAL-TESALIA",
+   "ubicacion": "U",
+   "municipios": [
+    "IQUIRA",
+    "LAARGENTINA",
+    "LAPLATA",
+    "PAEZ",
+    "PITAL",
+    "TESALIA"
+   ]
+  },
+  "73": {
+   "zona": "Occidente",
+   "usuarios": 5,
+   "descripcion": "AUTOCONSUMOS ZONZ OCCIDENTE",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "75": {
+   "zona": "Occidente",
+   "usuarios": 77,
+   "descripcion": "ALUMBRADO PUBLICO ZONA OCCIDENTE",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "76": {
+   "zona": "Occidente",
+   "usuarios": 5418,
+   "descripcion": "LA PLATA",
+   "ubicacion": "U",
+   "municipios": [
+    "LAPLATA"
+   ]
+  },
+  "78": {
+   "zona": "Occidente",
+   "usuarios": 10,
+   "descripcion": "TV CABLES ZONA 4",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "79": {
+   "zona": "Occidente",
+   "usuarios": 9,
+   "descripcion": "SERV COMLEMENTAR ZONA OCCIDENTE",
+   "ubicacion": "U",
+   "municipios": []
+  },
+  "80": {
+   "zona": "Norte",
+   "usuarios": 716,
+   "descripcion": "CORPORATIVO-NEIVA",
+   "ubicacion": "U",
+   "municipios": [
+    "ACEVEDO",
+    "AIPE",
+    "ALGECIRAS",
+    "BARAYA",
+    "CAMPOALEGRE",
+    "COLOMBIA",
+    "ELIAS",
+    "HOBO",
+    "IQUIRA",
+    "ISNOS",
+    "NEIVA",
+    "OPORAPA",
+    "PALERMO",
+    "PALESTINA",
+    "PITALITO",
+    "RIVERA",
+    "SALADOBLANCO",
+    "SANAGUSTIN",
+    "SANTAMARIA",
+    "SANVICENTEDELCAGUAN",
+    "TELLO",
+    "TERUEL",
+    "TIMANA",
+    "VILLAVIEJA",
+    "YAGUARA"
+   ]
+  },
+  "81": {
+   "zona": "Norte",
+   "usuarios": 615,
+   "descripcion": "DESTACADOS ZONA NEIVA",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "82": {
+   "zona": "Norte",
+   "usuarios": 365,
+   "descripcion": "DESTACADOS ZONA NORTE-MUNICIPIOS ALEDAÑOS A NEIVA",
+   "ubicacion": "U",
+   "municipios": [
+    "AIPE",
+    "ALGECIRAS",
+    "BARAYA",
+    "CAMPOALEGRE",
+    "HOBO",
+    "IQUIRA",
+    "NEIVA",
+    "PALERMO",
+    "RIVERA",
+    "SANTAMARIA",
+    "TELLO",
+    "TERUEL",
+    "VILLAVIEJA",
+    "YAGUARA"
+   ]
+  },
+  "90": {
+   "zona": "Occidente",
+   "usuarios": 3894,
+   "descripcion": "RURAL LA PLATA-BELEN",
+   "ubicacion": "R",
+   "municipios": [
+    "LAPLATA"
+   ]
+  },
+  "91": {
+   "zona": "Occidente",
+   "usuarios": 3613,
+   "descripcion": "RURAL LA PLATA-FATIMA",
+   "ubicacion": "R",
+   "municipios": [
+    "LAPLATA"
+   ]
+  },
+  "92": {
+   "zona": "Occidente",
+   "usuarios": 3602,
+   "descripcion": "RURAL LA PLATA-PITAL",
+   "ubicacion": "R",
+   "municipios": [
+    "LAPLATA",
+    "PITAL"
+   ]
+  },
+  "93": {
+   "zona": "Occidente",
+   "usuarios": 3073,
+   "descripcion": "RURAL NATAGA-PAICOL",
+   "ubicacion": "R",
+   "municipios": [
+    "NATAGA",
+    "PAEZ",
+    "PAICOL"
+   ]
+  },
+  "94": {
+   "zona": "Occidente",
+   "usuarios": 2932,
+   "descripcion": "RURAL TESALIA-IQUIRA",
+   "ubicacion": "R",
+   "municipios": [
+    "IQUIRA",
+    "PAEZ",
+    "TESALIA"
+   ]
+  },
+  "103": {
+   "zona": "Norte",
+   "usuarios": 2657,
+   "descripcion": "CENTRO 2-NEIVA",
+   "ubicacion": "R",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "107": {
+   "zona": "Norte",
+   "usuarios": 5238,
+   "descripcion": "CANDIDO-STA INES-MERCEDES",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "108": {
+   "zona": "Norte",
+   "usuarios": 4955,
+   "descripcion": "COLMENARES-LUIS E VANEGAS-MIRA R",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "109": {
+   "zona": "Norte",
+   "usuarios": 7736,
+   "descripcion": "GUALANDAY-PRADO NORTE",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "110": {
+   "zona": "Norte",
+   "usuarios": 4960,
+   "descripcion": "VERGEL-IPANEMA-CONDOMINIOS",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "112": {
+   "zona": "Norte",
+   "usuarios": 6275,
+   "descripcion": "BARRIOS DEL SUR",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "114": {
+   "zona": "Norte",
+   "usuarios": 5571,
+   "descripcion": "SAN JORGE, PTA  DEL SOL-OASIS",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "117": {
+   "zona": "Norte",
+   "usuarios": 5088,
+   "descripcion": "LA RIOJA-LOS COLORES",
+   "ubicacion": "U",
+   "municipios": [
+    "NEIVA"
+   ]
+  },
+  "121": {
+   "zona": "Norte",
+   "usuarios": 4944,
+   "descripcion": "TERUEL-IQUIRA-YAGUARA",
+   "ubicacion": "U",
+   "municipios": [
+    "IQUIRA",
+    "TERUEL",
+    "YAGUARA"
+   ]
+  },
+  "123": {
+   "zona": "Norte",
+   "usuarios": 4902,
+   "descripcion": "RIVERA",
+   "ubicacion": "U",
+   "municipios": [
+    "RIVERA"
+   ]
+  },
+  "124": {
+   "zona": "Norte",
+   "usuarios": 2421,
+   "descripcion": "RURAL RIVERA",
+   "ubicacion": "R",
+   "municipios": [
+    "CAMPOALEGRE",
+    "RIVERA"
+   ]
+  },
+  "125": {
+   "zona": "Norte",
+   "usuarios": 2583,
+   "descripcion": "RURAL PALERMO",
+   "ubicacion": "R",
+   "municipios": [
+    "IQUIRA",
+    "PALERMO",
+    "TERUEL"
+   ]
+  },
+  "126": {
+   "zona": "Norte",
+   "usuarios": 1224,
+   "descripcion": "RURAL VILLAVIEJA Y BARAYA",
+   "ubicacion": "R",
+   "municipios": [
+    "ALPUJARRA",
+    "BARAYA",
+    "COLOMBIA"
+   ]
+  },
+  "127": {
+   "zona": "Norte",
+   "usuarios": 2144,
+   "descripcion": "RURAL ALGECIRAS",
+   "ubicacion": "R",
+   "municipios": [
+    "ALGECIRAS"
+   ]
+  },
+  "128": {
+   "zona": "Norte",
+   "usuarios": 2803,
+   "descripcion": "RURAL NEIVA ORIENTE-TELLO-VEGALARGA",
+   "ubicacion": "R",
+   "municipios": [
+    "BARAYA",
+    "NEIVA",
+    "TELLO"
+   ]
+  },
+  "129": {
+   "zona": "Norte",
+   "usuarios": 3305,
+   "descripcion": "RURAL SANTA MARIA-AIPE",
+   "ubicacion": "R",
+   "municipios": [
+    "AIPE",
+    "ATACO",
+    "NEIVA",
+    "SANTAMARIA"
+   ]
+  },
+  "176": {
+   "zona": "Occidente",
+   "usuarios": 5292,
+   "descripcion": "LA PLATA",
+   "ubicacion": "U",
+   "municipios": [
+    "LAPLATA"
+   ]
+  },
+  "200": {
+   "zona": "Norte",
+   "usuarios": 17,
+   "descripcion": "AUTOGENERADORES-DEPARTAMENTO DEL HUILA",
+   "ubicacion": "U",
+   "municipios": []
+  }
+ }
+}

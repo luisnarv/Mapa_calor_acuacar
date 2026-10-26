@@ -1,0 +1,29 @@
+{
+  "name": "electrohuila-mapa-calor",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Visor del mapa de calor de ElectroHuila",
+  "scripts": {
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "start": "next start",
+    "lint": "eslint",
+    "postinstall": "node scripts/copiar-worker-maplibre.mjs",
+    "dev:turbo": "next dev",
+    "build:turbo": "next build"
+  },
+  "dependencies": {
+    "@maplibre/maplibre-gl-leaflet": "^0.1.4",
+    "leaflet": "^1.9.4",
+    "leaflet.heat": "^0.2.0",
+    "lucide-react": "^1.31.0",
+    "maplibre-gl": "^6.6.0",
+    "next": "^16.2.10",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "eslint": "^9",
+    "eslint-config-next": "^16.2.10"
+  }
+}

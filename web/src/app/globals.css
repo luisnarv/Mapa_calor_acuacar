@@ -1,0 +1,1212 @@
+/* =========================================================================
+   Centro Operativo SCR — Identidad corporativa ISES
+   Tipografía: Gotham → Montserrat → Poppins → Segoe UI
+   Paleta: #78BE20 · #B5BD00 · #509E2F · #38764C · #97999B · #E0E0E0
+   Dos temas: LIGHT y DARK con los mismos componentes.
+   ========================================================================= */
+
+:root{
+  /* --- tipografía --- */
+  --ff:'Gotham','Montserrat','Poppins','Segoe UI',sans-serif;
+  --ff-num:'Gotham','Montserrat','Poppins','Segoe UI',sans-serif;
+
+  /* --- marca (invariante en ambos temas) --- */
+  --ises:#78BE20;
+  --ises-lima:#B5BD00;
+  --ises-medio:#509E2F;
+  --ises-oscuro:#38764C;
+  --gris-medio:#97999B;
+  --gris-claro:#E0E0E0;
+
+  /* --- series de datos: de claro a oscuro + gris de referencia --- */
+  --s1:#B5BD00; --s2:#78BE20; --s3:#509E2F; --s4:#38764C; --s-ref:#97999B;
+
+  /* --- radios (mismo sistema en todo el tablero) --- */
+  --r:6px; --r-sm:4px; --r-lg:10px;
+}
+
+/* ===================== TEMA DARK (por defecto) =====================
+   Identidad Navy (SIP): superficies azul medianoche, marca en azul cielo,
+   acento en verde menta. El verde queda reservado para «orden efectiva». */
+:root,
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0A1A2F;            /* base · azul medianoche */
+  --pan:#102A4A;           /* superficie · paneles */
+  --pan2:#0F2744;          /* tarjeta */
+  --elev:#16355C;          /* elevado */
+  --line:#1E3A5F;          /* línea interna */
+  --line2:#2C5482;         /* borde fuerte */
+  --tx:#F2F7FF;            /* texto 1 · blanco hielo */
+  --ttl:#F2F7FF;
+  --mut:#C9DAEE;           /* texto 2 · azul acero claro */
+  --dim:#85A3C4;           /* texto 3 · secundario */
+  --cu:#4A9EE8;            /* acento de marca · azul cielo */
+  --cu2:#4A9EE8;           /* acento de texto */
+  --cu-strong:#3B8AD9;     /* activo / borde de acento */
+  --cu-deep:#143A63;       /* fondo de acento (badges, botón activo) */
+  --ok:#2BD98C; --warn:#F0C040; --bad:#FF5A5F;
+  --ok-tx:#2BD98C; --warn-tx:#F0C040; --bad-tx:#FF7A7E;
+  --none:#85A3C4;
+  --ink:#FFFFFF; --ink-soft:#0A1A2F;
+  /* la barra superior es superficie navy con acento azul lateral */
+  --banner:var(--pan);
+  --banner-tx:#F2F7FF;
+  --banner-sub:#85A3C4;
+  --banner-line:#2C5482;
+  --brand-sep:#4A9EE8;
+  --top-accent:#4A9EE8;
+  --btn-bg:transparent; --btn-tx:#C9DAEE; --btn-line:#2C5482; --btn-bg-h:#16355C;
+  --theme-bg:#143A63; --theme-tx:#4A9EE8; --theme-line:#143A63;
+  --track:#2C5482; --thumb:#4A9EE8;
+  --kv-tx:#C9DAEE;
+  --badge-bg:#143A63; --badge-tx:#4A9EE8;
+  --map-bg:#0A1A2F;
+  --overlay:rgba(10,26,47,.94);
+  --shadow:0 10px 30px rgba(0,0,0,.55);
+  --accent-wash:rgba(59,138,217,.12);
+  /* Header: el badge de marca va en el acento del tema, no en verde. En oscuro
+     el verde está reservado para «orden efectiva» y un badge verde competiría
+     con lo que dice el mapa. */
+  --hd-badge-bg:#143A63; --hd-badge-tx:#4A9EE8;
+  --hd-id-tx:#F2F7FF; --hd-id-sub:#85A3C4;
+  --hd-ico-line:#2C5482; --hd-ico-tx:#C9DAEE; --hd-ico-bg-h:#16355C;
+  --hd-fresh-bg:#0F2744; --hd-fresh-tx:#C9DAEE;
+  --hd-warn-bg:rgba(255,154,31,.16); --hd-warn-tx:#FFB454;
+  --hd-pill-bg:#0F2744; --hd-pill-tx:#C9DAEE; --hd-pill-line:#2C5482;
+  --hd-on-bg:#143A63; --hd-on-line:#3B8AD9; --hd-on-tx:#4A9EE8;
+  --row-line:#16304F;
+}
+
+/* ===================== TEMA LIGHT ===================== */
+:root[data-theme="light"]{
+  color-scheme:light;
+  --bg:#FFFFFF; --pan:#F4F6EF; --pan2:#EDF1E3; --elev:#E6EBDA;
+  --line:#E0E0E0; --line2:#C9CFC0;
+  --tx:#3A3A3A;
+  --ttl:#38764C;
+  --mut:#5F6663;
+  --dim:#6F7275;           /* secundario oscurecido para cumplir AA */
+  --cu:#78BE20;
+  --cu2:#38764C;           /* texto verde en claro: NUNCA #78BE20 */
+  --cu-strong:#509E2F;
+  --cu-deep:#38764C;
+  --ok:#509E2F; --warn:#B5BD00; --bad:#C0392B;
+  --ok-tx:#3E7B24; --warn-tx:#6E7300; --bad-tx:#A5301F;
+  --none:#97999B;
+  --ink:#FFFFFF; --ink-soft:#14201A;
+  /* en claro sí se usa el degradado de marca en la cabecera */
+  --banner:linear-gradient(90deg,#78BE20,#B5BD00);
+  --banner-tx:#FFFFFF;
+  --banner-sub:rgba(255,255,255,.95);
+  --banner-line:rgba(255,255,255,.55);
+  --brand-sep:rgba(255,255,255,.7);
+  --top-accent:transparent;
+  --btn-bg:transparent; --btn-tx:#3A3A3A;
+  --btn-line:#C9CFC0; --btn-bg-h:#EDF1E3;
+  --hd-badge-bg:#173404; --hd-badge-tx:#C0DD97;
+  --hd-id-tx:#FFFFFF; --hd-id-sub:rgba(255,255,255,.92);
+  --hd-ico-line:rgba(255,255,255,.55); --hd-ico-tx:#FFFFFF;
+  --hd-ico-bg-h:rgba(255,255,255,.22);
+  --hd-fresh-bg:rgba(255,255,255,.18); --hd-fresh-tx:#FFFFFF;
+  --hd-warn-bg:#FBEBD0; --hd-warn-tx:#8A5A00;
+  --hd-pill-bg:rgba(255,255,255,.16); --hd-pill-tx:#FFFFFF;
+  --hd-pill-line:rgba(255,255,255,.45);
+  --hd-on-bg:#FFFFFF; --hd-on-line:#FFFFFF; --hd-on-tx:#38764C;
+  --theme-bg:rgba(255,255,255,.14); --theme-tx:#FFFFFF; --theme-line:rgba(255,255,255,.55);
+  --track:rgba(255,255,255,.55); --thumb:#FFFFFF;
+  --kv-tx:#38764C;
+  --badge-bg:#38764C; --badge-tx:#FFFFFF;
+  --map-bg:#EDF0E8;
+  --overlay:rgba(255,255,255,.95);
+  --shadow:0 10px 28px rgba(56,118,76,.16);
+  --accent-wash:rgba(120,190,32,.12);
+  --row-line:rgba(0,0,0,.07);
+}
+
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--bg); color:var(--tx);
+  font:400 14px/1.45 var(--ff);
+  overflow:hidden; -webkit-font-smoothing:antialiased;
+  transition:background-color .2s ease,color .2s ease;
+}
+h2,h3,h4{font-family:var(--ff);font-weight:700;letter-spacing:.01em;color:var(--ttl)}
+.num,.kv,.sp-risk,.pb-risk,b.mono{font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-weight:500}
+.ok{color:var(--ok-tx)} .warn{color:var(--warn-tx)} .bad{color:var(--bad-tx)} .dim{color:var(--dim)}
+.hint{font-size:11px;color:var(--dim);font-weight:400;letter-spacing:0}
+.empty{color:var(--dim);font-size:12.5px;padding:14px 2px;line-height:1.6}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-thumb{background:var(--line2);border-radius:6px}
+::-webkit-scrollbar-track{background:transparent}
+:focus-visible{outline:2px solid var(--cu2);outline-offset:1px}
+
+/* ===== SHELL ===== */
+#app{display:grid;grid-template-rows:auto auto 1fr;height:100vh;max-width:100vw;width:100%;overflow:hidden}
+
+/* ===== TOPBAR ===== */
+/* Tres franjas: identidad, cómo va la operación, y los filtros. Antes iba todo
+   en una sola banda con el degradado de marca detrás, y el verde competía con
+   los propios controles. */
+#top{display:block;max-width:100vw;width:100%;overflow:visible;
+  background:var(--pan);border-bottom:1px solid var(--line);
+  border-left:3px solid var(--top-accent)}
+
+/* Fila única: identidad · filtros · utilidades, toda sobre la banda de marca. */
+.hd-id{display:flex;flex-wrap:wrap;align-items:center;gap:10px 12px;
+  padding:9px 14px;background:var(--banner)}
+.hd-badge{width:30px;height:30px;flex:0 0 30px;border-radius:var(--r-sm);
+  background:var(--hd-badge-bg);color:var(--hd-badge-tx);display:flex;
+  align-items:center;justify-content:center;font:500 12px var(--ff);
+  letter-spacing:.06em}
+select.hd-proceso{width:auto;min-width:60px;flex:0 0 auto;padding:0 4px;
+  border:none;cursor:pointer;appearance:auto;-webkit-appearance:auto;
+  text-align:center}
+.hd-title{min-width:0;display:flex;flex-direction:column}
+.hd-title b{font:500 14px var(--ff);color:var(--hd-id-tx);line-height:1.2}
+.hd-title span{font-size:12px;color:var(--hd-id-sub);line-height:1.3}
+/* El contexto del conjunto de datos empuja las utilidades a la derecha. */
+/* Filete a la izquierda para separarlo de la marca: pegados sin nada en medio,
+   las cifras se leían como una tercera línea del título. */
+.hd-ctx{font-size:11px;color:var(--hd-id-sub);font-family:var(--ff-num);
+  font-variant-numeric:tabular-nums;white-space:nowrap;
+  padding-left:12px;border-left:1px solid var(--banner-line)}
+.hd-fresh{display:flex;align-items:center;gap:6px;font-size:12px;padding:5px 10px;
+  border-radius:999px;white-space:nowrap;color:var(--hd-fresh-tx);background:var(--hd-fresh-bg)}
+.hd-fresh.warn{background:var(--hd-warn-bg);color:var(--hd-warn-tx)}
+.hd-ico{width:30px;height:30px;flex:0 0 30px;padding:0;display:flex;
+  align-items:center;justify-content:center;background:transparent;
+  border:1px solid var(--hd-ico-line);border-radius:var(--r-sm);
+  color:var(--hd-ico-tx);cursor:pointer}
+.hd-ico:hover{background:var(--hd-ico-bg-h)}
+.hd-ico:disabled{opacity:.55;cursor:default}
+.refresh-ic{line-height:1;display:inline-flex;align-items:center}
+.refresh-ic.spinning{animation:mm-spin .7s linear infinite}
+
+/* 3 · filtros como píldoras. La píldora ES el estado: sin poner muestra su
+   nombre, puesta muestra el valor y se limpia desde ella misma. */
+/* Se van a la derecha, contra las utilidades, y envuelven si no caben. */
+.hd-filtros{display:flex;flex-wrap:wrap;align-items:center;justify-content:flex-end;
+  gap:6px;margin-left:auto;min-width:0}
+.hd-f{position:relative}
+.hd-pill{display:inline-flex;align-items:center;gap:6px;font:400 13px var(--ff);
+  padding:5px 10px;border-radius:999px;border:1px solid var(--hd-pill-line);
+  background:var(--hd-pill-bg);color:var(--hd-pill-tx);cursor:pointer;
+  max-width:280px}
+.hd-pill:hover{border-color:var(--hd-on-line)}
+.hd-pill.on{background:var(--hd-on-bg);border-color:var(--hd-on-line);
+  color:var(--hd-on-tx)}
+.hd-pill-k{flex:0 0 auto}
+.hd-pill-v{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.hd-pill-n{font-family:var(--ff-num);font-variant-numeric:tabular-nums;
+  font-size:11px;opacity:.75;flex:0 0 auto}
+.hd-pill-ic{display:inline-flex;align-items:center;line-height:1;flex:0 0 auto}
+/* Zona muerta sobre la X: abrir la lista y limpiar no pueden pelearse el clic. */
+.hd-pill-x{position:absolute;top:0;right:0;width:26px;height:100%;padding:0;
+  background:transparent;border:0;cursor:pointer}
+.hd-clear{background:transparent;border:0;color:var(--hd-id-sub);
+  font:400 13px var(--ff);padding:5px 6px;cursor:pointer;text-decoration:underline}
+.hd-clear:hover{color:var(--hd-id-tx)}
+
+/* Lista de un filtro simple */
+.hd-pop{position:absolute;top:calc(100% + 5px);left:0;z-index:950;min-width:220px;
+  max-width:320px;max-height:320px;overflow:auto;background:var(--pan);
+  border:1px solid var(--line2);border-radius:var(--r);box-shadow:var(--shadow);
+  padding:5px;display:flex;flex-direction:column;gap:1px}
+.hd-pop:focus{outline:none}
+/* `flex:0 0 auto` no es opcional: en una columna flex con altura máxima los
+   hijos se encogen por debajo de su contenido y las opciones se solapan unas
+   sobre otras en cuanto la lista es larga (22 municipios). */
+.hd-op{flex:0 0 auto;text-align:left;background:transparent;border:0;
+  border-radius:var(--r-sm);padding:6px 9px;font:400 12.5px var(--ff);
+  line-height:1.35;color:var(--mut);cursor:pointer;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hd-op:hover,.hd-op.mk{background:var(--elev);color:var(--tx)}
+.hd-op.sel{color:var(--cu2);font-weight:600}
+
+/* fecha */
+.dates{display:flex;flex-direction:column;gap:2px;min-width:190px}
+.dates .rr{display:flex;flex-direction:column;gap:0}
+input[type=range]{-webkit-appearance:none;appearance:none;background:transparent;height:16px;cursor:pointer;width:100%}
+input[type=range]::-webkit-slider-runnable-track{height:3px;background:var(--track);border-radius:3px}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;
+  background:var(--thumb);margin-top:-5px;border:0}
+input[type=range]::-moz-range-track{height:3px;background:var(--track);border-radius:3px}
+input[type=range]::-moz-range-thumb{width:13px;height:13px;border:0;border-radius:50%;background:var(--thumb)}
+#dateLabel{font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-size:11px;color:var(--banner-tx)}
+/* sliders fuera de la cabecera (panel izquierdo) */
+#left input[type=range]::-webkit-slider-runnable-track{background:var(--line2)}
+#left input[type=range]::-webkit-slider-thumb{background:var(--cu)}
+#left input[type=range]::-moz-range-track{background:var(--line2)}
+#left input[type=range]::-moz-range-thumb{background:var(--cu)}
+#left .f label,#right .f label{color:var(--dim)}
+
+/* ===== SELECTOR DE MESES DE OPERACIÓN (cabecera) ===== */
+.f.mm{position:relative;flex:0 0 auto}
+.mm-btn{display:flex;align-items:center;gap:8px;min-width:186px;max-width:186px;
+  background:var(--pan2);border:1px solid var(--line2);border-radius:var(--r-sm);
+  padding:6px 9px;cursor:pointer;font:400 12px var(--ff);color:var(--tx)}
+.mm-btn:hover{border-color:var(--cu)}
+.mm-btn.open{border-color:var(--cu)}
+.mm-sum{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;text-align:left}
+.mm-count{flex:0 0 auto;font:600 10.5px var(--ff-num);font-variant-numeric:tabular-nums;
+  color:var(--cu2);background:var(--accent-wash);border-radius:999px;padding:2px 7px;line-height:1.3}
+.mm-chev{flex:0 0 auto;display:inline-flex;color:var(--mut);transition:transform .15s ease}
+.mm-btn.open .mm-chev{transform:rotate(180deg)}
+
+.mm-pop{position:absolute;top:calc(100% + 5px);right:0;z-index:950;width:250px;
+  background:var(--pan);border:1px solid var(--line2);border-radius:var(--r);
+  box-shadow:var(--shadow);padding:10px}
+.mm-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.mm-title{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.mm-all{font-size:10px;color:var(--cu2);background:none;border:none;cursor:pointer;
+  font-weight:600;letter-spacing:.02em;padding:0;white-space:nowrap;min-width:0}
+.mm-all:hover{text-decoration:underline}
+.mm-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:3px}
+.mm-item{display:flex;align-items:center;gap:5px;padding:5px 6px;border-radius:var(--r-sm);
+  border:1px solid var(--line);background:transparent;color:var(--dim);cursor:pointer;
+  font:400 11px var(--ff);text-align:left;min-width:0}
+.mm-item.on{background:var(--accent-wash);border-color:var(--cu);color:var(--tx)}
+.mm-item input[type=checkbox]{width:12px;height:12px;flex:0 0 auto;accent-color:var(--cu);
+  cursor:pointer;margin:0;min-width:0}
+.mm-name{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mm-n{flex:0 0 auto;font-family:var(--ff-num);font-variant-numeric:tabular-nums;
+  font-size:10px;color:var(--dim)}
+.mm-item.on .mm-n{color:var(--cu2)}
+.mm-spin{flex:0 0 auto;width:11px;height:11px;border-radius:50%;
+  border:2px solid var(--line2);border-top-color:var(--cu);animation:mm-spin .7s linear infinite}
+@keyframes mm-spin{to{transform:rotate(360deg)}}
+
+/* Detalle de varios barrios: acumulado o por separado. */
+.multi-modo{display:flex;gap:4px;margin-bottom:12px;padding:3px;border:1px solid var(--line2);
+  border-radius:var(--r);background:var(--bg)}
+.mm-seg{flex:1;padding:5px 8px;border:none;border-radius:var(--r-sm);background:transparent;
+  color:var(--dim);font:600 11px var(--ff);cursor:pointer}
+.mm-seg.on{background:var(--accent-wash);color:var(--cu2)}
+.multi-b{border:1px solid var(--line);border-radius:var(--r);margin-bottom:10px;padding:8px 10px}
+.multi-b>summary{cursor:pointer;font-weight:600;font-size:12px;margin-bottom:8px}
+.multi-b>summary .dim{font-weight:400;color:var(--dim);font-size:10.5px;margin-left:6px}
+.sp-sel{display:flex;align-items:center;gap:10px;margin:6px 8px;padding:6px 10px;
+  border:1px solid var(--cu);border-radius:var(--r);background:var(--accent-wash);font-size:11px}
+.sp-sel span{flex:1;min-width:0}
+.sp-sel button{background:none;border:none;color:var(--cu2);font:600 11px var(--ff);cursor:pointer;padding:0}
+.sp-sel button:hover{text-decoration:underline}
+.sp-chk{flex:0 0 auto;width:14px;height:14px;margin:0;align-self:center;accent-color:var(--cu);cursor:pointer}
+/* Selector de varios técnicos/gestores, dentro de su pestaña. */
+.sm-wrap{margin-bottom:12px}
+.sm-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px}
+.sm-head label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;color:var(--dim);font-weight:700}
+.sm-quitar{font-size:10px;color:var(--cu2);background:none;border:none;cursor:pointer;font-weight:600;padding:0}
+.sm-quitar:hover{text-decoration:underline}
+.sm-buscar{width:100%;box-sizing:border-box;margin-bottom:6px;padding:6px 8px;border-radius:var(--r-sm);
+  border:1px solid var(--line2);background:var(--bg);color:var(--tx);font:400 11.5px var(--ff)}
+.sm-buscar:focus{outline:none;border-color:var(--cu)}
+.sm-lista{display:flex;flex-direction:column;gap:3px;max-height:190px;overflow-y:auto}
+.sm-item{display:flex;align-items:center;gap:6px;padding:5px 7px;border-radius:var(--r-sm);
+  border:1px solid var(--line);color:var(--dim);cursor:pointer;font:400 11px var(--ff);min-width:0}
+.sm-item.on{background:var(--accent-wash);border-color:var(--cu);color:var(--tx)}
+.sm-item input[type=checkbox]{width:12px;height:12px;flex:0 0 auto;margin:0;accent-color:var(--cu);cursor:pointer}
+.sm-nombre{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sm-extra{flex:0 0 auto;font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-size:10px}
+.sm-vacio{font-size:10.5px;color:var(--dim);padding:6px 2px}
+.mm-days{margin-top:10px;padding-top:10px;border-top:1px solid var(--line)}
+.mm-days-h{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:7px}
+.mm-range{font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-size:10.5px;color:var(--mut)}
+.mm-sliders{display:flex;flex-direction:column;gap:7px}
+.mm-pop input[type=range]{width:100%}
+.mm-pop input[type=range]::-webkit-slider-runnable-track{background:var(--line2)}
+.mm-pop input[type=range]::-webkit-slider-thumb{background:var(--cu)}
+.mm-pop input[type=range]::-moz-range-track{background:var(--line2)}
+.mm-pop input[type=range]::-moz-range-thumb{background:var(--cu)}
+
+/* ===== LAYOUT PRINCIPAL ===== */
+#main{display:flex;flex-direction:row;align-items:stretch;overflow:hidden;width:100%}
+#left,#center,#right{min-width:0;min-height:0}
+
+/* ===== COLA DE TRIAJE ===== */
+#left{flex:0 0 clamp(220px,24vw,296px);background:var(--pan);border-right:1px solid var(--line);
+  display:flex;flex-direction:column;overflow:hidden}
+.lh{padding:10px 12px;border-bottom:1px solid var(--line)}
+.lh h3{font-size:14px;display:flex;align-items:center;justify-content:space-between}
+.lh h3 em{font-style:normal;font-size:11px;font-family:var(--ff-num);font-weight:700;
+  background:var(--badge-bg);color:var(--badge-tx);border-radius:var(--r-sm);padding:2px 8px}
+.lh p{font-size:10.5px;color:var(--dim);margin-top:3px;line-height:1.45}
+#spineSearch{width:100%;margin-top:7px;background:var(--bg);border:1px solid var(--line);
+  border-radius:var(--r-sm);padding:6px 8px;color:var(--tx);font:400 12px var(--ff)}
+.lctl{display:flex;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);align-items:flex-end}
+.lctl .f{flex:1}
+.lctl input[type=number]{min-width:0;width:100%}
+.lctl .rgw{flex:1.3}
+.lctl-nota{display:block;margin-top:3px;font-size:10px;line-height:1.3;color:var(--dim)}
+#hotLabel{color:var(--cu2);font-family:var(--ff-num);font-weight:600}
+#spine{flex:1;overflow-y:auto}
+#spineCount{font-size:10px;color:var(--dim);padding:6px 12px;font-family:var(--ff-num);
+  border-bottom:1px solid var(--line)}
+.sp-row{display:flex;gap:9px;padding:9px 10px;margin:6px 8px;cursor:pointer;
+  background:var(--pan2);border:1px solid var(--line);border-radius:var(--r)}
+.sp-row:hover{border-color:var(--line2)}
+.sp-row.sel{border-color:var(--cu);box-shadow:inset 3px 0 0 var(--cu)}
+.sp-risk{width:32px;height:32px;flex:0 0 32px;border-radius:var(--r-sm);display:flex;align-items:center;
+  justify-content:center;font-size:13px;font-weight:700}
+.sp-body{flex:1;min-width:0}
+.sp-t{font-size:12.5px;font-weight:600;display:flex;align-items:center;gap:4px;color:var(--tx);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sp-m{font-size:9.5px;color:var(--dim);margin-left:auto;padding-left:6px;flex:0 0 auto;font-weight:400;
+  max-width:82px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.sp-row.hot .sp-t{color:var(--bad-tx)}
+.dot{width:5px;height:5px;border-radius:50%;background:var(--bad);flex:0 0 5px;animation:pulse 1.6s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* símbolo ISES girando en la pantalla de carga */
+.ises-spin{animation:ises-spin 1.9s linear infinite;transform-origin:50% 50%}
+@keyframes ises-spin{to{transform:rotate(360deg)}}
+
+/* ===== PANTALLA DE CARGA: logo girando + anillo + barra ===== */
+.loader-screen{background:var(--bg);height:100vh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:24px;padding:0 24px;text-align:center;color:var(--cu2)}
+.loader-badge{position:relative;display:flex;align-items:center;justify-content:center;
+  width:clamp(104px,22vw,132px);height:clamp(104px,22vw,132px)}
+/* anillo exterior que gira alrededor del logo */
+.loader-ring{position:absolute;inset:0;border-radius:50%;
+  border:3px solid var(--line2);border-top-color:var(--cu);border-right-color:var(--cu);
+  animation:ises-spin 1s linear infinite}
+/* pista tenue de fondo del anillo (para que se vea "barra alrededor") */
+.loader-ring-bg{position:absolute;inset:0;border-radius:50%;border:3px solid var(--line2);opacity:.4}
+.loader-logo{position:relative;z-index:1;width:clamp(54px,13vw,72px);height:auto}
+.loader-title{font-family:var(--ff);font-weight:700;font-size:clamp(15px,4vw,22px);letter-spacing:.18em}
+/* barra de carga indeterminada */
+.loader-bar{position:relative;width:min(280px,72vw);height:5px;border-radius:999px;
+  background:var(--line2);overflow:hidden}
+.loader-bar-fill{position:absolute;top:0;height:100%;width:40%;border-radius:999px;
+  background:var(--cu);animation:loader-slide 1.2s ease-in-out infinite}
+@keyframes loader-slide{0%{left:-45%}100%{left:100%}}
+.sp-bar{display:flex;height:4px;margin:5px 0;background:var(--line);border-radius:3px;overflow:hidden}
+.sp-bar i{display:block;height:100%}
+.sp-f{display:flex;gap:8px;font-size:10px;color:var(--mut);font-family:var(--ff-num)}
+.sp-pe{color:var(--bad-tx)}
+.tr{margin-left:auto;display:inline-flex;align-items:center;gap:3px}
+.tr.up{color:var(--bad-tx)}.tr.dn{color:var(--ok-tx)}
+
+/* ===== MAPA ===== */
+#center{flex:1 1 auto;position:relative;display:flex;flex-direction:column;overflow:hidden}
+#mapwrap{position:relative;flex:1;min-height:0}
+#map{position:absolute;inset:0;height:100%;background:var(--map-bg)}
+.pt-canvas{position:absolute;top:0;left:0;pointer-events:none}
+.leaflet-container{font-family:var(--ff);background:var(--map-bg)}
+.leaflet-control-zoom a{background:var(--pan)!important;color:var(--ttl)!important;border-color:var(--line)!important}
+.leaflet-control-attribution{background:var(--overlay)!important;color:var(--dim)!important}
+.leaflet-control-attribution a{color:var(--cu2)!important}
+.tt,.leaflet-tooltip{background:var(--overlay)!important;border:1px solid var(--line2)!important;
+  color:var(--tx)!important;border-radius:var(--r)!important;box-shadow:var(--shadow)!important;
+  font-size:11.5px!important;padding:7px 9px!important}
+.leaflet-tooltip-top:before{border-top-color:var(--line2)!important}
+.tt b{color:var(--ttl)}
+.tt span{display:block;color:var(--mut);font-size:10.5px}
+.tt .tt-m{color:var(--dim);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase}
+.tt .tt-r{font-family:var(--ff-num);font-weight:600;margin:3px 0}
+.tt .tt-p{color:var(--cu2);margin-top:3px;font-size:10px}
+.tt .tt-w{color:var(--warn-tx);font-size:10px;margin-top:3px}
+.mk-hot{animation:mkp 1.8s infinite}
+@keyframes mkp{0%,100%{opacity:1}50%{opacity:.55}}
+
+/* órdenes por ejecutar del archivo cargado: foco ámbar. El color va en línea
+   desde la paleta JS; aquí solo la forma, que no depende del tema.
+   El selector lleva `.leaflet-div-icon` para ganarle al fondo blanco y al borde
+   que Leaflet le pone por defecto a todo divIcon. */
+.leaflet-div-icon.cargue-foco{background:none;border:0}
+/* El alto tiene que coincidir con el `iconSize` del divIcon: si el círculo es
+   más grande que su caja, se dibuja descentrado respecto al punto real y la
+   zona sensible al clic queda más pequeña que lo que se ve. */
+.cargue-foco>span{display:flex;align-items:center;justify-content:center;
+  width:14px;height:14px;border-radius:50%;box-shadow:0 1px 3px rgba(0,0,0,.45);
+  transition:transform .12s ease}
+.cargue-foco:hover>span{transform:scale(1.25)}
+
+/* capas */
+#layers{max-height:calc(100% - 12px);overflow-y:auto;pointer-events:auto;position:absolute;top:12px;left:12px;z-index:800;background:var(--overlay);
+  border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;backdrop-filter:blur(6px);
+  width:250px;box-shadow:var(--shadow)}
+#layers h4{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);margin-bottom:6px}
+#layers .lgrp h4{margin-top:2px}
+.lay{display:flex;align-items:center;gap:6px;padding:3px 0;font-size:11px;color:var(--tx);cursor:pointer;user-select:none}
+.lay:hover{color:var(--cu2)}
+.lay input{accent-color:var(--cu);width:13px;height:13px}
+.lay .sw{width:9px;height:9px;border-radius:2px;flex:0 0 9px}
+.lgrp{border-top:1px solid var(--line);margin-top:7px;padding-top:6px}
+.lay-nota{font-size:9.5px;color:var(--dim);line-height:1.45;margin-top:5px}
+
+#legend{font-size:10.5px;color:var(--mut)}
+#legend div{display:flex;align-items:center;gap:6px;padding:1.5px 0}
+#legend i{width:9px;height:9px;border-radius:2px;flex:0 0 9px}
+
+#mapEmpty{display:none;position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);
+  z-index:700;background:var(--overlay);border:1px solid var(--line2);border-radius:var(--r);
+  padding:16px 20px;text-align:center;max-width:320px;backdrop-filter:blur(6px);box-shadow:var(--shadow)}
+#mapCap{display:none;position:absolute;bottom:12px;left:50%;transform:translateX(-50%);z-index:650;
+  background:var(--overlay);border:1px solid var(--line2);border-radius:var(--r);padding:5px 12px;
+  font-size:11px;color:var(--mut);backdrop-filter:blur(6px);pointer-events:none}
+#mapEmpty b{font-family:var(--ff);font-weight:700;font-size:15px;letter-spacing:.02em;color:var(--ttl)}
+#mapEmpty p{font-size:11.5px;color:var(--mut);margin-top:5px;line-height:1.5}
+
+/* ===== DOCK ===== */
+#dock{border-top:1px solid var(--line);background:var(--pan);height:296px;display:flex;flex-direction:column;
+  transition:height .25s ease}
+#dock.min{height:38px}
+.dh{display:flex;align-items:center;gap:2px;padding:0 10px;border-bottom:1px solid var(--line);flex:0 0 38px;
+  overflow-x:auto}
+.dtab,.ptab{background:none;border:0;color:var(--dim);font:500 11px var(--ff);padding:11px 12px;
+  cursor:pointer;letter-spacing:.05em;border-bottom:2px solid transparent;white-space:nowrap}
+.dtab:hover,.ptab:hover{color:var(--ttl)}
+.dtab.on,.ptab.on{color:var(--cu2);border-bottom-color:var(--cu);font-weight:600}
+/* El botón Contraer/Expandir vive sobre un panel (--pan), no sobre el banner,
+   así que NO puede usar los tokens --btn-* (texto blanco, pensados para el
+   banner: en claro quedarían blanco sobre claro = invisible). Usa colores de
+   panel, legibles en ambos temas. */
+#dockToggle{
+  margin-left:auto;
+  background:var(--pan2);
+  border:1px solid var(--line2);
+  color:var(--dim);
+  font:500 10.5px var(--ff);
+  letter-spacing:.04em;
+  padding:5px 12px;
+  border-radius:var(--r-sm);
+  cursor:pointer;
+  transition:all .15s ease;
+}
+#dockToggle:hover{background:var(--elev);border-color:var(--cu);color:var(--tx)}
+#gran{min-width:96px;margin-left:8px;background:var(--bg);color:var(--tx);border:1px solid var(--line);
+  border-radius:var(--r-sm);padding:5px 6px;font:400 11px var(--ff)}
+#dockBody{flex:1;overflow:auto;padding:12px 14px}
+.vt-sw{display:inline-flex;margin-left:8px;border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.vt-sw button{background:none;border:0;color:var(--dim);font:500 11px var(--ff);padding:5px 10px;cursor:pointer}
+.vt-sw button.on{background:var(--pan2);color:var(--tx);font-weight:600}
+.gv{display:flex;gap:18px;align-items:flex-start}
+.gv-t{flex:1.7;min-width:0;max-height:252px;overflow:auto}
+.gv-t table.mt thead th{position:sticky;top:0;background:var(--pan);z-index:1}
+.gv-t table.mt tfoot td{position:sticky;bottom:0;background:var(--pan);font-weight:700;color:var(--tx);border-top:1px solid var(--line2)}
+.gv-c{flex:1;min-width:240px;max-height:252px;overflow:auto}
+.gv-ch{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px;font-size:11.5px;color:var(--tx)}
+.gv-ch select{background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:var(--r);font:500 11px var(--ff);padding:3px 6px}
+.gv-b{display:grid;grid-template-columns:118px 1fr 82px;align-items:center;gap:6px;padding:2px 0;font-size:10.5px}
+.gv-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--mut)}
+.gv-b i{display:flex;flex-direction:column;justify-content:center;gap:2px;height:12px}
+.gv-b i b{display:block;height:9px;border-radius:2px;min-width:1px}
+.gv-v{text-align:right;color:var(--tx);font-variant-numeric:tabular-nums}
+.gv-nota{font-size:9.5px;color:var(--dim);margin-top:6px}
+.mc{display:flex;gap:18px;align-items:flex-start}
+.mc-l{flex:1.4;min-width:0}
+.mc-r{flex:1;min-width:230px;display:flex;flex-direction:column;gap:5px}
+.mc-h{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.mc-h .vt-sw{margin-left:0}
+.mc-t{font-size:11px;color:var(--mut)}
+.cz-click{cursor:pointer;border-radius:var(--r)}
+.cz-click:hover,.cz-click.sel{background:var(--pan2)}
+.cz-click.sel .cz-n{color:var(--ttl);font-weight:600}
+.mc-rt{font-size:11.5px;color:var(--tx);margin-bottom:2px}
+.mc-d{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:var(--mut);padding:3px 0;border-bottom:1px solid var(--row-line)}
+.mc-d b{color:var(--tx);font-weight:600}
+.mc-d em,.cz-v em{font-style:normal;color:var(--dim);margin-left:4px}
+.mc-ag{margin-top:6px;text-align:left;background:var(--pan2);border:1px solid var(--line);border-radius:var(--r);color:var(--mut);font:500 11px var(--ff);padding:7px 9px;cursor:pointer}
+.mc-ag:hover,.mc-ag.sel{border-color:var(--cu2);color:var(--tx)}
+.mc-ag b{color:var(--tx)}
+.lay-sub{margin:0 0 2px 20px}
+.lay-sub .lay{font-size:11px;opacity:.95}
+.cc-q{background:var(--bg);color:var(--tx);border:1px solid var(--line);border-radius:var(--r);font:500 11.5px var(--ff);padding:5px 9px;min-width:200px}
+.rk-fila{cursor:pointer}
+.rk-fila:hover,.rk-fila.sel{background:var(--pan2)}
+.rk-fila.sel td:nth-child(2){color:var(--ttl);font-weight:700}
+.filtro-activo{position:absolute;top:12px;left:50%;transform:translateX(-50%);z-index:800;display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--overlay);border:1px solid var(--cu2);border-radius:var(--r);color:var(--mut);cursor:pointer;font:500 11.5px var(--ff);backdrop-filter:blur(6px);box-shadow:var(--shadow)}
+.filtro-activo b{color:var(--tx)}
+.sp-cat{color:var(--ttl);font-weight:700;margin-right:2px}
+.sp-ms{font-style:normal;font-size:9.5px;color:var(--dim);border:1px solid var(--line);border-radius:3px;padding:0 4px}
+
+#dock.min #dockBody{display:none}
+.dock-row{display:flex;gap:20px}
+.half{flex:1;min-width:0}
+h4{font-size:12px;color:var(--ttl);margin-bottom:8px;display:flex;gap:7px;align-items:baseline;font-weight:700}
+
+/* tendencias */
+.trend-cards{display:flex;flex-direction:column;gap:7px;flex:0 0 176px}
+.tc{background:var(--pan2);border:1px solid var(--line);border-radius:var(--r);padding:8px 10px;
+  display:flex;align-items:baseline;gap:7px;white-space:nowrap}
+.tc span{font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);flex:1}
+.tc b{font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-size:15px;font-weight:600;flex:0 0 auto;color:var(--ttl)}
+.tc>span:last-child{margin-left:auto;white-space:nowrap}
+.tc>span:last-child,.tc .ok,.tc .bad{font-size:10.5px;font-family:var(--ff-num);flex:0}
+.tc-d{display:inline-flex;align-items:center;gap:3px;letter-spacing:0;text-transform:none}
+.chart{flex:1;display:flex;align-items:flex-end;gap:2px;height:206px;padding-bottom:16px;position:relative}
+.tb{display:flex;flex-direction:column;justify-content:flex-end;height:100%;position:relative}
+.tb-stack{display:flex;flex-direction:column-reverse;height:100%;border-radius:2px;overflow:hidden;justify-content:flex-end}
+.tb-stack i{display:block;width:100%}
+.tb:hover .tb-stack{filter:brightness(1.15)}
+.tb-l{position:absolute;bottom:-15px;left:50%;transform:translateX(-50%);font-size:8.5px;color:var(--dim);
+  white-space:nowrap;font-family:var(--ff-num)}
+
+/* causas */
+.causes{display:flex;flex-direction:column;gap:5px}
+.cz{display:grid;grid-template-columns:1fr 88px 84px;align-items:center;gap:9px;font-size:11.5px}
+.cz-n{color:var(--tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cz-n em{font-style:normal;font-size:9px;color:var(--dim);border:1px solid var(--line2);
+  border-radius:var(--r-sm);padding:0 4px;margin-left:4px}
+.cz i{display:block;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.cz i b{display:block;height:100%;border-radius:3px}
+.cz-v{font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-size:11px;text-align:right;color:var(--tx)}
+.cz-v em{font-style:normal;color:var(--dim);font-size:10px;margin-left:4px}
+
+/* ===== TABLAS ===== */
+table.mt,table.cmp{width:100%;border-collapse:collapse;font-size:11.5px}
+table.mt th,table.cmp th{text-align:left;font:600 9.5px var(--ff);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);padding:6px 7px;border-bottom:1px solid var(--line)}
+table.mt td,table.cmp td{padding:6px 7px;border-bottom:1px solid var(--row-line);color:var(--mut)}
+table.mt td:first-child,table.cmp td:first-child{color:var(--tx)}
+/* Cabecera y cifras centradas: con la cifra a la derecha y el título a la izquierda no se sabía a qué columna pertenecía cada valor. */
+td.num,th.num{text-align:center;font-family:var(--ff-num);font-variant-numeric:tabular-nums}
+table.mt th:not(:first-child),table.cmp th:not(:first-child),table.mt th.num,table.mt td:not(:first-child),table.cmp td:not(:first-child){text-align:center}
+table.cmp td:not(:first-child){text-align:center;font-family:var(--ff-num);font-variant-numeric:tabular-nums}
+tr.clk{cursor:pointer}
+tr.clk:hover td{background:var(--pan2)}
+.pill{display:inline-block;min-width:28px;padding:2px 6px;border-radius:var(--r-sm);
+  font-size:10.5px;text-align:center;font-weight:700}
+.dl{font-family:var(--ff-num);font-size:11px;color:var(--dim)}
+.dl.ok{color:var(--ok-tx)} .dl.bad{color:var(--bad-tx)}
+.rk-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 22px}
+.rk-grid .wide{grid-column:1/-1}
+
+/* ===== PANEL DERECHO ===== */
+#right{flex:0 0 340px;background:var(--pan);border-left:1px solid var(--line);
+  display:flex;flex-direction:column;overflow:hidden}
+.ph{display:flex;border-bottom:1px solid var(--line);flex:0 0 38px;padding:0 6px;overflow-x:auto}
+#panelBody{flex:1;overflow-y:auto;padding:14px}
+#panelBody h3{color:var(--cu2);margin:16px 0 7px;padding-bottom:4px;
+  border-bottom:1px solid var(--line);display:flex;gap:7px;align-items:baseline;letter-spacing:.08em;
+  text-transform:uppercase;font-size:10.5px;font-weight:700}
+#panelBody h3:first-of-type{margin-top:10px}
+.pb-head{display:flex;gap:11px;align-items:center}
+.pb-risk{width:46px;height:46px;flex:0 0 46px;border-radius:var(--r);display:flex;align-items:center;
+  justify-content:center;font-size:19px;font-weight:700}
+.pb-head h2{font-size:19px;line-height:1.15}
+.pb-sub{font-size:10.5px;color:var(--dim)}
+.mini-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:11px}
+.mini-grid.tres{grid-template-columns:repeat(3,1fr)}
+.mini{background:var(--pan2);border:1px solid var(--line);border-radius:var(--r);padding:7px 8px}
+.mini span{display:block;font-size:8.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);font-weight:600}
+.mini b{font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-size:15px;font-weight:600;color:var(--ttl)}
+.sel-wrap{margin-bottom:9px}
+.sel-wrap label{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim);margin-bottom:3px;font-weight:600}
+.sel-wrap select{width:100%}
+
+/* riesgo desglose */
+.parts{display:flex;flex-direction:column;gap:5px}
+.part{display:grid;grid-template-columns:112px 1fr 52px;align-items:center;gap:8px;font-size:11px;color:var(--mut)}
+.part i{display:block;height:6px;background:var(--line);border-radius:3px;overflow:hidden}
+.part i b{display:block;height:100%;background:var(--cu);border-radius:3px}
+.part em{font-style:normal;font-family:var(--ff-num);font-size:10.5px;text-align:right;color:var(--dim)}
+
+/* acciones */
+.acts{display:flex;flex-direction:column;gap:7px}
+.act{border-left:3px solid var(--line2);background:var(--pan2);border-radius:0 var(--r) var(--r) 0;padding:9px 10px}
+.act.crit{border-left-color:var(--bad)}
+.act.warn{border-left-color:var(--warn)}
+.act.info{border-left-color:var(--cu2)}
+.act.ok{border-left-color:var(--ok)}
+.act b{font-size:12px;display:block;margin-bottom:3px;font-weight:700;color:var(--ttl)}
+.act p{font-size:11px;color:var(--mut);line-height:1.5}
+.act p b{display:inline;font-family:var(--ff-num);color:var(--tx)}
+
+/* recomendador */
+.recs{display:flex;flex-direction:column;gap:7px}
+.rec{background:var(--pan2);border:1px solid var(--line);border-radius:var(--r);padding:9px 10px}
+.rec.best{border-color:var(--cu);background:linear-gradient(180deg,var(--accent-wash),var(--pan2))}
+.rec-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.rec-h b{font-size:12.5px;color:var(--ttl)}
+.conf{font-size:9px;letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:var(--r-sm);
+  border:1px solid var(--line2);color:var(--dim);white-space:nowrap;font-weight:600}
+.conf.alta{color:var(--ok-tx);border-color:var(--ok)}
+.conf.media{color:var(--warn-tx);border-color:var(--warn)}
+.conf.baja{color:var(--dim)}
+.rec-m{display:grid;grid-template-columns:1fr 1fr;gap:2px 10px;margin-top:5px;font-size:10.5px;color:var(--mut)}
+.rec-m b{font-family:var(--ff-num);color:var(--tx)}
+.rec-s{font-size:9.5px;color:var(--dim);margin-top:5px;padding-top:5px;border-top:1px solid var(--line)}
+
+/* jerarquía */
+.jer-crumb{display:flex;align-items:center;gap:6px;font-size:11px;padding:3px 2px 9px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.jc{background:none;border:0;color:var(--dim);cursor:pointer;font-family:var(--ff)}
+.jc.on{color:var(--cu2);font-weight:700}
+.jc:hover{text-decoration:underline}
+.jer-crumb span{color:var(--dim)}
+.jc-sep{display:inline-flex;align-items:center}
+td.go{color:var(--dim);width:22px}
+td.go>svg{display:block;margin-left:auto}
+.jer-row{cursor:pointer}
+.jer-row:hover td{background:var(--pan2)}
+.jer-tec{background:var(--pan2);border:1px solid var(--line);border-radius:var(--r);margin-bottom:8px;overflow:hidden}
+.jer-tec-h{padding:8px 10px;background:var(--pan2);border-bottom:1px solid var(--line);display:flex;
+  align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.jer-tec-h b{font-size:12.5px;color:var(--ttl)}
+.jer-tec-m{font-size:10.5px;color:var(--dim);font-family:var(--ff-num)}
+.jer-tec-m em{font-style:normal}
+.jer-ords{font-size:10.5px}
+.jer-ords th{padding:4px 8px}
+.jer-ords td{padding:4px 8px}
+
+/* ===== POPUP DE MARCADOR DE BARRIO ===== */
+.bpo-pop .leaflet-popup-content-wrapper{background:var(--overlay);color:var(--tx);
+  border:1px solid var(--line2);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(6px)}
+.bpo-pop .leaflet-popup-tip{background:var(--overlay);border:1px solid var(--line2)}
+.bpo-pop .leaflet-popup-content{margin:0;padding:12px 14px;width:250px!important}
+.bpo-pop .leaflet-popup-close-button{color:var(--dim)!important}
+.bpo-h{display:flex;gap:9px;align-items:center;padding-bottom:9px;margin-bottom:9px;border-bottom:1px solid var(--line2)}
+.bpo-name{font-size:13.5px;font-weight:700;line-height:1.2;color:var(--ttl)}
+.bpo-sub{font-size:10px;color:var(--dim);margin-top:2px}
+.bpo-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px}
+.bpo-cell{background:var(--pan2);border:1px solid var(--line);border-radius:var(--r-sm);padding:6px 7px;
+  display:flex;flex-direction:column;gap:1px}
+.bpo-cell span{font-size:8.5px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.bpo-cell b{font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-size:13px;font-weight:600}
+
+/* ===== POPUP DE ORDEN INDIVIDUAL ===== */
+.ord-pop .leaflet-popup-content-wrapper{background:var(--overlay);color:var(--tx);
+  border:1px solid var(--line2);border-radius:var(--r);box-shadow:var(--shadow);backdrop-filter:blur(6px)}
+.ord-pop .leaflet-popup-tip{background:var(--overlay);border:1px solid var(--line2)}
+.ord-pop .leaflet-popup-content{margin:0;padding:10px 12px;width:240px!important}
+.ord-pop .leaflet-popup-close-button{color:var(--dim)!important}
+.op-h{display:flex;align-items:baseline;justify-content:space-between;padding-bottom:6px;
+  border-bottom:2px solid var(--line);margin-bottom:7px}
+.op-h b{color:var(--ttl)}
+.op-e{font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.op-t{width:100%;border-collapse:collapse;font-size:11px}
+.op-t td{padding:3px 0;color:var(--mut)}
+.op-t td:first-child{color:var(--dim);width:76px;font-size:10px;letter-spacing:.06em;text-transform:uppercase}
+.op-t td:last-child{color:var(--tx);font-weight:500}
+.op-nc{font-style:normal;font-size:8.5px;color:var(--dim);border:1px solid var(--line2);
+  border-radius:var(--r-sm);padding:0 3px;margin-left:4px;text-transform:none}
+.op-t .mono{font-family:var(--ff-num);font-variant-numeric:tabular-nums;font-size:10px}
+.op-b,.op-n{width:100%;border-radius:var(--r-sm);padding:7px 6px;font:600 10px var(--ff);cursor:pointer}
+.op-b{background:var(--pan2);color:var(--cu2);border:1px solid var(--line2)}
+.op-b:hover{border-color:var(--cu)}
+.op-n{background:var(--badge-bg);color:var(--badge-tx);border:0}
+.op-n:hover{opacity:.88}
+
+/* ===== PIEZAS SUELTAS (misma retícula y mismos grises) ===== */
+.tc-h{font:600 9px var(--ff);letter-spacing:.12em;text-transform:uppercase;color:var(--cu2);margin-bottom:1px}
+#spineCount .flt{color:var(--cu2);font-weight:700}
+#spineCount .flt-off{color:var(--dim)}
+
+/* distribución efectivas / fallidas / perdidas */
+.dist-bar{display:flex;height:9px;border-radius:5px;overflow:hidden;background:var(--line);margin-bottom:7px}
+.dist-bar i{display:block;height:100%}
+.dist-leg{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:10.5px;color:var(--mut)}
+.dist-leg span{display:flex;align-items:center;gap:5px}
+.dist-leg i{width:9px;height:9px;border-radius:2px;flex:0 0 9px}
+.dist-leg b{font-family:var(--ff-num);font-variant-numeric:tabular-nums;color:var(--tx)}
+
+.tbl-wrap{-webkit-overflow-scrolling:touch}
+.jer-body{overflow-x:auto}
+
+/* Los estados mandan sobre el color base de su componente (.kv, .mini b,
+   table td…): la clase repetida sube la especificidad sin recurrir a !important. */
+.ok.ok{color:var(--ok-tx)}
+.warn.warn{color:var(--warn-tx)}
+.bad.bad{color:var(--bad-tx)}
+.dim.dim{color:var(--dim)}
+
+/* =========================================================================
+   RESPONSIVE
+   ========================================================================= */
+
+@media(max-width:1500px){
+  .hd-ctx{display:none}
+}
+
+@media(max-width:1280px){
+  select,input[type=number]{min-width:96px}
+  #panelBody{padding:10px}
+  #panelBody h3{margin:12px 0 6px}
+  .mini{padding:5px 6px}
+  .mini b{font-size:13px}
+  .cmp td,.cmp th{padding:4px 6px}
+  #dock{height:250px}
+  #dockBody{padding:8px 10px}
+  #dockBody table{font-size:10.5px}
+  #dockBody td,#dockBody th{padding:4px 5px}
+  .rk-grid{gap:10px 14px}
+  .trend-cards{flex:0 0 150px}
+  .chart{height:160px}
+}
+
+@media(max-width:1024px){
+  .hd-id{padding-left:12px;padding-right:12px}
+  #panelBody{padding:8px}
+  #panelBody h3{font-size:9.5px;margin:10px 0 5px}
+  .pb-head h2{font-size:15px}
+  .mini-grid{grid-template-columns:1fr 1fr}
+  .rk-grid{grid-template-columns:1fr}
+  #dock{height:220px}
+  .chart{height:130px}
+  #right{flex:0 0 292px}
+}
+
+/* --- tablet / móvil: el tablero pasa a una sola columna y hace scroll --- */
+@media(max-width:900px){
+  html,body{height:auto;overflow-x:hidden;overflow-y:auto}
+  /* minmax(0,1fr) evita que una tabla ancha estire toda la retícula */
+  #app{grid-template-rows:auto;grid-template-columns:minmax(0,1fr);height:auto;min-height:100vh}
+  #main,#left,#center,#right{width:100%;max-width:100%;min-width:0}
+
+  #main{flex-direction:column;overflow:visible}
+  #center{order:1}
+  #left{order:2}
+  #right{order:3}
+
+  #left,#right{flex:0 0 auto;width:100%;border-right:0;border-left:0;
+    border-top:1px solid var(--line);overflow:visible}
+  #left{max-height:none}
+  #spine{max-height:60vh;overflow-y:auto}
+  #right{max-height:none}
+  #panelBody{overflow:visible;max-height:none}
+
+  #mapwrap{flex:0 0 auto;height:58vh;min-height:320px}
+  #dock{height:auto}
+  #dock.min{height:38px}
+  #dockBody{max-height:52vh}
+
+  #layers{width:min(70%,240px);max-height:56%;overflow-y:auto}
+  .dock-row{flex-direction:column;gap:14px}
+  .trend-cards{flex:0 0 auto;flex-direction:row;flex-wrap:wrap}
+  .trend-cards .tc{flex:1 1 140px}
+  .mini-grid{grid-template-columns:repeat(4,1fr)}
+}
+
+@media(max-width:720px){
+  .hd-id{gap:8px 10px}
+  .hd-ctx{display:none}
+  .hd-filtros{flex:1 1 100%;justify-content:flex-start;margin-left:0}
+  .f{flex:1 1 44%;min-width:0}
+  .f select,.f input[type=number]{width:100%;min-width:0}
+  .dates{flex:1 1 100%;min-width:0}
+  .btn{flex:1 1 auto;justify-content:center;text-align:center;min-height:38px}
+
+
+  .lctl{flex-wrap:wrap}
+  .cz{grid-template-columns:1fr 64px;row-gap:2px}
+  .cz i{grid-column:1/-1}
+  #mapwrap{height:52vh;min-height:280px}
+  #dockBody{padding:10px}
+  #panelBody{padding:12px}
+  .mini-grid{grid-template-columns:repeat(2,1fr)}
+  .rec-m{grid-template-columns:1fr}
+  .part{grid-template-columns:92px 1fr 44px}
+  table.mt,table.cmp{font-size:11px}
+}
+
+@media(max-width:480px){
+  .hd-pill{max-width:100%}
+  #layers{width:min(86%,240px);top:8px;left:8px}
+  .hd-title b{font-size:13px}
+  #mapwrap{height:46vh;min-height:240px}
+  .dtab,.ptab{padding:11px 9px}
+}
+
+/* dispositivos táctiles: objetivos de toque más generosos */
+@media(hover:none) and (pointer:coarse){
+  select,input[type=number],input[type=text],input[type=search]{min-height:38px;font-size:14px}
+  .lay{padding:6px 0}
+  .lay input{width:16px;height:16px}
+  .sp-row{padding:11px 12px}
+}
+
+@media print{
+  body{overflow:visible;background:#fff;color:#000}
+  #top{background:var(--banner)}
+  #dock,#layers{display:none}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;
+    transition-duration:.001ms!important}
+}
+
+/* =========================================================================
+   Layout V4 Enfoque specific styling
+   ========================================================================= */
+.v4-layout {
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.v4-main {
+  height: calc(100vh - 56px) !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: stretch !important;
+}
+
+.v4-rail {
+  user-select: none;
+  background-color: var(--pan) !important;
+  border-right: 1px solid var(--line2) !important;
+}
+
+.rail-btn {
+  background: transparent;
+  border: none;
+  color: var(--dim);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 8px 0;
+  transition: all 0.15s ease;
+  border-left: 3px solid transparent;
+}
+
+.rail-btn:hover {
+  background-color: var(--accent-wash) !important;
+  color: var(--tx) !important;
+}
+
+.rail-btn.active {
+  background-color: var(--badge-bg) !important;
+  border-left: 3px solid var(--cu) !important;
+  color: var(--tx) !important;
+}
+
+.v4-center-map {
+  flex: 1 1 0% !important;
+  height: 100% !important;
+  position: relative !important;
+}
+
+/* Columna central V4 y su contenedor de mapa. El #mapwrap interno usa flex:1
+   para tomar altura; sin un padre flex-column colapsa a 0 y el mapa desaparece.
+   (En la vista Clásica #mapwrap es hijo directo de #center, que ya es flex.) */
+.v4-center-column {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.v4-map-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  position: relative;
+}
+
+.v4-panel {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+  background-color: var(--pan) !important;
+  border-left: 1px solid var(--line2) !important;
+  overflow-y: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* Fix panel contents to prevent internal scroll lockups */
+.v4-panel > * {
+  flex: 0 0 auto !important;
+}
+
+.v4-panel .sp-body,
+.v4-panel .pb-body,
+.v4-panel .tab-content {
+  overflow-y: visible !important;
+}
+
+/* =========================================================================
+   ASISTENTE SCR (ChatBot) — burbuja arrastrable + panel flotante
+   ========================================================================= */
+
+.cb-launcher{
+  position:fixed;z-index:1200;
+  width:56px;height:56px;padding:0;
+  display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--cu-strong);border-radius:50%;
+  background:var(--banner);color:var(--banner-tx);
+  box-shadow:var(--shadow);cursor:grab;touch-action:none;
+  transition:transform .18s ease,box-shadow .18s ease,filter .15s ease;
+  /* Sin `both`: al terminar libera el transform y el :hover vuelve a mandar. */
+  animation:cb-pop .3s cubic-bezier(.34,1.56,.64,1);
+}
+@keyframes cb-pop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:scale(1)}}
+:root[data-theme="dark"] .cb-launcher{background:var(--cu-deep)}
+.cb-launcher:hover{filter:brightness(1.08)}
+.cb-launcher>svg{pointer-events:none}
+/* El punto del globo cerrado dice lo mismo que el del encabezado: verde solo si
+   el backend contestó. El sondeo sigue corriendo con el chat cerrado, si no este
+   punto se quedaría en verde para siempre. */
+.cb-launcher-dot{position:absolute;top:6px;right:6px;width:9px;height:9px;border-radius:50%;
+  background:var(--ok);border:2px solid var(--bg);pointer-events:none}
+.cb-launcher-dot.cb-dot-off{background:var(--bad)}
+.cb-launcher-dot.cb-dot-wait{background:var(--warn);animation:cb-live-p 1.2s ease-in-out infinite}
+
+.cb-launcher:hover:not(.dragging){transform:scale(1.06)}
+.cb-launcher.dragging{cursor:grabbing;transform:none;transition:none;
+  box-shadow:0 16px 40px rgba(0,0,0,.45)}
+
+/* ---------- panel ---------- */
+.cb-panel{
+  position:fixed;z-index:1201;
+  display:flex;flex-direction:column;overflow:hidden;
+  background:var(--pan);border:1px solid var(--line2);
+  border-radius:14px;box-shadow:var(--shadow);
+  /* salida suave (easeOutQuint): arranca rápido y frena, sin rebote. */
+  animation:cb-in .28s cubic-bezier(.22,1,.36,1) both;
+}
+/* El cierre es más corto y acelerando: esperar a que se vaya se siente lento. */
+.cb-panel.closing{animation:cb-out .16s cubic-bezier(.55,0,1,.45) both;pointer-events:none}
+.cb-panel.from-r{transform-origin:100% 60%}
+.cb-panel.from-l{transform-origin:0 60%}
+@keyframes cb-in{from{opacity:0;transform:scale(.92) translateY(12px)}to{opacity:1;transform:none}}
+@keyframes cb-out{from{opacity:1;transform:none}to{opacity:0;transform:scale(.96) translateY(6px)}}
+
+/* Cada burbuja entra sola: al abrir escalonan y en vivo acompañan la respuesta. */
+.cb-panel:not(.closing) .cb-msg{animation:cb-rise .26s cubic-bezier(.22,1,.36,1) both}
+@keyframes cb-rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+@media (prefers-reduced-motion:reduce){
+  .cb-panel,.cb-panel.closing,.cb-launcher,.cb-msg{animation-duration:.01ms!important}
+  /* Los latidos son infinitos: acortarlos no basta, hay que apagarlos. */
+  .cb-thinking-t{animation:none!important;opacity:1}
+  .cb-mic.on{animation:none!important}
+}
+
+.cb-head{display:flex;align-items:center;gap:10px;flex:0 0 auto;
+  padding:11px 12px;background:var(--banner);color:var(--banner-tx);
+  cursor:grab;user-select:none;touch-action:none}
+.cb-head.dragging{cursor:grabbing}
+.cb-head.pinned{cursor:default}
+/* Plegado: solo queda la cabecera, así que redondea por los cuatro lados. */
+.cb-panel.min{border-radius:14px}
+.cb-head-acts{flex:0 0 auto;display:flex;align-items:center;gap:4px}
+/* en oscuro el verde queda reservado para «orden efectiva» */
+:root[data-theme="dark"] .cb-head{background:linear-gradient(90deg,#143A63,#2C6DB0)}
+.cb-head-ic{flex:0 0 auto;width:32px;height:32px;border-radius:9px;
+  display:flex;align-items:center;justify-content:center;font-size:16px;
+  background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.28)}
+.cb-head-t{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px}
+.cb-head-t b{font:700 13px var(--ff);letter-spacing:.10em;text-transform:uppercase;
+  color:#FFFFFF;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cb-head-t span{display:flex;align-items:center;gap:6px;font-size:10.5px;
+  color:rgba(255,255,255,.92);font-variant-numeric:tabular-nums}
+/* Punto de estado del asistente. El blanco es el estado sano: el encabezado es
+   un degradado verde y un punto verde encima no se distinguiría. */
+.cb-live{width:7px;height:7px;border-radius:50%;background:#FFFFFF;
+  box-shadow:0 0 0 3px rgba(255,255,255,.28)}
+.cb-live-off{background:#FF5A5F;box-shadow:0 0 0 3px rgba(255,90,95,.38)}
+.cb-live-wait{background:#FFD500;box-shadow:0 0 0 3px rgba(255,213,0,.32);
+  animation:cb-live-p 1.2s ease-in-out infinite}
+@keyframes cb-live-p{0%,100%{opacity:1}50%{opacity:.35}}
+.cb-x{flex:0 0 auto;width:26px;height:26px;border-radius:50%;cursor:pointer;
+  background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);
+  color:#FFFFFF;font-size:12px;line-height:1}
+.cb-x:hover{background:rgba(255,255,255,.3)}
+/* Estado activo del alfiler: se nota que está fijado sin cambiar de icono. */
+.cb-x.on{background:rgba(255,255,255,.34)}
+
+/* ---------- conversación ---------- */
+.cb-body{flex:1 1 auto;min-height:0;overflow-y:auto;
+  display:flex;flex-direction:column;gap:10px;padding:12px;background:var(--bg)}
+
+.cb-chips{display:flex;gap:6px;flex-wrap:wrap}
+.cb-chip{background:var(--pan2);border:1px solid var(--line2);color:var(--mut);
+  border-radius:999px;padding:5px 11px;font:500 11px var(--ff);cursor:pointer;white-space:nowrap}
+.cb-chip:hover{border-color:var(--cu);color:var(--tx)}
+
+/* pre-wrap: el modelo devuelve saltos de línea y listas que no deben colapsarse. */
+.cb-msg{max-width:86%;padding:9px 12px;border-radius:12px;font-size:12.5px;line-height:1.5;
+  white-space:pre-wrap;overflow-wrap:anywhere}
+.cb-msg.me{align-self:flex-end;background:var(--ises-medio);color:#FFFFFF;
+  border-bottom-right-radius:4px}
+:root[data-theme="dark"] .cb-msg.me{background:var(--cu-deep);color:var(--tx);
+  border:1px solid var(--line2)}
+/* Negritas del markdown del modelo. Solo peso: el color lo hereda de la burbuja,
+   que ya está resuelto para claro y oscuro. */
+.cb-msg strong{font-weight:700}
+.cb-msg.bot{align-self:flex-start;background:var(--pan);color:var(--tx);
+  border:1px solid var(--line);border-bottom-left-radius:4px}
+
+/* ---------- tarjeta de resultado ---------- */
+/* Etiqueta de espera: fundido al cambiar de frase y latido mientras se mantiene. */
+.cb-thinking{color:var(--mut);font-style:italic}
+.cb-thinking-t{display:inline-block;
+  animation:cb-fade .32s ease-out both,cb-latido 1.9s ease-in-out .32s infinite}
+@keyframes cb-fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes cb-latido{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* Hora de cada mensaje. Discreta y pegada a su burbuja: es dato de apoyo, no
+   contenido, así que no debe competir con el texto. */
+.cb-hora{font-size:9.5px;color:var(--dim);font-variant-numeric:tabular-nums;
+  margin:-6px 2px 0;letter-spacing:.04em}
+.cb-hora.me{align-self:flex-end}
+.cb-hora.bot{align-self:flex-start;margin-left:6px}
+
+/* ---------- acciones de una respuesta: copiar y calificar ---------- */
+/* Discretas a propósito: acompañan la respuesta, no compiten con ella. */
+/* El margen negativo se come el `gap:10px` de .cb-body: la hora y los iconos
+   son apoyo del MISMO mensaje y deben leerse como un bloque, no como dos
+   cosas sueltas a media distancia entre dos burbujas. */
+.cb-acts{display:flex;align-items:center;gap:2px;
+  align-self:flex-start;margin:-11px 0 2px 4px}
+.cb-acts>button{width:24px;height:24px;border-radius:6px;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:1px solid transparent;color:var(--dim);
+  transition:color .15s ease,background .15s ease,border-color .15s ease}
+.cb-acts>button:hover{background:var(--pan2);border-color:var(--line2);color:var(--tx)}
+.cb-acts>button.votado{color:var(--cu)}
+.cb-acts-ok{margin-left:4px;font-size:10.5px;color:var(--dim)}
+
+/* Modal de comentarios. Va sobre el panel del chat (z-index 1201), no dentro:
+   el panel mide 380px y el formulario no cabe sin apretujarlo.
+   Depende de que .cb-panel NO tenga un transform permanente: hoy se mueve con
+   left/top y su animación termina en `transform:none`. Si alguien lo pasa a
+   transform, este `position:fixed` se anclaría al panel y el modal saldría
+   descolocado. */
+.cb-modal-bg{position:fixed;inset:0;z-index:1300;display:flex;
+  align-items:center;justify-content:center;padding:16px;
+  background:rgba(0,0,0,.42);backdrop-filter:blur(2px)}
+.cb-modal{width:min(430px,100%);display:flex;flex-direction:column;gap:11px;
+  padding:15px 16px;border-radius:14px;
+  background:var(--pan);border:1px solid var(--line2);box-shadow:var(--shadow)}
+.cb-modal-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.cb-modal-h b{font-size:13.5px;color:var(--ttl)}
+.cb-modal-h button{width:26px;height:26px;border-radius:50%;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:0;color:var(--dim)}
+.cb-modal-h button:hover{background:var(--pan2);color:var(--tx)}
+.cb-modal-chips{display:flex;flex-wrap:wrap;gap:6px}
+.cb-modal-chips button{cursor:pointer;padding:5px 11px;border-radius:999px;font-size:11.5px;
+  background:transparent;border:1px solid var(--line2);color:var(--mut)}
+.cb-modal-chips button:hover{border-color:var(--cu);color:var(--tx)}
+.cb-modal-chips button.on{background:var(--cu);border-color:var(--cu);color:#FFFFFF}
+.cb-modal textarea{width:100%;border-radius:9px;padding:8px 10px;font-size:11.5px;
+  font-family:var(--ff);resize:vertical;min-height:62px}
+.cb-modal-nota{font-size:10.5px;color:var(--dim);margin:0}
+.cb-modal-acts{display:flex;justify-content:flex-end}
+.cb-modal-acts button.primary{cursor:pointer;padding:6px 16px;border-radius:var(--r);
+  font-size:11.5px;background:var(--cu);border:1px solid var(--cu);color:#FFFFFF}
+.cb-modal-acts button.primary:hover{filter:brightness(1.1)}
+.cb-modal-acts button:disabled{opacity:.45;cursor:default;filter:none}
+
+/* Aviso de que el tablero se filtró solo. Es un botón: al hacer clic vuelve a
+   aplicar ese filtro, útil cuando el usuario lo limpió a mano. */
+.cb-filtro{display:flex;align-items:center;gap:6px;align-self:stretch;text-align:left;
+  padding:7px 10px;border-radius:9px;font-size:11px;line-height:1.4;cursor:pointer;
+  background:var(--pan2);border:1px dashed var(--cu);color:var(--mut);
+  transition:background .15s ease,border-color .15s ease,color .15s ease}
+.cb-filtro:hover{background:var(--pan);border-style:solid;color:var(--tx)}
+.cb-filtro>svg{flex:0 0 auto;color:var(--cu)}
+.cb-filtro b{color:var(--tx);font-weight:600}
+
+.cb-card{background:var(--pan);border:1px solid var(--line2);border-radius:12px;padding:11px}
+.cb-card-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+  padding-bottom:8px;margin-bottom:6px;border-bottom:1px solid var(--line)}
+.cb-card-h span{font:700 9.5px var(--ff);letter-spacing:.13em;text-transform:uppercase;color:var(--ttl)}
+.cb-card-h em{font:600 9px var(--ff);letter-spacing:.1em;text-transform:uppercase;
+  color:var(--dim);font-style:normal}
+
+.cb-rank{list-style:none;display:flex;flex-direction:column}
+.cb-rank li{display:flex;align-items:center;gap:8px;padding:7px 0;font-size:12.5px;
+  border-bottom:1px solid var(--row-line)}
+.cb-rank li:last-child{border-bottom:none}
+.cb-dot{flex:0 0 auto;width:8px;height:8px;border-radius:50%}
+.cb-rank-n{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;color:var(--tx)}
+.cb-rank-os{flex:0 0 auto;font-size:11px;color:var(--dim)}
+.cb-rank b{flex:0 0 auto;font-size:14px;font-weight:700;min-width:24px;text-align:right}
+
+
+.cb-src{display:flex;align-items:center;gap:5px;margin-top:9px;
+  font-size:10.5px;color:var(--dim);line-height:1.4}
+.cb-src>svg{flex:0 0 auto}
+
+/* ---------- entrada ---------- */
+.cb-foot{flex:0 0 auto;padding:10px 12px 9px;background:var(--pan);border-top:1px solid var(--line)}
+.cb-input{display:flex;align-items:center;gap:8px}
+/* El campo traía el borde por defecto del navegador: gris, plano y ajeno al
+   resto del panel. Se le dan los colores del tema y un foco propio. */
+.cb-input input{flex:1 1 auto;min-width:0;border-radius:999px;padding:10px 16px;font-size:12.5px;
+  font-family:inherit;background:var(--pan2);border:1px solid var(--line2);color:var(--tx);
+  outline:none;transition:border-color .15s ease,box-shadow .15s ease}
+.cb-input input::placeholder{color:var(--mut);opacity:.7}
+.cb-input input:focus{border-color:var(--cu);
+  box-shadow:0 0 0 3px color-mix(in srgb, var(--cu) 20%, transparent)}
+.cb-input input:disabled{color:var(--mut);cursor:default}
+.cb-send{flex:0 0 auto;width:36px;height:36px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;font-size:14px;
+  background:var(--ises);border:1px solid var(--ises-medio);color:#FFFFFF}
+:root[data-theme="dark"] .cb-send{background:var(--cu);border-color:var(--cu-strong);color:var(--ink-soft)}
+.cb-send:hover:not(:disabled){filter:brightness(1.1)}
+.cb-send:disabled{opacity:.45;cursor:default}
+
+/* Dictado y adjunto: secundarios frente a enviar. Comparten reglas para que no
+   se separen con el tiempo; solo el micrófono añade el estado "escuchando". */
+.cb-mic,.cb-clip{flex:0 0 auto;width:36px;height:36px;border-radius:50%;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:var(--pan2);border:1px solid var(--line2);color:var(--mut);
+  transition:background .15s ease,color .15s ease,border-color .15s ease}
+.cb-mic:hover:not(:disabled),.cb-clip:hover:not(:disabled){border-color:var(--cu);color:var(--tx)}
+.cb-mic:disabled,.cb-clip:disabled{opacity:.45;cursor:default}
+.cb-mic.on{background:var(--bad);border-color:var(--bad);color:#FFFFFF;
+  animation:cb-escucha 1.5s ease-out infinite}
+/* El halo late hacia afuera: se ve que el micrófono está abierto sin leer nada. */
+@keyframes cb-escucha{
+  0%{box-shadow:0 0 0 0 rgba(255,90,95,.5)}
+  70%,100%{box-shadow:0 0 0 8px rgba(255,90,95,0)}
+}
+
+/* El control nativo dibuja su propio "Seleccionar archivo": se saca del flujo en
+   vez de ocultarlo con display, para que .click() lo siga abriendo. */
+.cb-file{position:absolute;width:1px;height:1px;padding:0;border:0;margin:-1px;
+  overflow:hidden;clip-path:inset(50%);white-space:nowrap;opacity:0;pointer-events:none}
+
+/* El adjunto se anuncia sobre la caja de texto, no dentro: el nombre es largo. */
+.cb-adjunto{display:flex;align-items:center;gap:7px;margin-bottom:7px;
+  padding:6px 7px 6px 10px;border-radius:12px;font-size:11px;
+  background:var(--pan2);border:1px solid var(--line2);color:var(--tx)}
+.cb-adjunto>svg{flex:0 0 auto;color:var(--cu)}
+/* Dos líneas: el nombre del export es largo y el recuento es lo que de verdad
+   se lee —cuántas quedaron de cuántas—, así que no compiten por el mismo hueco. */
+.cb-adjunto-txt{flex:1 1 auto;min-width:0;display:flex;flex-direction:column;gap:1px}
+.cb-adjunto-n{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb-adjunto-d{color:var(--dim);font-size:10px}
+.cb-adjunto button{flex:0 0 auto;width:18px;height:18px;border-radius:50%;cursor:pointer;
+  display:inline-flex;align-items:center;justify-content:center;
+  background:transparent;border:0;color:var(--mut)}
+.cb-adjunto button:hover{background:var(--line2);color:var(--tx)}
+
+.cb-legal{margin-top:7px;font-size:10px;color:var(--dim);text-align:center;line-height:1.4}
+.cb-legal.err{color:var(--bad)}
+
+@media(max-width:640px){
+  .cb-panel{left:10px!important;right:10px!important;width:auto!important}
+}
+
+
+
+/* El contenedor de Capas ocupa el alto del mapa (para poder limitar el panel) sin
+   bloquear los clics sobre el mapa que quedan a su lado. */
+.v4-layers-overlay{bottom:12px;right:12px;pointer-events:none}
+
+/* Tablet y celular: el menú lateral pasa a barra horizontal. Como columna de 66 px
+   quedaba reducido a un recuadro de 66 px de alto con los demás menús ocultos. */
+@media(max-width:900px){
+  .v4-rail{width:100% !important;flex:0 0 auto !important;flex-direction:row !important;
+    overflow-x:auto !important;overflow-y:hidden !important;padding:4px 6px !important;gap:4px !important;
+    border-right:0 !important;border-bottom:1px solid var(--line2) !important}
+  .v4-rail .rail-btn{width:auto !important;min-width:76px;flex:0 0 auto !important;border-left:0 !important;
+    border-bottom:3px solid transparent !important;padding:6px 10px !important}
+  .v4-rail .rail-btn.active{border-left:0 !important;border-bottom:3px solid var(--cu) !important}
+}
+
+
+/* Controles que los datos filtrados no permiten usar: se ven apagados. */
+.hd-pill:disabled{opacity:.45;cursor:not-allowed}
+label.lay:has(input:disabled){opacity:.45;cursor:not-allowed}
+label.lay input:disabled{cursor:not-allowed}
