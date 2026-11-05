@@ -6,7 +6,7 @@ import React from "react";
 // lo escrito y se invita a seguir escribiendo.
 const MAX_VISIBLES = 80;
 
-const sinTildes = (t) =>
+export const sinTildes = (t) =>
   (t || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
 
 /**

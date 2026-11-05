@@ -1,10 +1,11 @@
 "use client";
 
 import React from "react";
-import { AlertTriangle, ChevronDown, Moon, RefreshCw, Sun, X } from "lucide-react";
+import { AlertTriangle, ChevronDown, Moon, RefreshCw, Sun } from "lucide-react";
 
 import { useTheme } from "@/lib/theme";
 import FiltroPildora from "@/components/FiltroPildora";
+import FiltroUbicacion from "@/components/FiltroUbicacion";
 
 /**
  * Cuántos días tienen los datos que se están viendo.
@@ -50,6 +51,7 @@ export default function Topbar({
   avail,
   onFilterChange,
   onReset,
+  onBarrios,
   availableMonths,
   loadingMonths = [],
   onRefresh,
@@ -134,27 +136,9 @@ export default function Topbar({
       .map((texto, i) => ({ valor: i, texto }))
       .filter((o) => disponibles.has(o.valor));
 
-  // Un barrio por zona y nombre, sin el prefijo del municipio (todos son Cartagena). Con una
-  // zona elegida solo salen los suyos: la lista completa pasa de 200 nombres.
-  const barriosDeLaZona = React.useMemo(
-    () =>
-      dim.barrios
-        .map((nombre, i) => ({ valor: i, texto: nombre.split(" | ").pop() }))
-        .filter((o) => st.zona === "" || dim.b_zona[o.valor] === +st.zona)
-        .sort((a, b) => a.texto.localeCompare(b.texto, "es")),
-    [dim, st.zona]
-  );
-
-  const barrioSel =
-    st.barrios?.length > 1
-      ? `${st.barrios.length} barrios`
-      : st.selBarrio != null
-        ? (dim.barrios[st.selBarrio] || "").split(" | ").pop()
-        : null;
-
   const hayFiltros =
-    st.zona !== "" || st.brig !== "" || st.tipo !== "" ||
-    st.act !== "" || st.gest !== "" || st.cob !== "" || mesesPuestos || barrioSel ||
+    st.zona !== "" || st.corr !== "" || st.brig !== "" || st.tipo !== "" ||
+    st.act !== "" || st.gest !== "" || st.cob !== "" || mesesPuestos || st.barrios?.length > 0 ||
     st.causaSel != null || !st.est.every(Boolean) || st.efOcultas.length > 0 || st.hotspot !== 60 ||
     st.minOrders !== (esCobros ? 1 : 10);
 
@@ -182,19 +166,12 @@ export default function Topbar({
             franja propia, y separarlos partía el header en dos. Cada una lleva
             dentro su estado, así que tampoco hay fila de chips aparte. */}
         <div className="hd-filtros">
-          <FiltroPildora
-            etiqueta="Zona"
-            valor={st.zona}
-            opciones={opcionesDe(dim.zonas, avail.zona)}
-            onElegir={(v) => onFilterChange("zona", v)}
-            vacio={`Todas las zonas (${avail.zona.size})`}
-          />
-          <FiltroPildora
-            etiqueta="Barrio"
-            valor={st.selBarrio ?? ""}
-            opciones={barriosDeLaZona}
-            onElegir={(v) => onFilterChange("selBarrio", v === "" ? null : +v)}
-            vacio={`Todos los barrios (${barriosDeLaZona.length})`}
+          <FiltroUbicacion
+            st={st}
+            dim={dim}
+            avail={avail}
+            onFilterChange={onFilterChange}
+            onBarrios={onBarrios}
           />
           <FiltroPildora
             etiqueta={esCobros ? "Plan" : "Brigada"}
@@ -297,25 +274,6 @@ export default function Topbar({
               </div>
             )}
           </div>
-
-          {/* Los barrios elegidos (en la cola de triaje, el mapa o el chat): hasta ahora
-              no había forma de ver que estaban puestos ni de soltarlos. */}
-          {barrioSel && st.barrios?.length > 1 && (
-            <div className="hd-f">
-              <button
-                type="button"
-                className="hd-pill on"
-                onClick={() => onFilterChange("selBarrio", null)}
-                aria-label={`Quitar la selección de ${barrioSel}`}
-              >
-                <span className="hd-pill-k">{st.barrios?.length > 1 ? "Barrios" : "Barrio"}</span>
-                <span className="hd-pill-v">: {barrioSel}</span>
-                <span className="hd-pill-ic" aria-hidden="true">
-                  <X size={13} strokeWidth={2.4} />
-                </span>
-              </button>
-            </div>
-          )}
 
           {hayFiltros && (
             <button type="button" className="hd-clear" onClick={onReset}>

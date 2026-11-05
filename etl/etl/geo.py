@@ -18,6 +18,8 @@ from .logging_conf import get_logger
 
 log = get_logger()
 
+CABECERA = "Cabecera municipal"
+
 
 def _cargar_geojson(path: Path) -> dict[str, Any] | None:
     """Lee un GeoJSON; devuelve None (con aviso) si no existe."""
@@ -142,6 +144,37 @@ def asignar_zona(d: pd.DataFrame, path_zonas: Path) -> pd.DataFrame:
     iguales = int((d["ZONA"] == d["ZONA_BASE"]).sum())
     log.info("Zona por polígono: %s de %s órdenes coinciden con la zona de la base; %s quedan fuera de todo polígono.",
              f"{iguales:,}", f"{len(d):,}", f"{int((zona == 'SIN ZONA').sum()):,}")
+    return d
+
+
+def asignar_corregimiento(d: pd.DataFrame, path_corregimientos: Path) -> pd.DataFrame:
+    """Pone en CORREGIMIENTO el del polígono que contiene el GPS de cada orden.
+
+    La base de Acuacar no trae el corregimiento: solo existe `corregimientos.geojson`. Todo lo
+    que cae fuera de esos polígonos es zona urbana y se llama «Cabecera municipal». Si un punto
+    cae en dos polígonos (borde compartido o los dos «ZONA CONFLICTO DE LIMITES») gana el de
+    nombre menor, para que el resultado no dependa del orden del índice espacial. Sin el
+    archivo todo queda en «Cabecera municipal» y el filtro simplemente no ofrece la columna.
+    """
+    d = d.copy()
+    gc = _cargar_geojson(path_corregimientos)
+    if gc is None:
+        d["CORREGIMIENTO"] = CABECERA
+        return d
+    import shapely as _sh
+    from shapely.geometry import shape
+    from shapely.strtree import STRtree
+
+    feats = sorted(gc["features"], key=lambda f: f["properties"].get("nombre") or "")
+    nombres = np.array([f["properties"].get("nombre") or CABECERA for f in feats], dtype=object)
+    arbol = STRtree([shape(f["geometry"]) for f in feats])
+    puntos = _sh.points(d["LONGITUD"].values, d["LATITUD"].values)
+    i_punto, i_poli = arbol.query(puntos, predicate="intersects")
+    elegido = np.full(len(d), len(nombres))  # len(nombres) = fuera de todo polígono
+    np.minimum.at(elegido, i_punto, i_poli)
+    d["CORREGIMIENTO"] = np.append(nombres, CABECERA)[elegido]
+    log.info("Corregimiento por polígono: %s de %s órdenes caen en un corregimiento.",
+             f"{int((elegido < len(nombres)).sum()):,}", f"{len(d):,}")
     return d
 
 
