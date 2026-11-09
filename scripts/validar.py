@@ -82,7 +82,8 @@ def main() -> int:
 
 
 def _zonas_por_poligono(ordenes: list[tuple]) -> list[str]:
-    """Zona de cada orden según el polígono curado que contiene su GPS (menor código si son varios)."""
+    """Zona de cada orden: la del polígono curado que contiene su GPS (menor código si son varios)
+    o, fuera de todo polígono, la de la base."""
     from shapely import points
     from shapely.geometry import shape
     from shapely.strtree import STRtree
@@ -95,15 +96,14 @@ def _zonas_por_poligono(ordenes: list[tuple]) -> list[str]:
     pts = points([o[2] for o in ordenes], [o[1] for o in ordenes])
     for i_punto, i_poli in arbol.query(pts, predicate="intersects").T.tolist():
         por[i_punto].append(i_poli)
-    return [nombres[min(idx)] if idx else "SIN ZONA" for idx in por]
+    return [nombres[min(idx)] if idx else (o[0] or "SIN ZONA") for o, idx in zip(ordenes, por)]
 
 
 def _informe_zonas(ordenes: list[tuple], por_poligono: list[str]) -> str:
-    """Informativo: cuánto difiere la zona del polígono de la columna `zona` de la base."""
+    """Informativo: cuánto difiere la zona asignada de la columna `zona` de la base."""
     iguales = sum(1 for o, z in zip(ordenes, por_poligono) if o[0] == z)
     sin = sum(1 for z in por_poligono if z == "SIN ZONA")
-    return (f"INFO zona por polígono vs base: {iguales / len(ordenes):.1%} coincide; "
-            f"{sin / len(ordenes):.1%} ({sin:,}) queda fuera de todo polígono (SIN ZONA)")
+    return (f"INFO zona asignada vs base: {iguales / len(ordenes):.1%} coincide; {sin:,} SIN ZONA")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,12 @@
+# Lo que no debe entrar al contexto de build: dependencias locales, secretos y
+# los JSON de cifras (los genera el ETL y se montan al correr el contenedor).
+node_modules
+.next
+.env*
+*.tsbuildinfo
+public/scr
+public/data.json
+public/data_*.json
+public/maplibre
+Dockerfile
+.dockerignore

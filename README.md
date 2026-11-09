@@ -46,8 +46,8 @@ pip install -r Backend/requirements.txt && python -m uvicorn app.main:app --app-
 | Técnico | `brigada_movilidad` |
 | Brigada | `contratista_desc` (siempre ISES) |
 | Tipo OS / Actividad | `proceso` |
-| Zona | polígono curado según el GPS (no la columna `zona`) |
-| Barrio | por GPS contra `web/public/geojson/barrios.geojson` |
+| Zona | polígono curado según el GPS; fuera de todo polígono, la columna `zona` |
+| Barrio | por GPS contra `web/public/geojson/barrios.geojson`; si el GPS no cae en un polígono, el de la dirección (texto entre paréntesis) |
 | Fecha | `fecha_finalizacion`, o `fecha_imposibilidad`, o `fecha_apertura` |
 
 **Causas no controlables** (no penalizan a la brigada en la efectividad ajustada):
@@ -57,12 +57,19 @@ Oposición del usuario y Estado del servicio. Está en `etl/etl/taxonomy.py`.
 (`cartagena_zonas_acuacar`, `cartagena_corregimientos_visor`, `cartagena_veredas_visor`).
 **La zona de cada orden la fija el polígono curado según su GPS**, aunque difiera de la
 columna `zona` de la base (coinciden en el 61 %). El 18,5 % de las órdenes (4.978) cae fuera
-de todo polígono y queda en `SIN ZONA`. La zona de la base no se pierde: va en `ZONA_BASE`
-dentro del ETL. Los códigos `C011`…`C022` se normalizan a `C11`…`C22`.
+de todo polígono: esas toman la zona de la base, porque los polígonos curados no cubren toda
+la ciudad. La zona de la base va siempre en `ZONA_BASE` dentro del ETL. Los códigos
+`C011`…`C022` se normalizan a `C11`…`C22`.
 
 **Caché del navegador:** el tablero guarda los datos 1 hora en IndexedDB. El ETL escribe
 `web/public/scr/version.json` con la hora de generación y la caché se descarta sola cuando
 cambia; el botón «Actualizar información» sigue limpiándola a mano.
+
+**Polígonos de barrio:** si el polígono oficial cubre menos de la mitad de las órdenes que la
+dirección dice que son de ese barrio (o no existe), `preparar_geografia.py` lo reemplaza por
+uno dibujado con el GPS de esas órdenes (37 barrios, entre ellos Villa Estrella, San José de
+los Campanos, Manzanillo del Mar y La Carolina). Los alias de escritura, como
+«VEREDA ZAPATERO» a «ZAPATERO», están en `config/alias_barrios.json`.
 
 **Barrio = barrio + zona.** Un barrio atraviesa varias zonas y el tablero asigna una zona
 por unidad; por eso el nombre lleva la zona, por ejemplo `ALAMEDA LA VICTORIA (C17)`.

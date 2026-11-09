@@ -117,10 +117,11 @@ def asignar_zona(d: pd.DataFrame, path_zonas: Path) -> pd.DataFrame:
     """Pone en ZONA la del polígono curado que contiene el GPS de cada orden.
 
     Se decidió que manda el polígono y no la columna `zona` de la base, aunque difieran
-    (coinciden en ~61 % de las órdenes). Fuera de todo polígono queda «SIN ZONA»; si un
-    punto cae en dos (borde compartido) gana el polígono de código menor, para que el
-    resultado no dependa del orden en que el índice espacial devuelve los pares.
-    La zona de la base se conserva en ZONA_BASE por si hay que auditar la diferencia.
+    (coinciden en ~61 % de las órdenes). Solo cuando el GPS cae fuera de todo polígono se
+    usa la zona de la base (los polígonos curados no cubren toda la ciudad); si tampoco la
+    trae, queda «SIN ZONA». Si un punto cae en dos polígonos (borde compartido) gana el de
+    código menor, para que el resultado no dependa del orden en que el índice espacial
+    devuelve los pares. La zona de la base se conserva en ZONA_BASE para auditar la diferencia.
     """
     gz = _cargar_geojson(path_zonas)
     if gz is None:
@@ -136,14 +137,16 @@ def asignar_zona(d: pd.DataFrame, path_zonas: Path) -> pd.DataFrame:
     i_punto, i_poli = arbol.query(puntos, predicate="intersects")
     elegido = np.full(len(d), len(nombres))  # len(nombres) = sin polígono
     np.minimum.at(elegido, i_punto, i_poli)
+    fuera = elegido == len(nombres)
     zona = np.append(nombres, "SIN ZONA")[elegido]
 
     d = d.copy()
     d["ZONA_BASE"] = d["ZONA"]
-    d["ZONA"] = zona
+    d["ZONA"] = np.where(fuera, d["ZONA_BASE"].fillna("SIN ZONA").to_numpy(dtype=object), zona)
     iguales = int((d["ZONA"] == d["ZONA_BASE"]).sum())
-    log.info("Zona por polígono: %s de %s órdenes coinciden con la zona de la base; %s quedan fuera de todo polígono.",
-             f"{iguales:,}", f"{len(d):,}", f"{int((zona == 'SIN ZONA').sum()):,}")
+    log.info("Zona por polígono: %s de %s órdenes coinciden con la zona de la base; %s cayeron fuera de todo "
+             "polígono y toman la de la base; %s quedan SIN ZONA.",
+             f"{iguales:,}", f"{len(d):,}", f"{int(fuera.sum()):,}", f"{int((d['ZONA'] == 'SIN ZONA').sum()):,}")
     return d
 
 

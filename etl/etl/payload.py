@@ -103,6 +103,12 @@ def _prepare(df: pd.DataFrame, settings: Settings) -> pd.DataFrame:
     d = asignar_territorio(d, settings.geo_barrios, settings.geo_municipios)
     if "_BARRIO_POLIGONO" not in d:
         d["_BARRIO_POLIGONO"] = False
+    # Sin polígono de barrio, el barrio es el de la dirección. Queda marcado como «no
+    # de polígono» para que `unificar_barrios` conserve la escritura del polígono si la hay.
+    sin_poligono = ~d["_BARRIO_POLIGONO"]
+    d.loc[sin_poligono, "LOCALIDAD/BARRIO"] = d.loc[sin_poligono, "BARRIO_DIRECCION"]
+    log.info("Barrio por dirección: %s de %s órdenes (el GPS no cayó en ningún polígono de barrio).",
+             f"{int(d.loc[sin_poligono, 'LOCALIDAD/BARRIO'].notna().sum()):,}", f"{len(d):,}")
     d = asignar_zona(d, settings.geo_zonas)
     d = asignar_corregimiento(d, settings.geo_corregimientos)
     d["MUNICIPIO"] = d["MUNICIPIO"].fillna("SIN MUNICIPIO")

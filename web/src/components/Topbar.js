@@ -137,7 +137,7 @@ export default function Topbar({
       .filter((o) => disponibles.has(o.valor));
 
   const hayFiltros =
-    st.zona !== "" || st.corr !== "" || st.brig !== "" || st.tipo !== "" ||
+    st.zona !== "" || st.corr !== "" ||
     st.act !== "" || st.gest !== "" || st.cob !== "" || mesesPuestos || st.barrios?.length > 0 ||
     st.causaSel != null || !st.est.every(Boolean) || st.efOcultas.length > 0 || st.hotspot !== 60 ||
     st.minOrders !== (esCobros ? 1 : 10);
@@ -172,24 +172,6 @@ export default function Topbar({
             avail={avail}
             onFilterChange={onFilterChange}
             onBarrios={onBarrios}
-          />
-          <FiltroPildora
-            etiqueta={esCobros ? "Plan" : "Brigada"}
-            valor={st.brig}
-            opciones={opcionesDe(dim.brigs, avail.brig)}
-            onElegir={(v) => onFilterChange("brig", v)}
-            vacio={esCobros
-              ? `Todos los planes (${avail.brig.size})`
-              : `Todas las brigadas (${avail.brig.size})`}
-          />
-          <FiltroPildora
-            etiqueta={esCobros ? "Gestión" : "Tipo OS"}
-            valor={st.tipo}
-            opciones={opcionesDe(dim.tipos, avail.tipo)}
-            onElegir={(v) => onFilterChange("tipo", v)}
-            vacio={esCobros
-              ? `Todas las gestiones (${avail.tipo.size})`
-              : `Todos los tipos (${avail.tipo.size})`}
           />
           {dim.gests && dim.gests.length > 0 && (
             <FiltroPildora
