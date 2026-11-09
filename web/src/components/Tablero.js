@@ -15,6 +15,7 @@ import Dock from "@/components/Dock";
 import ChatBot from "@/components/ChatBot";
 import { useTheme, riskColor, usarRampaCobros } from "@/lib/theme";
 import { cacheGet, cachePut, cacheClear } from "@/lib/monthCache";
+import { agruparBarrios } from "@/lib/agruparBarrios";
 
 // Dynamic import for Leaflet map to avoid window undefined pre-render issues
 const LeafletMap = dynamic(() => import("@/components/LeafletMap"), {
@@ -94,7 +95,17 @@ export default function Tablero({ proceso }) {
   const setProceso = (p) => router.push(p === "cobros" ? "/cobros" : "/");
   // Paleta corporativa para los swatches de capas y la leyenda de riesgo
   const { palette: P } = useTheme();
-  const [data, setData] = useState(null);
+  const [dataRaw, setData] = useState(null);
+  // Un barrio que los datos parten en varias zonas («VILLA ESTRELLA (C07)», «(C11)»…) se ve y se
+  // cuenta como uno solo en todo el tablero. La zona de cada orden no cambia (ver rawArrays.B0).
+  const grupos = useMemo(
+    () => (dataRaw ? agruparBarrios(dataRaw.dim, dataRaw.geo) : null),
+    [dataRaw?.dim, dataRaw?.geo] // eslint-disable-line react-hooks/exhaustive-deps
+  );
+  const data = useMemo(
+    () => (dataRaw ? { ...dataRaw, dim: grupos.dim, geo: grupos.geo } : null),
+    [dataRaw, grupos]
+  );
   const [loading, setLoading] = useState(true);
 
   // Antes de pintar a los hijos: la rampa de riesgo de cobros no se parece a ningún estado.
@@ -347,7 +358,10 @@ export default function Tablero({ proceso }) {
     const P = data.pts;
     return {
       E: Uint8Array.from(P.e),
-      B: Int16Array.from(P.b),
+      // B = barrio ya unido por nombre (para contar, listar y seleccionar); B0 = la entrada
+      // original, de la que cuelgan la zona, el municipio y el corregimiento de la orden.
+      B: Int16Array.from(P.b, (b) => data.dim.b_grupo[b]),
+      B0: Int16Array.from(P.b),
       T: Int16Array.from(P.t),
       G: Uint8Array.from(P.g),
       O: Uint8Array.from(P.o),
@@ -467,7 +481,7 @@ export default function Tablero({ proceso }) {
   // 1. FILTERING ENGINE
   const IDX = useMemo(() => {
     if (!data || !rawArrays) return [];
-    const { DAY, B, G, O, ACT, GEST, E, RG, COB } = rawArrays;
+    const { DAY, B0: B, G, O, ACT, GEST, E, RG, COB } = rawArrays;
     const N = DAY.length;
     // Las casillas de «gestiones a mostrar» (perdidas / efectivas y sus tipos de recaudo) son
     // filtros reales: lo desmarcado no entra en ninguna lista, tabla ni total.
@@ -639,7 +653,7 @@ export default function Tablero({ proceso }) {
       efRec: new Map()
     };
     if (!data || !rawArrays) return res;
-    const { B, G, O, ACT, GEST, DAY, E, RG, COB } = rawArrays;
+    const { B, B0, G, O, ACT, GEST, DAY, E, RG, COB } = rawArrays;
     const ocultas = new Set(st.efOcultas);
     const N = DAY.length;
 
@@ -668,9 +682,10 @@ export default function Tablero({ proceso }) {
       const cOk = cbi < 0 || !COB || COB[i] === cbi;
       const xOk = gOk && cOk;
       const b = B[i];
-      const zVal = data.dim.b_zona[b];
-      const mVal = data.dim.b_muni[b];
-      const cVal = bCorr ? bCorr[b] : -1;
+      const b0 = B0[i];
+      const zVal = data.dim.b_zona[b0];
+      const mVal = data.dim.b_muni[b0];
+      const cVal = bCorr ? bCorr[b0] : -1;
       const gVal = G[i];
       const oVal = O[i];
       const aVal = ACT ? ACT[i] : -1;
@@ -1066,13 +1081,20 @@ export default function Tablero({ proceso }) {
       fa = 0,
       noCtrl = 0;
     if (!data) return { tot, efPct: 0, efAdj: 0, pePct: 0, faPct: 0 };
-    for (const [b, o] of A.barrio) {
-      if (zonaIdx != null && data.dim.b_zona[b] !== zonaIdx) continue;
-      tot += o.tot;
-      ef += o.ef;
-      pe += o.pe;
-      fa += o.fa;
-      noCtrl += o.noCtrl;
+    // Por orden y no por barrio: un barrio unido (varias zonas) no puede asignarle toda su
+    // actividad a una sola. La zona de cada orden sale de su entrada original (B0).
+    const { B0, E, C } = rawArrays;
+    const CTRL = V.sinAjuste ? data.dim.causa_ctrl.map(() => 1) : data.dim.causa_ctrl;
+    for (let j = 0; j < IDX.length; j++) {
+      const i = IDX[j];
+      if (zonaIdx != null && data.dim.b_zona[B0[i]] !== zonaIdx) continue;
+      tot++;
+      if (E[i] === 0) ef++;
+      else {
+        if (E[i] === 1) fa++;
+        else pe++;
+        if (CTRL[C[i]] === 0) noCtrl++;
+      }
     }
     const den = tot - noCtrl;
     const pct = (x, y) => (y ? (x / y) * 100 : 0);
@@ -1205,7 +1227,7 @@ export default function Tablero({ proceso }) {
     if (!data || !rawArrays) return [];
     const muni = data.dim.b_muni[bIdx];
     const zona = data.dim.b_zona[bIdx];
-    const { B, O, T, G, E, C, M } = rawArrays;
+    const { B, B0, O, T, G, E, C, M } = rawArrays;
     // En cobros toda perdida cuenta, así que ninguna causa se descarta como "no controlable".
     const CTRL = V.sinAjuste ? data.dim.causa_ctrl.map(() => 1) : data.dim.causa_ctrl;
 
@@ -1217,11 +1239,11 @@ export default function Tablero({ proceso }) {
       { name: "este barrio (todos los tipos)", test: (i) => B[i] === bIdx },
       {
         name: `este municipio y ${V.esteTipo}`,
-        test: (i) => data.dim.b_muni[B[i]] === muni && (tipoIdx < 0 || O[i] === tipoIdx)
+        test: (i) => data.dim.b_muni[B0[i]] === muni && (tipoIdx < 0 || O[i] === tipoIdx)
       },
       {
         name: `esta zona y ${V.esteTipo}`,
-        test: (i) => data.dim.b_zona[B[i]] === zona && (tipoIdx < 0 || O[i] === tipoIdx)
+        test: (i) => data.dim.b_zona[B0[i]] === zona && (tipoIdx < 0 || O[i] === tipoIdx)
       }
     ];
 
@@ -1467,6 +1489,14 @@ export default function Tablero({ proceso }) {
       return i >= 0 ? String(i) : null;
     };
 
+    // El backend nombra el barrio como el catálogo original («… VILLA ESTRELLA (C11)»); el
+    // tablero lo maneja unido, así que se traduce a la entrada que representa al grupo.
+    const idxBarrio = (valor) => {
+      const crudo = idxDe(dim.barrios_raw, valor);
+      if (crudo !== null) return String(dim.b_grupo[+crudo]);
+      return idxDe(dim.barrios, valor);
+    };
+
     setSt((prev) => {
       const next = { ...prev };
 
@@ -1493,7 +1523,7 @@ export default function Tablero({ proceso }) {
       // Varios barrios: BKEYs, igual que en dim.barrios. Un barrio que el catálogo no
       // conoce se salta en vez de vaciar el tablero.
       if (accion.barrios?.length) {
-        const lista = accion.barrios.map((k) => idxDe(dim.barrios, k)).filter((i) => i !== null).map(Number);
+        const lista = [...new Set(accion.barrios.map(idxBarrio).filter((i) => i !== null).map(Number))];
         if (lista.length) {
           next.barrios = lista;
           next.selBarrio = lista.length === 1 ? lista[0] : null;
@@ -1539,7 +1569,7 @@ export default function Tablero({ proceso }) {
       if (typeof accion.ajustada === "boolean") next.adjusted = accion.ajustada;
 
       // El barrio llega como BKEY ("MUNICIPIO | BARRIO"), igual que en dim.barrios.
-      const b = idxDe(dim.barrios, accion.barrio);
+      const b = idxBarrio(accion.barrio);
       if (b !== null) {
         next.barrios = [+b];
         next.selBarrio = +b;
@@ -1561,9 +1591,15 @@ export default function Tablero({ proceso }) {
         };
         const zs = conjunto(dim.zonas, accion.zonas?.length ? accion.zonas : [accion.zona]);
         const cs = conjunto(dim.corrs, accion.corregimientos?.length ? accion.corregimientos : [accion.corregimiento]);
-        const lista = dim.barrios
-          .map((_, i) => i)
-          .filter((i) => (!zs || zs.has(dim.b_zona[i])) && (!cs || cs.has(dim.b_corr?.[i])));
+        // La zona sale de la entrada original de cada barrio; se elige el barrio unido.
+        const lista = [
+          ...new Set(
+            dim.barrios_raw
+              .map((_, i) => i)
+              .filter((i) => (!zs || zs.has(dim.b_zona[i])) && (!cs || cs.has(dim.b_corr?.[i])))
+              .map((i) => dim.b_grupo[i])
+          )
+        ];
         if (lista.length) {
           next.zona = "";
           next.corr = "";

@@ -167,8 +167,8 @@ TOOLS: list[dict[str, Any]] = [
             "limite": {
                 "type": "integer",
                 "description": (
-                    "Filas a devolver (10 por defecto). Con dimension=tecnico pasa siempre el número que pidieron "
-                    "(«los 2 mejores» → 2): esos técnicos quedan elegidos en el tablero."
+                    "Filas a devolver (10 por defecto). Pasa siempre el número que pidieron («los 2 mejores» → 2, "
+                    "«los 5 barrios con más órdenes» → 5): esos quedan elegidos en el tablero. Sin él no se marca nada."
                 ),
             },
             "sin_filtros_de_pantalla": _SIN_PANTALLA,
@@ -910,6 +910,15 @@ class ToolRunner:
             # Lo que se nombra en la respuesta («los 2 mejores técnicos», «las 3 peores zonas»)
             # queda elegido en el tablero. Sin `limite` es un listado general: no se marca nada.
             filtro = self._marcar(filtro, dimension, [f.nombre for f in filas])
+            salida["marcado_en_mapa"] = True
+        elif filas and dimension in _MARCABLES and not filtra_aparte:
+            # Sin `limite` no se marca nada: el modelo no puede afirmar que lo hizo. Si el usuario
+            # pidió verlos en el mapa, que repita con `limite` (el número que pidió).
+            salida["marcado_en_mapa"] = False
+            salida["nota"] += (
+                " NO se marcó nada en el mapa. Si el usuario pidió marcar, ver o resaltar estos, vuelve a "
+                "llamar esta herramienta con `limite` = cuántos pidió; no digas que los marcaste sin eso."
+            )
         return salida, filtro
 
     async def _causas_no_efectivas(

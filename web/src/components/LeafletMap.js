@@ -536,7 +536,8 @@ export default function LeafletMap({
           if (!sel.has(p.b)) continue;
         } else if (p.b >= 0) {
           // Filter by selected zone
-          if (st.zona !== "" && dim.b_zona[p.b] !== +st.zona) continue;
+          // (un barrio unido está en la zona si cualquiera de sus entradas lo está)
+          if (st.zona !== "" && !(dim.b_miembros?.get(p.b) || [p.b]).some((i) => dim.b_zona[i] === +st.zona)) continue;
           // Filter by selected muni
           if (st.muni !== "" && dim.b_muni[p.b] !== +st.muni) continue;
         } else {

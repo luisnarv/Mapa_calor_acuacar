@@ -477,7 +477,7 @@ class MetricsService:
     def _catalogo(self, dimension: str) -> list[str]:
         p = self.datos
         return {
-            "brigada": p.brigs, "tecnico": p.tecs, "barrio": p.barrios, "subaccion": p.subs,
+            "brigada": p.brigs, "tecnico": p.tecs, "barrio": p.barrios_unidos or p.barrios, "subaccion": p.subs,
             "tarifa": p.tarifas, "actividad": p.acts, "municipio": p.munis, "zona": p.zonas, "corregimiento": p.corrs,
             "causa": p.causas, "tipo_os": p.tipos,
         }[dimension]
@@ -725,7 +725,8 @@ class MetricsService:
         ctrl, b_muni, b_zona = p.causa_ctrl, p.b_muni, p.b_zona
         b_corr = p.b_corr
         columnas = {
-            "brigada": p.g, "tecnico": p.t, "barrio": p.b,
+            # Rankings y series por barrio cuentan el barrio completo, no una fila por zona.
+            "brigada": p.g, "tecnico": p.t, "barrio": p.b_unido or p.b,
             "subaccion": p.s, "tarifa": p.f, "actividad": A,
             "causa": C, "tipo_os": O,
         }

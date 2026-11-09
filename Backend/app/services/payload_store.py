@@ -14,7 +14,9 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from array import array
+from collections import Counter
 from dataclasses import dataclass, field
 from pathlib import Path
 from threading import Lock
@@ -72,6 +74,14 @@ class Payload:
     # Corregimiento (por GPS, lo asigna el ETL). Vacíos si el JSON es anterior a esa columna.
     corrs: list[str] = field(default_factory=list)
     b_corr: list[int] = field(default_factory=list)  # barrio -> corregimiento
+
+    # El mismo barrio en varias zonas («VILLA ESTRELLA (C07)», «(C11)»…) son varias entradas de
+    # `barrios` porque el ETL le pega a cada orden la zona de su GPS. Para un ranking o una
+    # serie es UN barrio: `b_unido` es el `b` de cada orden apuntando a la entrada que
+    # representa al grupo, y `barrios_unidos` el nombre de esa entrada sin la zona.
+    b_grupo: list[int] = field(default_factory=list)  # entrada -> entrada canónica del grupo
+    barrios_unidos: list[str] = field(default_factory=list)
+    b_unido: array = field(default_factory=lambda: array("h"))
 
     def __len__(self) -> int:
         return len(self.e)
@@ -136,6 +146,36 @@ def _iter_meses(directorio: Path, raiz: dict) -> Iterator[tuple[dict, dict]]:
             yield mes, json.load(fh)["pts"]
 
 
+_PARENTESIS_FINALES = re.compile(r"(?:\s*\([^()]*\))+\s*$")
+
+
+def _unir_barrios(
+    barrios: list[str], por_orden: array
+) -> tuple[list[int], list[str], array]:
+    """Une por nombre las entradas de un mismo barrio (mismo municipio, mismo nombre sin zona).
+
+    La entrada canónica es la que más órdenes tiene: así el barrio unido lleva la zona donde
+    de verdad se concentra. Un barrio con una sola entrada queda tal cual.
+    """
+    ordenes = Counter(por_orden)
+    grupos: dict[str, list[int]] = {}
+    for i, bkey in enumerate(barrios):
+        muni, _, nombre = bkey.partition(" | ")
+        base = _PARENTESIS_FINALES.sub("", nombre).strip()
+        grupos.setdefault(f"{muni} | {base}".upper(), []).append(i)
+
+    canon = list(range(len(barrios)))
+    unidos = list(barrios)
+    for miembros in grupos.values():
+        c = max(miembros, key=lambda i: (ordenes[i], -i))
+        for i in miembros:
+            canon[i] = c
+        if len(miembros) > 1:
+            muni, _, nombre = barrios[c].partition(" | ")
+            unidos[c] = f"{muni} | {_PARENTESIS_FINALES.sub('', nombre).strip()}"
+    return canon, unidos, array("h", (canon[b] for b in por_orden))
+
+
 def _cargar(directorio: Path) -> Payload:
     """Lee `data.json` y los archivos por mes, y los concatena en columnas."""
     raiz = _leer_raiz(directorio)
@@ -162,7 +202,9 @@ def _cargar(directorio: Path) -> Payload:
             columnas[clave].extend(pts[clave])
         columnas["mes"].extend([i] * n)
 
+    b_grupo, barrios_unidos, b_unido = _unir_barrios(dim["barrios"], columnas["b"])
     payload = Payload(
+        b_grupo=b_grupo, barrios_unidos=barrios_unidos, b_unido=b_unido,
         barrios=dim["barrios"], munis=dim["munis"], zonas=dim["zonas"], brigs=dim["brigs"],
         tecs=dim["tecs"], tipos=dim["tipos"], causas=dim["causas"], subs=dim["subs"],
         tarifas=dim["tarifas"], acts=dim.get("acts", []),

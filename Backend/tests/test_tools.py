@@ -381,3 +381,12 @@ def test_barrio_en_una_zona_donde_no_esta_vuelve_como_dato(runner):
 def test_filtrar_mapa_con_barrio_y_zona_elige_solo_esa_zona(runner):
     resultado, filtro = correr(runner, "filtrar_mapa", barrio="La Boquilla", zona="C01")
     assert filtro.barrio == "CARTAGENA DE INDIAS | LA BOQUILLA (C01)" and filtro.barrios is None
+
+
+def test_el_ranking_por_barrio_une_las_zonas_de_un_mismo_barrio(runner):
+    resultado, _ = correr(runner, "ranking", dimension="barrio", mes="todo", min_ordenes=1, limite=20)
+    filas = resultado["filas"]
+    boquilla = [f for f in filas if "LA BOQUILLA" in f["nombre"]]
+    # La Boquilla está en C01 (3 órdenes) y C02 (3): una sola fila de 6, sin zona en el nombre.
+    assert len(boquilla) == 1 and boquilla[0]["tot"] == 6
+    assert boquilla[0]["nombre"] == "CARTAGENA DE INDIAS | LA BOQUILLA"

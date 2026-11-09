@@ -26,6 +26,8 @@ from shapely import points
 from shapely.geometry import box, mapping, shape
 from shapely.ops import unary_union
 
+from geo_util import quitar_sueltas
+
 RAIZ = Path(__file__).resolve().parents[1]
 CURADOS = RAIZ.parent / "GEO_FIELDOPS" / "datos" / "curados"
 BARRIOS = RAIZ / "cartagena" / "cartagena_barrios.geojson"
@@ -126,7 +128,10 @@ def _poligono_desde_gps(gps: list[tuple[float, float]]):
     celdas = [box(j * CELDA_BARRIO, i * CELDA_BARRIO, (j + 1) * CELDA_BARRIO, (i + 1) * CELDA_BARRIO)
               for (i, j), n in por_celda.items() if n >= minimo]
     union = unary_union(celdas)
-    return union.buffer(0.0006).buffer(-0.0006).simplify(0.00015)
+    forma = union.buffer(0.0006).buffer(-0.0006).simplify(0.00015)
+    # Una orden con GPS lejos del barrio dejaba una celda suelta de ~110 m: no es un polígono
+    # del barrio. Se conserva la parte principal y lo que está pegado a ella.
+    return quitar_sueltas(forma)
 
 
 def corregir_barrios(feats: list[dict]) -> list[dict]:
