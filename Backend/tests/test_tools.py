@@ -55,7 +55,9 @@ def test_un_barrio_en_dos_zonas_se_suma(runner):
     resultado, filtro = correr(runner, "efectividad", mes="todo", barrio="La Boquilla")
     assert resultado["metricas"]["tot"] == 6
     assert len(filtro.barrios) == 2
-    assert "detalle_por_barrio" in resultado
+    assert {d["nombre"]: d["tot"] for d in resultado["detalle_por_zona"]} == {
+        "LA BOQUILLA (C01)": 3, "LA BOQUILLA (C02)": 3}
+    assert "UN solo barrio" in resultado["nota_agrupacion"]
 
 
 def test_la_clave_completa_de_un_barrio_apunta_a_una_sola_zona(runner):
@@ -318,3 +320,64 @@ def test_ranking_de_las_n_peores_zonas_las_deja_elegidas(runner):
 def test_zona_inexistente_en_una_lista_vuelve_como_dato(runner):
     resultado, filtro = correr(runner, "efectividad", mes="todo", zona=["C15", "C99"])
     assert filtro is None and "zona" in str(resultado)
+
+
+def test_comparar_mas_de_dos_periodos(runner):
+    resultado, _ = correr(runner, "comparar_periodos", periodos=["2026-08", "2026-09", "todo"], dimension="zona", min_ordenes=1)
+    assert resultado["periodos"] == ["2026-08", "2026-09", "2026-08, 2026-09"]
+    fila = resultado["filas"][0]
+    assert len(fila["periodos"]) == 3 and len(fila["cambios_consecutivos_pp"]) == 2
+    assert len(resultado["total"]["periodos"]) == 3
+    solo_uno, _ = correr(runner, "comparar_periodos", periodos=["2026-08"])
+    assert solo_uno["error"] == "faltan_periodos"
+
+
+def test_comparar_mueve_el_mapa_a_las_entidades_que_muestra(runner):
+    resultado, filtro = correr(runner, "comparar_periodos", dimension="zona", min_ordenes=1)
+    assert filtro.zonas == [f["nombre"] for f in resultado["filas"]]
+    assert filtro.meses == ["2026-08", "2026-09"]
+    _, barrios = correr(runner, "comparar_periodos", dimension="barrio", min_ordenes=1, limite=2)
+    assert len(barrios.barrios) == 2 and barrios.zonas is None
+    _, total = correr(runner, "comparar_periodos", zona="C15")
+    assert total.zona == "C15" and total.meses == ["2026-08", "2026-09"]
+    _, causa = correr(runner, "comparar_periodos", dimension="causa", min_ordenes=1)
+    assert causa.zona is None and causa.zonas is None  # la causa no se filtra en el tablero
+
+
+def test_serie_de_varias_zonas_a_la_vez(runner):
+    resultado, filtro = correr(runner, "serie_mensual", dimension="zona", zona=["C15", "C08"])
+    assert {e["nombre"] for e in resultado["entidades"]} == {"C15", "C08"}
+    c15 = next(e for e in resultado["entidades"] if e["nombre"] == "C15")
+    assert [p["mes"] for p in c15["serie"]] == ["2026-08", "2026-09"]
+    assert c15["tot"] == 6 and "variacion_primero_a_ultimo_pp" in c15
+    assert sorted(filtro.zonas) == ["C08", "C15"]
+
+
+def test_serie_por_tecnico_y_limite(runner):
+    resultado, filtro = correr(runner, "serie_mensual", dimension="tecnico", limite=2)
+    assert len(resultado["entidades"]) == 2 and resultado["total_entidades"] == 3
+    assert filtro.tecnicos == [e["nombre"] for e in resultado["entidades"]]
+    malo, _ = correr(runner, "serie_mensual", dimension="mes")
+    assert "error" in malo
+
+
+def test_barrio_dentro_de_una_zona_se_queda_con_esa_zona(runner):
+    resultado, filtro = correr(runner, "efectividad", mes="todo", barrio="La Boquilla", zona="C02")
+    assert resultado["metricas"]["tot"] == 3  # solo LA BOQUILLA (C02), no las dos zonas
+    assert filtro.barrio == "CARTAGENA DE INDIAS | LA BOQUILLA (C02)" and filtro.barrios is None
+    assert "detalle_por_zona" not in resultado
+    por_corr, _ = correr(runner, "efectividad", mes="todo", barrio="La Boquilla", corregimiento="La Boquilla")
+    assert por_corr["metricas"]["tot"] == 6  # los dos son de ese corregimiento
+
+
+def test_barrio_en_una_zona_donde_no_esta_vuelve_como_dato(runner):
+    resultado, filtro = correr(runner, "efectividad", mes="todo", barrio="Albornoz", zona="C01")
+    assert resultado["error"] == "barrio_fuera_de_zona" and filtro is None
+    assert resultado["aparece_en"] == ["ALBORNOZ (C15)"]
+    otra, f2 = correr(runner, "filtrar_mapa", barrio="Albornoz", zona="C01")
+    assert otra["error"] == "barrio_fuera_de_zona" and f2 is None
+
+
+def test_filtrar_mapa_con_barrio_y_zona_elige_solo_esa_zona(runner):
+    resultado, filtro = correr(runner, "filtrar_mapa", barrio="La Boquilla", zona="C01")
+    assert filtro.barrio == "CARTAGENA DE INDIAS | LA BOQUILLA (C01)" and filtro.barrios is None

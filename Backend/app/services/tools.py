@@ -257,15 +257,24 @@ TOOLS: list[dict[str, Any]] = [
     ),
     _herramienta(
         "comparar_periodos",
-        "Compara DOS periodos (agosto contra septiembre) en efectividad, pérdidas y volumen, en "
-        "total o por una dimensión. Úsala para «¿subió o bajó?», «¿quién mejora o empeora?», "
-        "«¿por qué cayó?» (dimension «causa»). Sin periodos compara el último mes con el "
-        "anterior. La diferencia es B menos A, en puntos porcentuales.",
+        "Compara dos o MÁS periodos (agosto contra septiembre, o julio, agosto y septiembre) en "
+        "efectividad, pérdidas y volumen, en total o por una dimensión. Úsala para «¿subió o "
+        "bajó?», «¿quién mejora o empeora?», «¿por qué cayó?» (dimension «causa»). Sin periodos "
+        "compara el último mes con el anterior. La diferencia es último menos primero, en puntos "
+        "porcentuales. Deja en el tablero a las entidades que muestra.",
         {
             "dimension": {"type": "string", "enum": ["ninguna", *DIMENSIONES],
                           "description": "Por qué se desglosa. «ninguna» da solo el total de cada periodo."},
-            "mes_a": {**_MES, "description": "Periodo base (el anterior)."},
-            "mes_b": {**_MES, "description": "Periodo nuevo, el que se compara contra el base."},
+            "periodos": {
+                "type": "array", "items": {"type": "string"},
+                "description": (
+                    "Los periodos a comparar, en orden cronológico, tantos como pida el usuario "
+                    "(['2026-07', '2026-08', '2026-09'] o ['2025', '2026']). Con esto no uses "
+                    "mes_a ni mes_b."
+                ),
+            },
+            "mes_a": {**_MES, "description": "Periodo base (el anterior). Solo para comparar dos."},
+            "mes_b": {**_MES, "description": "Periodo nuevo, el que se compara contra el base. Solo para dos."},
             "barrio": _BARRIO, "zona": _ZONA, "corregimiento": _CORREGIMIENTO, "tecnico": _TECNICO,
             "min_ordenes": {"type": "integer", "description": "Mínimo de órdenes en CADA periodo (30 por defecto)."},
             "ordenar_por": {"type": "string", "enum": ["efectividad", "perdidas", "volumen"],
@@ -277,9 +286,16 @@ TOOLS: list[dict[str, Any]] = [
     ),
     _herramienta(
         "serie_mensual",
-        "Efectividad y pérdidas de UNA entidad (un técnico, barrio, zona, corregimiento o el total) mes por mes, "
-        "con cuántos meses lleva seguidos en caída. Úsala para «¿cómo ha evolucionado…?».",
+        "Efectividad y pérdidas mes por mes, con cuántos meses lleva seguidos en caída. De UNA "
+        "entidad (un técnico, barrio, zona, corregimiento o el total) o, con `dimension`, de VARIAS "
+        "a la vez, una serie por cada una («la evolución de las zonas C01, C05 y C08»: dimension "
+        "«zona» y esas zonas en `zona`). Úsala para «¿cómo ha evolucionado…?». Deja en el tablero "
+        "a las entidades que muestra.",
         {"mes": {**_MES, "description": "Meses a incluir. Por defecto todos."},
+         "dimension": {"type": "string", "enum": ["ninguna", *DIMENSIONES],
+                       "description": "Una serie por cada barrio, zona, corregimiento, técnico… «ninguna»: una sola serie."},
+         "min_ordenes": {"type": "integer", "description": "Con dimension: mínimo de órdenes en todo el periodo (1 por defecto)."},
+         "limite": {"type": "integer", "description": "Con dimension: cuántas series devolver (10 por defecto, las de más volumen)."},
          "barrio": _BARRIO, "zona": _ZONA, "corregimiento": _CORREGIMIENTO, "tecnico": _TECNICO,
          "sin_filtros_de_pantalla": _SIN_PANTALLA},
     ),
@@ -294,6 +310,8 @@ _FILTRAN_CON_PANTALLA = frozenset({
     "comparar_periodos", "serie_mensual",
 })
 # Pueden dejar algo marcado en el mapa; si no lo hicieron, hay que decirlo.
+# Dimensiones cuyos resultados el tablero sabe elegir (un filtro propio por cada una).
+_MARCABLES = frozenset({"tecnico", "barrio", "zona", "corregimiento", "tipo_os"})
 _SEÑALAN_EN_EL_MAPA = frozenset({"efectividad", "ranking", "causas_no_efectivas", "comparar_periodos", "serie_mensual"})
 
 # Criterios donde un valor alto es malo, no bueno.
@@ -364,6 +382,14 @@ def etiqueta_periodo(meses: list[str] | None) -> str:
     if len(anios) == 1 and len(meses) > 2:
         return f"{meses[0]} a {meses[-1]}"
     return ", ".join(meses)
+
+
+class BarrioFueraDeZona(Exception):
+    """El barrio existe, pero no en la zona o el corregimiento que piden."""
+
+    def __init__(self, barrio: str, zona: Any, corregimiento: Any, donde_si_esta: list[str]) -> None:
+        super().__init__(f"{barrio!r} no está en {zona or corregimiento!r}")
+        self.barrio, self.zona, self.corregimiento, self.donde_si_esta = barrio, zona, corregimiento, donde_si_esta
 
 
 def _zona(texto: "str | list[str] | None") -> "str | list[str] | None":
@@ -542,6 +568,17 @@ class ToolRunner:
                 "texto_buscado": exc.texto,
                 "sugerencia": "Pide al usuario que confirme el nombre del barrio.",
             }, None
+        except BarrioFueraDeZona as exc:
+            return {
+                "error": "barrio_fuera_de_zona",
+                "barrio": exc.barrio,
+                "zona_pedida": exc.zona or exc.corregimiento,
+                "aparece_en": exc.donde_si_esta,
+                "sugerencia": (
+                    "Ese barrio no registra órdenes en esa zona o corregimiento. Dilo y ofrece las zonas donde "
+                    "sí aparece (`aparece_en`). No contestes con la cifra de otra zona."
+                ),
+            }, None
         except PeriodoVacio as exc:
             return {
                 "error": "periodo_sin_datos",
@@ -599,6 +636,33 @@ class ToolRunner:
         canonicos = list(dict.fromkeys(canonicos))
         return canonicos[0] if len(canonicos) == 1 else canonicos
 
+    async def _claves_de(self, nombre: str, zona: Any = None, corregimiento: Any = None) -> list[str]:
+        """Las claves del barrio, restringidas a la zona o el corregimiento que pidan.
+
+        Un barrio atraviesa varias zonas y cada una es una entrada del catálogo
+        («VILLA ESTRELLA (C11)», «(C07)»…). Sin esta restricción, «Villa Estrella en la zona
+        C11» devolvía las cuatro sumadas. Si el barrio no aparece en esa zona, lanza
+        BarrioFueraDeZona con las zonas donde sí está.
+        """
+        claves = [c.bkey for c in await self._grupo(nombre)]
+        if not (zona or corregimiento):
+            return claves
+        p = self.metrics.datos
+        pos = {b: i for i, b in enumerate(p.barrios)}
+        zs = self.metrics._indices(p.zonas, zona)
+        if zona and zs is None:
+            raise FiltroNoResuelto("zona", _rotulo(zona), p.zonas)
+        cs = self.metrics._indices(p.corrs, corregimiento)
+        if corregimiento and cs is None:
+            raise FiltroNoResuelto("corregimiento", _rotulo(corregimiento), p.corrs)
+        mantener = [
+            k for k in claves
+            if (zs is None or p.b_zona[pos[k]] in zs) and (cs is None or p.b_corr[pos[k]] in cs)
+        ]
+        if not mantener:
+            raise BarrioFueraDeZona(nombre, zona, corregimiento, [k.partition(" | ")[2] for k in claves])
+        return mantener
+
     async def _recorte(
         self,
         barrio: str | list[str] | None,
@@ -629,10 +693,10 @@ class ToolRunner:
         if nombres:
             claves: list[str] = []
             for nombre in nombres:
-                grupo = await self._grupo(nombre)
+                grupo = await self._claves_de(nombre, zona, corregimiento)
                 if len(grupo) > 1:
-                    self._agrupados[nombre] = [c.bkey.partition(" | ")[2] for c in grupo]
-                claves += [c.bkey for c in grupo]
+                    self._agrupados[nombre] = [k.partition(" | ")[2] for k in grupo]
+                claves += grupo
             bkeys = list(dict.fromkeys(claves))
 
         if bkeys and len(bkeys) == 1:
@@ -735,12 +799,28 @@ class ToolRunner:
                 "`detalle_por_tecnico`: una fila por cada uno."
             )
         nombres = [barrio] if isinstance(barrio, str) else [n for n in (barrio or []) if n]
-        if bkeys and len(bkeys) > 1:
+        if bkeys and len(nombres) == 1 and len(bkeys) > 1:
+            # UN barrio que los datos parten en varias zonas: `metricas` ya es el barrio completo, y
+            # se da el desglose por zona para que el usuario vea dónde se concentra.
+            detalle = []
+            for clave in bkeys:
+                fila = await self.metrics.efectividad(
+                    bkeys=[clave], meses=meses, tipo_os=tipo_os, subaccion=subaccion, tarifa=tarifa,
+                    causa=causa, tecnicos=tecnicos, etiqueta=clave.partition(" | ")[2])
+                detalle.append(fila.model_dump())
+            detalle.sort(key=lambda d: -d["tot"])
+            salida["detalle_por_zona"] = detalle
+            salida["nota_agrupacion"] = (
+                f"El barrio {nombres[0]} aparece en {len(bkeys)} zonas en los datos (cada orden toma la zona de "
+                "su GPS): es UN solo barrio y `metricas` ya los suma. Da ese total y, si es útil, el desglose de "
+                "`detalle_por_zona`. Si el usuario quiere una zona concreta, vuelve a llamar con `zona`."
+            )
+        elif bkeys and len(bkeys) > 1:
             # Una fila por cada barrio que PIDIERON, no por cada entrada del catálogo: «Olaya
             # Herrera» son dos (COM 5 y COM 6) y comparar solo una daría la mitad de sus órdenes.
             detalle = []
             for nombre in nombres:
-                claves = [c.bkey for c in await self._grupo(nombre)]
+                claves = await self._claves_de(nombre, _zona(zona), self._corr(corregimiento))
                 fila = await self.metrics.efectividad(
                     bkeys=claves, meses=meses, tipo_os=tipo_os, subaccion=subaccion, tarifa=tarifa,
                     causa=causa, tecnicos=tecnicos, etiqueta=nombre)
@@ -825,30 +905,11 @@ class ToolRunner:
                                "todo polígono de corregimiento). Preséntala como tal.")
         if not filas:
             salida["nota"] = f"Sin resultados en {base} con el mínimo de {min_ordenes} órdenes pedido."
-        elif dimension == "tecnico" and not nombres_tec and limite and 1 <= len(filas) <= 10 and not filtra_aparte:
-            # Los técnicos que se nombran en la respuesta («los 2 mejores») quedan elegidos en el
-            # tablero. Sin `limite` es un listado general: no se marca a nadie.
-            filtro = (filtro or FiltroMapa()).model_copy(update={"tecnicos": [f.nombre for f in filas]})
-        elif dimension in ("zona", "corregimiento") and limite and 1 <= len(filas) <= 10 and not filtra_aparte:
-            # Las zonas o corregimientos nombrados en la respuesta quedan elegidos (uno o varios).
-            nombres = [f.nombre for f in filas]
-            filtro = (filtro or FiltroMapa()).model_copy(update={
-                "zona": None, "zonas": None, "corregimiento": None, "corregimientos": None,
-                **_campos(dimension, nombres[0] if len(nombres) == 1 else nombres),
-            })
-        elif dimension == "tipo_os" and limite == 1 and len(filas) == 1 and not filtra_aparte:
-            filtro = (filtro or FiltroMapa()).model_copy(update={"tipo_os": filas[0].nombre})
-        elif dimension == "barrio" and limite and 1 <= len(filas) <= 10 and not filtra_aparte:
-            # Los barrios que se nombran en la respuesta quedan marcados, con su clave completa.
-            claves = [f.nombre for f in filas]
-            filtro = (filtro or FiltroMapa()).model_copy(update={
-                "barrio": claves[0] if len(claves) == 1 else None,
-                "barrios": claves if len(claves) > 1 else None,
-                "zona": None,
-                "corregimiento": None,
-                "zonas": None,
-                "corregimientos": None,
-            })
+        elif (dimension in _MARCABLES and limite and not filtra_aparte
+              and not (dimension == "tecnico" and nombres_tec)):
+            # Lo que se nombra en la respuesta («los 2 mejores técnicos», «las 3 peores zonas»)
+            # queda elegido en el tablero. Sin `limite` es un listado general: no se marca nada.
+            filtro = self._marcar(filtro, dimension, [f.nombre for f in filas])
         return salida, filtro
 
     async def _causas_no_efectivas(
@@ -913,7 +974,9 @@ class ToolRunner:
         if nombres:
             claves: list[str] = []
             for nombre in nombres:
-                claves += [c.bkey for c in await self._grupo(nombre)]
+                claves += await self._claves_de(
+                    nombre, kwargs.get("zona") or kwargs.get("zonas"),
+                    kwargs.get("corregimiento") or kwargs.get("corregimientos"))
             claves = list(dict.fromkeys(claves))
             kwargs["barrio"] = claves[0] if len(claves) == 1 else None
             kwargs["barrios"] = claves if len(claves) > 1 else None
@@ -969,14 +1032,56 @@ class ToolRunner:
     def _metrica(fila: Efectividad) -> float:
         return fila.ef_adj
 
+    def _marcar(self, filtro: FiltroMapa | None, dimension: str, nombres: list[str]) -> FiltroMapa | None:
+        """Deja elegidas en el tablero las entidades que la respuesta nombra.
+
+        Hasta 10; con más, o sin ninguna, no se marca nada. El tipo de orden solo se elige si
+        es uno (con dos sería no filtrar). Las demás dimensiones (causa, tarifa, subacción) no
+        tienen filtro en el tablero.
+        """
+        if dimension not in _MARCABLES or not nombres or len(nombres) > 10:
+            return filtro
+        base = filtro or FiltroMapa()
+        if dimension == "tecnico":
+            return base.model_copy(update={"tecnicos": nombres})
+        if dimension == "barrio":
+            # Con su clave completa, y sin zona ni corregimiento que los contradigan.
+            return base.model_copy(update={
+                "barrio": nombres[0] if len(nombres) == 1 else None,
+                "barrios": nombres if len(nombres) > 1 else None,
+                "zona": None, "zonas": None, "corregimiento": None, "corregimientos": None,
+            })
+        if dimension in ("zona", "corregimiento"):
+            return base.model_copy(update={
+                "zona": None, "zonas": None, "corregimiento": None, "corregimientos": None,
+                **_campos(dimension, nombres[0] if len(nombres) == 1 else nombres),
+            })
+        return base.model_copy(update={"tipo_os": nombres[0]}) if len(nombres) == 1 else filtro
+
+    @staticmethod
+    def _resumen_serie(serie: list[dict[str, Any]]) -> dict[str, Any]:
+        """Caídas seguidas, mejor y peor mes y variación de una serie mensual."""
+        caidas = 0
+        for anterior, actual in zip(reversed(serie[:-1]), reversed(serie[1:])):
+            if actual["efectividad"] >= anterior["efectividad"]:
+                break
+            caidas += 1
+        return {
+            "meses_seguidos_en_caida": caidas,
+            "mejor_mes": max(serie, key=lambda f: f["efectividad"])["mes"],
+            "peor_mes": min(serie, key=lambda f: f["efectividad"])["mes"],
+            "variacion_primero_a_ultimo_pp": round(serie[-1]["efectividad"] - serie[0]["efectividad"], 1),
+        }
+
     async def _comparar_periodos(
         self,
         dimension: str = "ninguna",
         mes_a: Any = None,
         mes_b: Any = None,
+        periodos: list[str] | None = None,
         barrio: str | list[str] | None = None,
-        zona: str | None = None,
-        corregimiento: str | None = None,
+        zona: str | list[str] | None = None,
+        corregimiento: str | list[str] | None = None,
         tecnico: str | list[str] | None = None,
         min_ordenes: int = 30,
         ordenar_por: str = "efectividad",
@@ -984,11 +1089,20 @@ class ToolRunner:
         limite: int = 10,
     ) -> tuple[dict[str, Any], FiltroMapa | None]:
         disponibles = await self.metrics.meses_disponibles()  # del más reciente al más antiguo
-        meses_b = expandir_meses(mes_b or disponibles[0], disponibles)
-        meses_a = expandir_meses(mes_a or (disponibles[1] if len(disponibles) > 1 else None), disponibles)
-        if not meses_a or not meses_b:
-            return {"error": "faltan_periodos", "sugerencia": "Pide los dos periodos a comparar."}, None
-        bkeys, _, _, _ = await self._recorte(barrio, "todo", zona, None, corregimiento)
+        if periodos:
+            pedidos = [periodos] if isinstance(periodos, str) else list(periodos)
+            lista = [expandir_meses(p, disponibles) for p in pedidos]
+        else:
+            lista = [
+                expandir_meses(mes_a or (disponibles[1] if len(disponibles) > 1 else None), disponibles),
+                expandir_meses(mes_b or disponibles[0], disponibles),
+            ]
+        if len(lista) < 2 or not all(lista):
+            return {"error": "faltan_periodos", "sugerencia": "Pide al menos dos periodos a comparar."}, None
+        etiquetas = [etiqueta_periodo(m) for m in lista]
+        union = sorted({m for p in lista for m in p})
+
+        bkeys, _, _, filtro = await self._recorte(barrio, union, zona, None, corregimiento)
         tecnicos, nombres_tec = self._tecnicos(tecnico)
         ambito = dict(bkeys=bkeys, zona=None if bkeys else _zona(zona),
                       corregimiento=None if bkeys else self._corr(corregimiento), tecnicos=tecnicos)
@@ -998,61 +1112,88 @@ class ToolRunner:
                 dimension=dimension, meses=meses, min_ordenes=0, limite=10**6, ordenar_por="volumen", **ambito)
             return {f.nombre: f for f in filas}
 
-        def resumen(a: Efectividad, b: Efectividad, nombre: str) -> dict[str, Any]:
-            return {
+        def resumen(fs: list[Efectividad], nombre: str) -> dict[str, Any]:
+            """Primero contra último (con dos periodos, A contra B); con más, también cada uno."""
+            a, b = fs[0], fs[-1]
+            fila: dict[str, Any] = {
                 "nombre": nombre, "tot_a": a.tot, "tot_b": b.tot, "delta_tot": b.tot - a.tot,
                 "efectividad_a": round(self._metrica(a), 1), "efectividad_b": round(self._metrica(b), 1),
                 "delta_efectividad_pp": round(self._metrica(b) - self._metrica(a), 1),
                 "perdidas_a": a.pe, "perdidas_b": b.pe, "delta_perdidas": b.pe - a.pe,
             }
+            if len(fs) > 2:
+                fila["periodos"] = [
+                    {"periodo": e, "tot": f.tot, "efectividad": round(self._metrica(f), 1), "perdidas": f.pe}
+                    for e, f in zip(etiquetas, fs)
+                ]
+                fila["cambios_consecutivos_pp"] = [
+                    round(self._metrica(y) - self._metrica(x), 1) for x, y in zip(fs, fs[1:])
+                ]
+            return fila
 
-        total_a = await self.metrics.efectividad(meses=meses_a, **ambito)
-        total_b = await self.metrics.efectividad(meses=meses_b, **ambito)
-        salida: dict[str, Any] = {
-            "periodo_a": etiqueta_periodo(meses_a), "periodo_b": etiqueta_periodo(meses_b),
-            "total": resumen(total_a, total_b, "TOTAL"),
-        }
+        totales = [await self.metrics.efectividad(meses=m, **ambito) for m in lista]
+        salida: dict[str, Any] = {"periodos": etiquetas, "total": resumen(totales, "TOTAL")}
+        if len(lista) == 2:
+            salida["periodo_a"], salida["periodo_b"] = etiquetas
         if dimension != "ninguna":
-            a, b = await por_periodo(meses_a), await por_periodo(meses_b)
+            tablas = [await por_periodo(m) for m in lista]
             vacio = lambda n: Efectividad(nombre=n, tot=0, ef=0, pe=0, noctrl=0, ef_pct=0.0, ef_adj=0.0)  # noqa: E731
-            # Con efectividad solo vale quien tiene muestra en los DOS periodos; con volumen,
-            # pérdidas o causas, que desaparezca en uno de ellos es justo lo que interesa.
+            # Con efectividad solo vale quien tiene muestra en TODOS los periodos; con volumen,
+            # pérdidas o causas, que desaparezca en alguno es justo lo que interesa.
             solo_volumen = ordenar_por != "efectividad" or dimension == "causa"
             filas = []
-            for nombre in dict.fromkeys([*a, *b]):
-                fa, fb = a.get(nombre) or vacio(nombre), b.get(nombre) or vacio(nombre)
-                if (max(fa.tot, fb.tot) < 1) if solo_volumen else (min(fa.tot, fb.tot) < min_ordenes):
+            for nombre in dict.fromkeys(n for t in tablas for n in t):
+                fs = [t.get(nombre) or vacio(nombre) for t in tablas]
+                if (max(f.tot for f in fs) < 1) if solo_volumen else (min(f.tot for f in fs) < min_ordenes):
                     continue
-                filas.append(resumen(fa, fb, nombre))
+                filas.append(resumen(fs, nombre))
             clave = {"efectividad": "delta_efectividad_pp", "perdidas": "delta_perdidas", "volumen": "delta_tot"}[ordenar_por]
             filas.sort(key=lambda r: r[clave], reverse=orden == "mas")
             salida["filas"] = filas[: max(1, min(int(limite), 50))]
             salida["total_filas"] = len(filas)
         salida["nota"] = (
-            "`delta_efectividad_pp` es la efectividad ajustada de B menos A en puntos porcentuales; "
-            "positivo es que mejoró. Las pérdidas y el volumen van en cantidades. Di siempre los dos "
-            "periodos." + self._avisos(meses=meses_b)
+            "`delta_efectividad_pp` es la efectividad ajustada del último periodo menos la del primero, en "
+            "puntos porcentuales; positivo es que mejoró. Con más de dos periodos, `periodos` da cada uno y "
+            "`cambios_consecutivos_pp` el cambio entre uno y el siguiente; `*_a` es el primero y `*_b` el último. "
+            "Las pérdidas y el volumen van en cantidades. Di siempre los periodos." + self._avisos(meses=union)
         )
         contexto = [self._rotulo_tecnicos(nombres_tec)] if nombres_tec else []
         sitio = [f"zona {_rotulo(_zona(zona))}" if zona else None,
                  f"corregimiento {_rotulo(self._corr(corregimiento))}" if corregimiento else None]
         salida["base"] = " · ".join([*contexto, *(s for s in sitio if s)] or [*contexto, "todo Cartagena"])
         salida["datos_hasta"] = self.metrics.datos.fecha_max
-        return salida, None
+
+        # El mapa queda en lo comparado: el sitio pedido, los técnicos y, desglosado, las
+        # entidades que la respuesta muestra, con los meses de la comparación.
+        if nombres_tec:
+            filtro = filtro.model_copy(update={"tecnicos": nombres_tec})
+        if dimension != "ninguna" and not (dimension == "tecnico" and nombres_tec):
+            filtro = self._marcar(filtro, dimension, [f["nombre"] for f in salida.get("filas", [])])
+        return salida, filtro
 
     async def _serie_mensual(
         self,
         mes: Any = "todo",
+        dimension: str = "ninguna",
         barrio: str | list[str] | None = None,
-        zona: str | None = None,
-        corregimiento: str | None = None,
+        zona: str | list[str] | None = None,
+        corregimiento: str | list[str] | None = None,
         tecnico: str | list[str] | None = None,
+        min_ordenes: int = 1,
+        limite: int = 10,
     ) -> tuple[dict[str, Any], FiltroMapa | None]:
         disponibles = sorted(await self.metrics.meses_disponibles())
         meses = sorted(expandir_meses(mes or "todo", disponibles) or disponibles)
+        if dimension != "ninguna":
+            if dimension not in DIMENSIONES:
+                raise ValueError(f"Dimensión no soportada: {dimension}")
+            return await self._serie_por_dimension(
+                dimension, meses, barrio, zona, corregimiento, tecnico, min_ordenes, limite)
+
         filas, filtro, base = [], None, ""
         for m in meses:
-            resultado, filtro = await self._efectividad(barrio=barrio, mes=m, zona=zona, corregimiento=corregimiento, tecnico=tecnico)
+            resultado, filtro = await self._efectividad(
+                barrio=barrio, mes=m, zona=zona, corregimiento=corregimiento, tecnico=tecnico)
             base = resultado["base"].rsplit(" · ", 1)[0] if " · " in resultado["base"] else resultado["base"]
             d = resultado["metricas"]
             if d["tot"]:
@@ -1060,17 +1201,8 @@ class ToolRunner:
                               "pct_perdidas": round(100 * d["pe"] / d["tot"], 1)})
         if not filas:
             return {"error": "sin_datos", "sugerencia": "Ese recorte no tiene órdenes en ningún mes."}, None
-        caidas = 0
-        for anterior, actual in zip(reversed(filas[:-1]), reversed(filas[1:])):
-            if actual["efectividad"] >= anterior["efectividad"]:
-                break
-            caidas += 1
-        mejor = max(filas, key=lambda f: f["efectividad"])
-        peor = min(filas, key=lambda f: f["efectividad"])
         salida = {
-            "base": base, "serie": filas, "meses_seguidos_en_caida": caidas,
-            "mejor_mes": mejor["mes"], "peor_mes": peor["mes"],
-            "variacion_primero_a_ultimo_pp": round(filas[-1]["efectividad"] - filas[0]["efectividad"], 1),
+            "base": base, "serie": filas, **self._resumen_serie(filas),
             "datos_hasta": self.metrics.datos.fecha_max,
             "nota": ("`efectividad` es la efectividad ajustada de cada mes. `meses_seguidos_en_caida` "
                      "cuenta hacia atrás desde el último mes." + self._avisos(meses=[filas[-1]["mes"]])),
@@ -1078,3 +1210,52 @@ class ToolRunner:
         if filtro and filtro.model_dump(exclude_none=True, exclude={"meses"}):
             return salida, filtro.model_copy(update={"meses": meses})
         return salida, None
+
+    async def _serie_por_dimension(
+        self, dimension: str, meses: list[str], barrio: Any, zona: Any, corregimiento: Any,
+        tecnico: Any, min_ordenes: int, limite: int,
+    ) -> tuple[dict[str, Any], FiltroMapa | None]:
+        """Una serie mensual por cada barrio, zona, corregimiento, técnico… del recorte."""
+        bkeys, _, base, filtro = await self._recorte(barrio, meses, zona, None, corregimiento)
+        tecnicos, nombres_tec = self._tecnicos(tecnico)
+        if nombres_tec:
+            base += f" · {self._rotulo_tecnicos(nombres_tec)}"
+        ambito = dict(bkeys=bkeys, zona=None if bkeys else _zona(zona),
+                      corregimiento=None if bkeys else self._corr(corregimiento), tecnicos=tecnicos)
+
+        por_mes: list[dict[str, Efectividad]] = []
+        for m in meses:
+            filas = await self.metrics.ranking(
+                dimension=dimension, meses=[m], min_ordenes=0, limite=10**6, ordenar_por="volumen", **ambito)
+            por_mes.append({f.nombre: f for f in filas})
+        volumen: dict[str, int] = {}
+        for tabla in por_mes:
+            for nombre, fila in tabla.items():
+                volumen[nombre] = volumen.get(nombre, 0) + fila.tot
+        elegidas = sorted((n for n, tot in volumen.items() if tot >= max(1, int(min_ordenes))),
+                          key=lambda n: -volumen[n])[: max(1, min(int(limite), 50))]
+        entidades = []
+        for nombre in elegidas:
+            serie = [
+                {"mes": m, "tot": t[nombre].tot, "efectividad": t[nombre].ef_adj, "perdidas": t[nombre].pe,
+                 "pct_perdidas": round(100 * t[nombre].pe / t[nombre].tot, 1)}
+                for m, t in zip(meses, por_mes) if nombre in t and t[nombre].tot
+            ]
+            entidades.append({"nombre": nombre, "tot": volumen[nombre], "serie": serie, **self._resumen_serie(serie)})
+        if not entidades:
+            return {"error": "sin_datos", "sugerencia": "Ese recorte no tiene órdenes en ningún mes."}, None
+
+        salida = {
+            "base": base, "dimension": dimension, "meses": meses, "entidades": entidades,
+            "total_entidades": len(volumen), "datos_hasta": self.metrics.datos.fecha_max,
+            "nota": ("Una serie por entidad, de las de mayor volumen. `efectividad` es la ajustada de cada mes. "
+                     "Presenta TODAS las entidades que devuelve, mes por mes, con su variación." +
+                     ("" if len(volumen) <= len(entidades)
+                      else f" Hay {len(volumen)} en total; se muestran {len(entidades)}: dilo.") +
+                     self._avisos(meses=meses)),
+        }
+        if nombres_tec:
+            filtro = filtro.model_copy(update={"tecnicos": nombres_tec})
+        if not (dimension == "tecnico" and nombres_tec):
+            filtro = self._marcar(filtro, dimension, [e["nombre"] for e in entidades])
+        return salida, filtro
