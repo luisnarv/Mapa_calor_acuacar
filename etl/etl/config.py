@@ -21,6 +21,8 @@ SALIDA_POR_DEFECTO: Path = RAIZ / "web" / "public" / "scr"
 GEOJSON_POR_DEFECTO: Path = RAIZ / "web" / "public" / "geojson"
 # código de tarifa -> descripción, de la hoja TARIFAS de `Geo/Cartagena/TARIFA Y ZONAS.xlsx`.
 TARIFAS_JSON: Path = RAIZ / "config" / "tarifas.json"
+# Barrios que la dirección escribe distinto al polígono (ej. «VEREDA ZAPATERO» -> «ZAPATERO»).
+ALIAS_BARRIOS_JSON: Path = RAIZ / "config" / "alias_barrios.json"
 
 TABLA = "dbanalitica.historico_acuacar_scr"
 

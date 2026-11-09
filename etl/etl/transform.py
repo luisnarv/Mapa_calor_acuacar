@@ -8,11 +8,12 @@ El mapeo de columnas de Acuacar a las que espera el tablero (heredado de Aire) e
 from __future__ import annotations
 
 import json
+import re
 
 import numpy as np
 import pandas as pd
 
-from .config import BBOX, TARIFAS_JSON
+from .config import ALIAS_BARRIOS_JSON, BBOX, TARIFAS_JSON
 from .logging_conf import get_logger
 from .taxonomy import causa_para
 from .text import norm
@@ -27,7 +28,7 @@ MUNICIPIO = "CARTAGENA DE INDIAS"
 ESTADO_DE_EFECTIVIDAD: dict[str, str] = {"Efectiva": "Efectiva", "No efectiva": "Perdida"}
 
 COLS_SALIDA: tuple[str, ...] = (
-    "ZONA", "ORDEN", "NIC", "MUNICIPIO", "LOCALIDAD/BARRIO", "TARIFA", "TECNICO",
+    "ZONA", "ORDEN", "NIC", "MUNICIPIO", "LOCALIDAD/BARRIO", "BARRIO_DIRECCION", "TARIFA", "TECNICO",
     "TIPO BRIGADA", "TIPO OS", "TIPO SUSPENSION SOLICITADA", "SUBACCION/SUBANOMALIA",
     "ACTIVIDAD", "Estado", "FECHA_EJECUCION", "LATITUD", "LONGITUD",
     "CAUSA", "FAMILIA_CAUSA", "CONTROLABLE",
@@ -45,6 +46,22 @@ def _etiqueta_tarifa(codigo: object) -> str | None:
         return None
     descripciones = json.loads(TARIFAS_JSON.read_text(encoding="utf-8"))
     return f"{codigo} · {descripciones.get(str(codigo), 'sin descripción en la tabla oficial')}"
+
+
+# La base no trae barrio, pero toda dirección termina con él entre paréntesis:
+# «CU.BRISAS DEL JARDIN T5-AP-436 (VILLA ESTRELLA)». Es el respaldo cuando el GPS no cae en un polígono.
+_RE_BARRIO_DIRECCION = re.compile(r"\(([^()]+)\)\s*$")
+
+
+def _barrio_de_direccion(direccion: object) -> str | None:
+    if not isinstance(direccion, str):
+        return None
+    m = _RE_BARRIO_DIRECCION.search(direccion)
+    if not m:
+        return None
+    nombre = m.group(1).strip().upper()
+    alias = json.loads(ALIAS_BARRIOS_JSON.read_text(encoding="utf-8"))
+    return alias.get(nombre, nombre)
 
 
 def enrich(df: pd.DataFrame) -> pd.DataFrame:
@@ -73,6 +90,7 @@ def enrich(df: pd.DataFrame) -> pd.DataFrame:
 
     df["TARIFA"] = _por_unico(df["TARIFA"], _etiqueta_tarifa)
     df["MUNICIPIO"] = MUNICIPIO
+    df["BARRIO_DIRECCION"] = _por_unico(df["DIRECCION"], _barrio_de_direccion)
     df["LOCALIDAD/BARRIO"] = None            # lo pone el GPS en `geo.asignar_territorio`
     df["TIPO SUSPENSION SOLICITADA"] = None  # Acuacar no registra el tipo solicitado
     df["ACTIVIDAD"] = df["TIPO OS"]

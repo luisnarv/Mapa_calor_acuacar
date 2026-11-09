@@ -1,0 +1,128 @@
+name: Imagen Docker del mapa de Acuacar
+
+# Cuándo corre:
+#  - push a main: valida, construye, publica la imagen y la promueve a producción.
+#  - pull_request: solo valida y construye; no publica nada.
+#  - workflow_dispatch: botón "Run workflow" para repetirlo a mano.
+# Solo se dispara si cambia el código del mapa. Los JSON de cifras que genera el ETL
+# no van en la imagen, así que no la reconstruyen.
+# NEXT_PUBLIC_API_URL (dirección pública del backend del asistente) se lee de la
+# variable del repositorio con el mismo nombre (Settings > Secrets and variables >
+# Actions > Variables). Si no existe, el mapa usa su valor por defecto.
+on:
+  push:
+    branches: [main]
+    paths:
+      - "web/**"
+      - ".github/workflows/imagen-docker.yml"
+      - "!web/public/scr/**"
+      - "!web/public/data*.json"
+  pull_request:
+    branches: [main]
+    paths:
+      - "web/**"
+      - ".github/workflows/imagen-docker.yml"
+      - "!web/public/scr/**"
+      - "!web/public/data*.json"
+  workflow_dispatch: {}
+
+# Si llega un commit nuevo mientras otro construye, se cancela el anterior.
+concurrency:
+  group: imagen-mapa-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  construir:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout del repositorio
+        uses: actions/checkout@v4
+
+      # GHCR exige el nombre en minúsculas y el repositorio puede tener mayúsculas.
+      - name: Nombre de la imagen
+        run: echo "IMAGEN=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+
+      - uses: docker/setup-buildx-action@v3
+
+      # Etiquetas: el commit completo (para volver atrás) y "latest" solo desde main.
+      - name: Etiquetas de la imagen
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGEN }}
+          tags: |
+            type=sha,prefix=,format=long
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      # El build corre `next build`: si hay un error de compilación, no hay imagen.
+      - name: Construir la imagen
+        uses: docker/build-push-action@v6
+        with:
+          context: web
+          load: true
+          tags: mapa:prueba
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      # Prueba rápida: el contenedor debe arrancar y servir la página principal.
+      - name: Probar el contenedor
+        run: |
+          docker run -d --name prueba -p 3000:3000 mapa:prueba
+          for i in $(seq 1 30); do
+            if curl -fs -o /dev/null http://127.0.0.1:3000/; then echo "responde"; exit 0; fi
+            sleep 2
+          done
+          docker logs prueba
+          exit 1
+
+      - name: Entrar al registro de imágenes
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Reutiliza la caché del paso anterior: no vuelve a compilar.
+      - name: Publicar la imagen
+        if: github.event_name != 'pull_request'
+        uses: docker/build-push-action@v6
+        with:
+          context: web
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          build-args: |
+            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+          cache-from: type=gha
+
+  # El servidor solo mira la etiqueta "produccion". Mover esa etiqueta es lo que
+  # "da la orden": si el entorno `produccion` tiene revisores obligatorios en
+  # GitHub (Settings > Environments), el job espera su aprobación; si no los
+  # tiene, la promoción es automática.
+  promover:
+    needs: construir
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    environment: produccion
+    permissions:
+      packages: write
+    steps:
+      - name: Nombre de la imagen
+        run: echo "IMAGEN=ghcr.io/${GITHUB_REPOSITORY,,}" >> "$GITHUB_ENV"
+      - uses: docker/setup-buildx-action@v3
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Mover la etiqueta produccion a esta versión
+        run: |
+          docker buildx imagetools create \
+            --tag ${{ env.IMAGEN }}:produccion \
+            ${{ env.IMAGEN }}:${{ github.sha }}
