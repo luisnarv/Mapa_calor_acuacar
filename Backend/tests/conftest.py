@@ -74,6 +74,8 @@ def datos_dir(tmp_path: Path) -> Path:
             "estados": ["Efectiva", "Fallida", "Perdida"],
             "causa_ctrl": CAUSA_CTRL, "causa_fam": ["acceso", "exito", "normativo", "seguridad"],
             "b_muni": [0] * 7, "b_zona": [3, 2, 0, 1, 4, 4, 5],
+            # Corregimientos: La Boquilla (2 y 3) es rural; el resto es la cabecera urbana.
+            "corrs": ["Cabecera municipal", "La Boquilla"], "b_corr": [0, 0, 1, 1, 0, 0, 0],
         },
         "geo": {"bc": [], "bp": [], "mp": [], "zp": [], "cp": [], "vp": []},
         "pts": _pts(SEPTIEMBRE),

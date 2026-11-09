@@ -67,6 +67,9 @@ class FiltroMapa(BaseModel):
     )
     municipio: str | None = None
     zona: str | None = None
+    corregimiento: str | None = Field(
+        default=None, description="Corregimiento (nombre del catálogo, p. ej. «Cabecera municipal»)."
+    )
     brigada: str | None = None
     actividad: str | None = None
     tipo_os: str | None = None

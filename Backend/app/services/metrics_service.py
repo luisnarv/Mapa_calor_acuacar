@@ -49,7 +49,7 @@ def _sin_zona(barrio: str) -> str:
     return _PARENTESIS_FINALES.sub("", barrio)
 
 
-DIMENSIONES = ("tecnico", "barrio", "zona", "subaccion", "tarifa", "causa", "tipo_os")
+DIMENSIONES = ("tecnico", "barrio", "zona", "corregimiento", "subaccion", "tarifa", "causa", "tipo_os")
 
 
 class Ranking(list):
@@ -383,6 +383,7 @@ class MetricsService:
         bkeys: Sequence[str] | None = None,
         municipio: str | None = None,
         zona: str | None = None,
+        corregimiento: str | None = None,
         meses: Sequence[str] | None = None,
         tipo_os: str | None = None,
         brigada: str | None = None,
@@ -399,7 +400,7 @@ class MetricsService:
         corresponder a diez etapas que son un mismo sitio para quien pregunta.
         """
         conteos = self._agrupar(
-            bkeys=bkeys, municipio=municipio, zona=zona, meses=meses,
+            bkeys=bkeys, municipio=municipio, zona=zona, corregimiento=corregimiento, meses=meses,
             tipo_os=tipo_os, brigada=brigada, subaccion=subaccion, tarifa=tarifa,
             actividad=actividad, causa=causa, tecnicos=tecnicos,
         )
@@ -413,6 +414,7 @@ class MetricsService:
         bkeys: Sequence[str] | None = None,
         municipio: str | None = None,
         zona: str | None = None,
+        corregimiento: str | None = None,
         meses: Sequence[str] | None = None,
         tipo_os: str | None = None,
         brigada: str | None = None,
@@ -443,7 +445,7 @@ class MetricsService:
 
         p = self.datos
         conteos = self._agrupar(
-            bkeys=bkeys, municipio=municipio, zona=zona, meses=meses,
+            bkeys=bkeys, municipio=municipio, zona=zona, corregimiento=corregimiento, meses=meses,
             tipo_os=tipo_os, brigada=brigada, subaccion=subaccion, tarifa=tarifa,
             actividad=actividad, causa=causa, tecnicos=tecnicos, por=dimension,
         )
@@ -476,7 +478,7 @@ class MetricsService:
         p = self.datos
         return {
             "brigada": p.brigs, "tecnico": p.tecs, "barrio": p.barrios, "subaccion": p.subs,
-            "tarifa": p.tarifas, "actividad": p.acts, "municipio": p.munis, "zona": p.zonas,
+            "tarifa": p.tarifas, "actividad": p.acts, "municipio": p.munis, "zona": p.zonas, "corregimiento": p.corrs,
             "causa": p.causas, "tipo_os": p.tipos,
         }[dimension]
 
@@ -486,6 +488,7 @@ class MetricsService:
         bkeys: Sequence[str] | None = None,
         municipio: str | None = None,
         zona: str | None = None,
+        corregimiento: str | None = None,
         meses: Sequence[str] | None = None,
         tipo_os: str | None = None,
         brigada: str | None = None,
@@ -499,7 +502,7 @@ class MetricsService:
         """Causas de las órdenes NO efectivas, de mayor a menor."""
         p = self.datos
         conteo = self._agrupar(
-            bkeys=bkeys, municipio=municipio, zona=zona, meses=meses,
+            bkeys=bkeys, municipio=municipio, zona=zona, corregimiento=corregimiento, meses=meses,
             tipo_os=tipo_os, brigada=brigada, subaccion=subaccion, tarifa=tarifa,
             actividad=actividad, causa=causa, tecnicos=tecnicos,
         ).get(0, Conteo())
@@ -635,6 +638,7 @@ class MetricsService:
         bkeys: Sequence[str] | None = None,
         municipio: str | None = None,
         zona: str | None = None,
+        corregimiento: str | None = None,
         meses: Sequence[str] | None = None,
         tipo_os: str | None = None,
         brigada: str | None = None,
@@ -660,6 +664,7 @@ class MetricsService:
         f_barrios = self._indices_barrio(bkeys) if bkeys else None
         f_muni = self._indice(p.munis, municipio)
         f_zona = self._indice(p.zonas, zona)
+        f_corr = self._indice(p.corrs, corregimiento)
         f_tipo = self._indice_parcial(p.tipos, tipo_os)
         f_brig = self._indice(p.brigs, brigada)
         # Parcial: nadie escribe «RESIDENCIAL | ESTRATO 3» ni «RED CHILENA/CONFIG.
@@ -688,6 +693,7 @@ class MetricsService:
         for campo, pedido, resuelto, catalogo in (
             ("municipio", municipio, f_muni, p.munis),
             ("zona", zona, f_zona, p.zonas),
+            ("corregimiento", corregimiento, f_corr, p.corrs),
             ("tipo_os", tipo_os, f_tipo, p.tipos),
             ("brigada", brigada, f_brig, p.brigs),
             ("subaccion", subaccion, f_sub, p.subs),
@@ -704,6 +710,7 @@ class MetricsService:
         # Índices ya resueltos por `indices_tecnico`: vacío significa «ninguno», no «todos».
         f_tecs = set(tecnicos) if tecnicos is not None else None
         ctrl, b_muni, b_zona = p.causa_ctrl, p.b_muni, p.b_zona
+        b_corr = p.b_corr
         columnas = {
             "brigada": p.g, "tecnico": p.t, "barrio": p.b,
             "subaccion": p.s, "tarifa": p.f, "actividad": A,
@@ -713,6 +720,7 @@ class MetricsService:
         # b_muni es per-barrio, no per-orden: se resuelve aparte en la clave.
         grupo_es_municipio = por == "municipio"
         grupo_es_zona = por == "zona"
+        grupo_es_corr = por == "corregimiento"
         # Cruce con una segunda dimensión: la clave pasa a ser el par (primera, segunda).
         grupo2 = columnas.get(por2)
 
@@ -724,6 +732,8 @@ class MetricsService:
             if f_muni is not None and b_muni[bi] != f_muni:
                 continue
             if f_zona is not None and b_zona[bi] != f_zona:
+                continue
+            if f_corr is not None and b_corr[bi] != f_corr:
                 continue
             if f_meses is not None and MES[i] not in f_meses:
                 continue
@@ -748,10 +758,12 @@ class MetricsService:
                 clave = b_muni[bi]
             elif grupo_es_zona:
                 clave = b_zona[bi]
+            elif grupo_es_corr:
+                clave = b_corr[bi]
             else:
                 clave = grupo[i] if grupo is not None else 0
             if por2:
-                clave = (clave, b_muni[bi] if por2 == "municipio" else b_zona[bi] if por2 == "zona" else grupo2[i])
+                clave = (clave, b_muni[bi] if por2 == "municipio" else b_zona[bi] if por2 == "zona" else b_corr[bi] if por2 == "corregimiento" else grupo2[i])
             conteo = conteos.get(clave)
             if conteo is None:
                 conteo = conteos[clave] = Conteo()

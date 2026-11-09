@@ -132,6 +132,7 @@ function resumirFiltro(accion) {
     tecnicos,
     accion.municipio,
     accion.zona,
+    accion.corregimiento,
     accion.brigada,
     accion.tipo_os,
     accion.meses?.join(", ")

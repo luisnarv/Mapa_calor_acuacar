@@ -217,3 +217,40 @@ def test_un_nombre_que_el_catalogo_parte_en_varios_barrios_se_avisa(runner):
     assert "AVISA" in resultado["nota"]
     unico, _ = correr(runner, "efectividad", mes="todo", barrio="Albornoz")
     assert "barrios_incluidos" not in unico, "un solo barrio no necesita aviso"
+
+
+def test_corregimiento_filtra_la_efectividad(runner):
+    resultado, filtro = correr(runner, "efectividad", mes="todo", corregimiento="la boquilla")
+    assert resultado["metricas"]["tot"] == 6  # barrios 2 y 3
+    assert "corregimiento La Boquilla" in resultado["base"]
+    assert filtro.corregimiento == "La Boquilla"  # nombre canónico, listo para el tablero
+    urbano, _ = correr(runner, "efectividad", mes="todo", corregimiento="Cabecera municipal")
+    assert urbano["metricas"]["tot"] == 10
+
+
+def test_corregimiento_se_cruza_con_zona(runner):
+    resultado, _ = correr(runner, "efectividad", mes="todo", corregimiento="La Boquilla", zona="C01")
+    assert resultado["metricas"]["tot"] == 3  # solo el barrio 2
+
+
+def test_ranking_por_corregimiento(runner):
+    resultado, _ = correr(runner, "ranking", dimension="corregimiento", mes="todo", min_ordenes=1)
+    assert {f["nombre"]: f["tot"] for f in resultado["filas"]} == {"Cabecera municipal": 10, "La Boquilla": 6}
+    assert "zona urbana" in resultado["nota"]
+
+
+def test_corregimiento_inexistente_vuelve_como_dato(runner):
+    resultado, filtro = correr(runner, "efectividad", mes="todo", corregimiento="Narnia")
+    assert filtro is None
+    assert "corregimiento" in str(resultado)
+
+
+def test_filtrar_mapa_con_corregimiento(runner):
+    resultado, filtro = correr(runner, "filtrar_mapa", corregimiento="boquilla")
+    assert filtro.corregimiento == "La Boquilla"
+    assert resultado["aplicado"]["corregimiento"] == "La Boquilla"
+
+
+def test_la_vista_con_corregimiento_se_hereda():
+    vista = VistaTablero(corregimiento="La Boquilla")
+    assert "corregimiento: La Boquilla" in vista.resumen()

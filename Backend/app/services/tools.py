@@ -66,6 +66,14 @@ _ZONA = {
         "usuario nombra una."
     ),
 }
+_CORREGIMIENTO = {
+    "type": "string",
+    "description": (
+        "Corregimiento, según el GPS de cada orden (p. ej. «La Boquilla», «Pasacaballos»). "
+        "«Cabecera municipal» es la zona urbana: todo lo que cae fuera de un corregimiento. "
+        "Úsalo solo si el usuario lo nombra; puede combinarse con una zona."
+    ),
+}
 _TIPO_OS = {
     "type": "string",
     "description": (
@@ -102,7 +110,7 @@ _SIN_PANTALLA = {
         "que tiene puestos. Por defecto la consulta ya sale del recorte de su pantalla."
     ),
 }
-_AMBITO = {"barrio": _BARRIO, "zona": _ZONA, "tecnico": _TECNICO, "tipo_os": _TIPO_OS}
+_AMBITO = {"barrio": _BARRIO, "zona": _ZONA, "corregimiento": _CORREGIMIENTO, "tecnico": _TECNICO, "tipo_os": _TIPO_OS}
 
 
 def _herramienta(nombre: str, descripcion: str, propiedades: dict[str, Any], requeridos: list[str] | None = None) -> dict:
@@ -120,7 +128,7 @@ _ORDEN_DELTA = {
 TOOLS: list[dict[str, Any]] = [
     _herramienta(
         "efectividad",
-        "Efectividad de un barrio, zona, técnico o del total, con el desglose de efectivas y "
+        "Efectividad de un barrio, zona, corregimiento, técnico o del total, con el desglose de efectivas y "
         "perdidas. Úsala para «¿qué efectividad tiene X?». Devuelve `base`, el recorte exacto "
         "sobre el que se calculó, que debes citar.",
         {**_AMBITO, "mes": _MES, "subaccion": _SUBACCION, "tarifa": _TARIFA, "causa": _CAUSA,
@@ -128,7 +136,7 @@ TOOLS: list[dict[str, Any]] = [
     ),
     _herramienta(
         "ranking",
-        "Ordena técnicos, barrios, zonas, causas, tarifas, subacciones o tipos de orden por "
+        "Ordena técnicos, barrios, zonas, corregimientos, causas, tarifas, subacciones o tipos de orden por "
         "efectividad ajustada (o por pérdidas, volumen…). Úsala para «¿cuáles son los peores "
         "barrios?» o «¿qué técnico rinde mejor?».",
         {
@@ -191,7 +199,8 @@ TOOLS: list[dict[str, Any]] = [
         "UN resultado concreto (el peor barrio, el mejor técnico). Para una lista o una "
         "respuesta general no la uses: mover la vista sin que lo pidan molesta.",
         {
-            "barrio": _BARRIO, "zona": _ZONA, "tecnico": _TECNICO, "tipo_os": _TIPO_OS,
+            "barrio": _BARRIO, "zona": _ZONA, "corregimiento": _CORREGIMIENTO, "tecnico": _TECNICO,
+            "tipo_os": _TIPO_OS,
             "meses": {"type": "array", "items": {"type": "string"}},
             "capas": {
                 "type": "array",
@@ -222,7 +231,7 @@ TOOLS: list[dict[str, Any]] = [
                           "description": "Por qué se desglosa. «ninguna» da solo el total de cada periodo."},
             "mes_a": {**_MES, "description": "Periodo base (el anterior)."},
             "mes_b": {**_MES, "description": "Periodo nuevo, el que se compara contra el base."},
-            "barrio": _BARRIO, "zona": _ZONA, "tecnico": _TECNICO,
+            "barrio": _BARRIO, "zona": _ZONA, "corregimiento": _CORREGIMIENTO, "tecnico": _TECNICO,
             "min_ordenes": {"type": "integer", "description": "Mínimo de órdenes en CADA periodo (30 por defecto)."},
             "ordenar_por": {"type": "string", "enum": ["efectividad", "perdidas", "volumen"],
                             "description": "Cuál diferencia ordena la lista. Por defecto efectividad."},
@@ -233,10 +242,11 @@ TOOLS: list[dict[str, Any]] = [
     ),
     _herramienta(
         "serie_mensual",
-        "Efectividad y pérdidas de UNA entidad (un técnico, barrio, zona o el total) mes por mes, "
+        "Efectividad y pérdidas de UNA entidad (un técnico, barrio, zona, corregimiento o el total) mes por mes, "
         "con cuántos meses lleva seguidos en caída. Úsala para «¿cómo ha evolucionado…?».",
         {"mes": {**_MES, "description": "Meses a incluir. Por defecto todos."},
-         "barrio": _BARRIO, "zona": _ZONA, "tecnico": _TECNICO, "sin_filtros_de_pantalla": _SIN_PANTALLA},
+         "barrio": _BARRIO, "zona": _ZONA, "corregimiento": _CORREGIMIENTO, "tecnico": _TECNICO,
+         "sin_filtros_de_pantalla": _SIN_PANTALLA},
     ),
 ]
 
@@ -421,12 +431,14 @@ class ToolRunner:
             nuevos[param] = valor
             puestos[etiqueta] = "; ".join(valor) if isinstance(valor, list) else str(valor)
 
-        if not any(pidio(k) for k in ("barrio", "zona") if k in params):
+        if not any(pidio(k) for k in ("barrio", "zona", "corregimiento") if k in params):
             barrios = list(v.barrios) or ([v.barrio] if v.barrio else [])
             if barrios and "barrio" not in por:
                 poner("barrio", barrios[0] if len(barrios) == 1 else barrios, "barrio" if len(barrios) == 1 else "barrios")
-            elif v.zona:
+            else:
+                # Zona y corregimiento se cruzan en el tablero (cascada): se heredan los dos.
                 poner("zona", v.zona, "zona", "zona")
+                poner("corregimiento", v.corregimiento, "corregimiento", "corregimiento")
         poner("tipo_os", v.tipo_os, "tipo de orden", "tipo_os")
         if nombre != "ordenes_de_tecnico":
             poner("tecnico", list(v.tecnicos), "técnicos", "tecnico")
@@ -514,12 +526,28 @@ class ToolRunner:
             logger.warning("Argumentos inválidos para %s: %s", nombre, exc)
             return {"error": f"Argumentos inválidos para {nombre}: {exc}"}, None
 
+    def _corr(self, texto: str | None) -> str | None:
+        """Nombre canónico del corregimiento (tolera tildes, mayúsculas y nombre a medias).
+
+        Lanza FiltroNoResuelto si no existe, o si el payload es anterior a la columna.
+        """
+        if not texto:
+            return None
+        p = self.metrics.datos
+        i = self.metrics._indice(p.corrs, texto)
+        if i is None:
+            i = self.metrics._indice_parcial(p.corrs, texto)
+        if i is None:
+            raise FiltroNoResuelto("corregimiento", texto, p.corrs)
+        return p.corrs[i]
+
     async def _recorte(
         self,
         barrio: str | list[str] | None,
         mes: Any,
         zona: str | None = None,
         tipo_os: str | None = None,
+        corregimiento: str | None = None,
     ) -> tuple[list[str] | None, list[str] | None, str, FiltroMapa]:
         """Traduce los argumentos a un recorte concreto, su descripción y su filtro del mapa.
 
@@ -537,6 +565,7 @@ class ToolRunner:
             meses = en_pantalla or None
 
         zona = _zona(zona)
+        corregimiento = self._corr(corregimiento)
         bkeys = None
         nombres = [barrio] if isinstance(barrio, str) else [n for n in (barrio or []) if n]
         if nombres:
@@ -555,7 +584,8 @@ class ToolRunner:
         elif bkeys:
             donde = f"{len(bkeys)} zonas del barrio {nombres[0]}"
         else:
-            donde = f"zona {zona}" if zona else "todo Cartagena"
+            sitio = [f"zona {zona}" if zona else None, f"corregimiento {corregimiento}" if corregimiento else None]
+            donde = " · ".join(s for s in sitio if s) or "todo Cartagena"
 
         partes = [donde, etiqueta_periodo(meses)]
         tipo_canonico = None
@@ -571,6 +601,7 @@ class ToolRunner:
             barrio=bkeys[0] if bkeys and len(bkeys) == 1 else None,
             barrios=bkeys if bkeys and len(bkeys) > 1 else None,
             zona=None if bkeys else zona,
+            corregimiento=None if bkeys else corregimiento,
             tipo_os=tipo_canonico,
             meses=meses,
         )
@@ -598,10 +629,11 @@ class ToolRunner:
         subaccion: str | None = None,
         tarifa: str | None = None,
         zona: str | None = None,
+        corregimiento: str | None = None,
         causa: str | None = None,
         tecnico: str | list[str] | None = None,
     ) -> tuple[dict[str, Any], FiltroMapa | None]:
-        bkeys, meses, base, filtro = await self._recorte(barrio, mes, zona, tipo_os)
+        bkeys, meses, base, filtro = await self._recorte(barrio, mes, zona, tipo_os, corregimiento)
         tecnicos, nombres_tec = self._tecnicos(tecnico)
         if nombres_tec:
             base += f" · {self._rotulo_tecnicos(nombres_tec)}"
@@ -613,7 +645,8 @@ class ToolRunner:
         if nombres_tec:
             filtro = (filtro or FiltroMapa()).model_copy(update={"tecnicos": nombres_tec})
         datos = await self.metrics.efectividad(
-            bkeys=bkeys, zona=None if bkeys else _zona(zona), meses=meses, tipo_os=tipo_os,
+            bkeys=bkeys, zona=None if bkeys else _zona(zona),
+            corregimiento=None if bkeys else self._corr(corregimiento), meses=meses, tipo_os=tipo_os,
             subaccion=subaccion, tarifa=tarifa, causa=causa, tecnicos=tecnicos, etiqueta=base,
         )
 
@@ -634,7 +667,8 @@ class ToolRunner:
         if tecnicos and len(tecnicos) > 1:
             # Comparar es dar las cifras de cada uno: sumados juntos no se distingue quién rinde más.
             detalle = await self.metrics.ranking(
-                dimension="tecnico", bkeys=bkeys, zona=None if bkeys else _zona(zona), meses=meses,
+                dimension="tecnico", bkeys=bkeys, zona=None if bkeys else _zona(zona),
+                corregimiento=None if bkeys else self._corr(corregimiento), meses=meses,
                 tipo_os=tipo_os, tecnicos=tecnicos, min_ordenes=0, limite=len(tecnicos),
             )
             salida["detalle_por_tecnico"] = [f.model_dump() for f in detalle]
@@ -673,11 +707,12 @@ class ToolRunner:
         subaccion: str | None = None,
         tarifa: str | None = None,
         zona: str | None = None,
+        corregimiento: str | None = None,
         causa: str | None = None,
         tecnico: str | list[str] | None = None,
         limite: int | None = None,
     ) -> tuple[dict[str, Any], FiltroMapa | None]:
-        bkeys, meses, base, filtro = await self._recorte(barrio, mes, zona, tipo_os)
+        bkeys, meses, base, filtro = await self._recorte(barrio, mes, zona, tipo_os, corregimiento)
         tecnicos, nombres_tec = self._tecnicos(tecnico)
         if nombres_tec:
             base += f" · {self._rotulo_tecnicos(nombres_tec)}"
@@ -698,7 +733,8 @@ class ToolRunner:
             ascendente = bool(peores)
 
         filas = await self.metrics.ranking(
-            dimension=dimension, bkeys=bkeys, zona=None if bkeys else _zona(zona), meses=meses,
+            dimension=dimension, bkeys=bkeys, zona=None if bkeys else _zona(zona),
+            corregimiento=None if bkeys else self._corr(corregimiento), meses=meses,
             tipo_os=tipo_os, min_ordenes=min_ordenes, ascendente=ascendente, ordenar_por=ordenar_por,
             subaccion=subaccion, tarifa=tarifa, causa=causa, tecnicos=tecnicos,
             **({"limite": max(1, min(int(limite), 50))} if limite else {}),
@@ -726,6 +762,9 @@ class ToolRunner:
         if dimension == "zona" and any(f.nombre == "SIN ZONA" for f in filas):
             salida["nota"] += (" `SIN ZONA` no es una zona operativa: son órdenes cuyo GPS cae fuera de todo "
                                "polígono. Menciónala aparte; no la cuentes como una de las zonas del ranking.")
+        if dimension == "corregimiento":
+            salida["nota"] += (" «Cabecera municipal» no es un corregimiento: es la zona urbana (GPS fuera de "
+                               "todo polígono de corregimiento). Preséntala como tal.")
         if not filas:
             salida["nota"] = f"Sin resultados en {base} con el mínimo de {min_ordenes} órdenes pedido."
         elif dimension == "tecnico" and not nombres_tec and limite == 1 and not filtra_aparte:
@@ -739,6 +778,7 @@ class ToolRunner:
                 "barrio": claves[0] if len(claves) == 1 else None,
                 "barrios": claves if len(claves) > 1 else None,
                 "zona": None,
+                "corregimiento": None,
             })
         return salida, filtro
 
@@ -748,12 +788,13 @@ class ToolRunner:
         mes: Any = None,
         tipo_os: str | None = None,
         zona: str | None = None,
+        corregimiento: str | None = None,
         subaccion: str | None = None,
         tarifa: str | None = None,
         causa: str | None = None,
         tecnico: str | list[str] | None = None,
     ) -> tuple[dict[str, Any], FiltroMapa | None]:
-        bkeys, meses, base, filtro = await self._recorte(barrio, mes, zona, tipo_os)
+        bkeys, meses, base, filtro = await self._recorte(barrio, mes, zona, tipo_os, corregimiento)
         tecnicos, nombres_tec = self._tecnicos(tecnico)
         if nombres_tec:
             base += f" · {self._rotulo_tecnicos(nombres_tec)}"
@@ -763,7 +804,8 @@ class ToolRunner:
         if nombres_tec:
             filtro = (filtro or FiltroMapa()).model_copy(update={"tecnicos": nombres_tec})
         filas = await self.metrics.causas(
-            bkeys=bkeys, zona=None if bkeys else _zona(zona), meses=meses, tipo_os=tipo_os,
+            bkeys=bkeys, zona=None if bkeys else _zona(zona),
+            corregimiento=None if bkeys else self._corr(corregimiento), meses=meses, tipo_os=tipo_os,
             subaccion=subaccion, tarifa=tarifa, causa=causa, tecnicos=tecnicos,
         )
         return {
@@ -795,6 +837,7 @@ class ToolRunner:
         if kwargs.get("tecnico"):
             kwargs["tecnicos"] = self._tecnicos(kwargs["tecnico"])[1]
         kwargs["zona"] = _zona(kwargs.get("zona"))
+        kwargs["corregimiento"] = self._corr(kwargs.get("corregimiento"))
         barrio = kwargs.get("barrio")
         nombres = [barrio] if isinstance(barrio, str) else [n for n in (barrio or []) if n]
         if nombres:
@@ -819,7 +862,7 @@ class ToolRunner:
             return {
                 "error": "filtro_vacio",
                 "sugerencia": ("No mandaste ningún campo, así que no hay nada que filtrar. Llama a "
-                               "filtrar_mapa solo con un barrio, zona, técnico, tipo de orden o meses concretos."),
+                               "filtrar_mapa solo con un barrio, zona, corregimiento, técnico, tipo de orden o meses concretos."),
             }, None
         return {"aplicado": aplicado}, filtro
 
@@ -863,6 +906,7 @@ class ToolRunner:
         mes_b: Any = None,
         barrio: str | list[str] | None = None,
         zona: str | None = None,
+        corregimiento: str | None = None,
         tecnico: str | list[str] | None = None,
         min_ordenes: int = 30,
         ordenar_por: str = "efectividad",
@@ -874,9 +918,10 @@ class ToolRunner:
         meses_a = expandir_meses(mes_a or (disponibles[1] if len(disponibles) > 1 else None), disponibles)
         if not meses_a or not meses_b:
             return {"error": "faltan_periodos", "sugerencia": "Pide los dos periodos a comparar."}, None
-        bkeys, _, _, _ = await self._recorte(barrio, "todo", zona)
+        bkeys, _, _, _ = await self._recorte(barrio, "todo", zona, None, corregimiento)
         tecnicos, nombres_tec = self._tecnicos(tecnico)
-        ambito = dict(bkeys=bkeys, zona=None if bkeys else _zona(zona), tecnicos=tecnicos)
+        ambito = dict(bkeys=bkeys, zona=None if bkeys else _zona(zona),
+                      corregimiento=None if bkeys else self._corr(corregimiento), tecnicos=tecnicos)
 
         async def por_periodo(meses: list[str]) -> dict[str, Efectividad]:
             filas = await self.metrics.ranking(
@@ -919,7 +964,9 @@ class ToolRunner:
             "periodos." + self._avisos(meses=meses_b)
         )
         contexto = [self._rotulo_tecnicos(nombres_tec)] if nombres_tec else []
-        salida["base"] = " · ".join([*contexto, f"zona {_zona(zona)}" if zona else "todo Cartagena"])
+        sitio = [f"zona {_zona(zona)}" if zona else None,
+                 f"corregimiento {self._corr(corregimiento)}" if corregimiento else None]
+        salida["base"] = " · ".join([*contexto, *(s for s in sitio if s)] or [*contexto, "todo Cartagena"])
         salida["datos_hasta"] = self.metrics.datos.fecha_max
         return salida, None
 
@@ -928,13 +975,14 @@ class ToolRunner:
         mes: Any = "todo",
         barrio: str | list[str] | None = None,
         zona: str | None = None,
+        corregimiento: str | None = None,
         tecnico: str | list[str] | None = None,
     ) -> tuple[dict[str, Any], FiltroMapa | None]:
         disponibles = sorted(await self.metrics.meses_disponibles())
         meses = sorted(expandir_meses(mes or "todo", disponibles) or disponibles)
         filas, filtro, base = [], None, ""
         for m in meses:
-            resultado, filtro = await self._efectividad(barrio=barrio, mes=m, zona=zona, tecnico=tecnico)
+            resultado, filtro = await self._efectividad(barrio=barrio, mes=m, zona=zona, corregimiento=corregimiento, tecnico=tecnico)
             base = resultado["base"].rsplit(" · ", 1)[0] if " · " in resultado["base"] else resultado["base"]
             d = resultado["metricas"]
             if d["tot"]:

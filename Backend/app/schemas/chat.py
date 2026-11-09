@@ -31,6 +31,7 @@ class VistaTablero(BaseModel):
     )
     municipio: str | None = None
     zona: str | None = None
+    corregimiento: str | None = None
     brigada: str | None = None
     tipo_os: str | None = None
     actividad: str | None = None
@@ -46,6 +47,7 @@ class VistaTablero(BaseModel):
                 ("técnicos", "; ".join(self.tecnicos) if self.tecnicos else None),
                 ("municipio", self.municipio),
                 ("zona", self.zona),
+                ("corregimiento", self.corregimiento),
                 ("brigada", self.brigada),
                 ("tipo de orden", self.tipo_os),
                 ("actividad", self.actividad),

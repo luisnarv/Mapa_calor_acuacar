@@ -1410,6 +1410,7 @@ export default function Tablero({ proceso }) {
       tecnicos: (st.tecs || []).map((i) => dim.tecs[i]).filter(Boolean),
       municipio: nombre(dim.munis, st.muni),
       zona: nombre(dim.zonas, st.zona),
+      corregimiento: dim.corrs ? nombre(dim.corrs, st.corr) : null,
       brigada: nombre(dim.brigs, st.brig),
       tipo_os: nombre(dim.tipos, st.tipo),
       actividad: dim.acts ? nombre(dim.acts, st.act) : null,
@@ -1475,6 +1476,9 @@ export default function Tablero({ proceso }) {
 
       const zona = idxDe(dim.zonas, accion.zona);
       if (zona !== null) next.zona = zona;
+      // Corregimiento: el catálogo (dim.corrs) solo existe si el ETL ya lo publicó.
+      const corr = idxDe(dim.corrs, accion.corregimiento);
+      if (corr !== null) next.corr = corr;
       const muni = idxDe(dim.munis, accion.municipio);
       if (muni !== null) next.muni = muni;
       const brig = idxDe(dim.brigs, accion.brigada);

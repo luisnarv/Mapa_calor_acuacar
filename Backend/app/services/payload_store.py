@@ -15,7 +15,7 @@ from __future__ import annotations
 import json
 import logging
 from array import array
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 from threading import Lock
 from typing import Iterator, Sequence
@@ -68,6 +68,10 @@ class Payload:
     fecha_max: str  # YYYY-MM-DD, el último día con gestiones
 
     generado: str
+
+    # Corregimiento (por GPS, lo asigna el ETL). Vacíos si el JSON es anterior a esa columna.
+    corrs: list[str] = field(default_factory=list)
+    b_corr: list[int] = field(default_factory=list)  # barrio -> corregimiento
 
     def __len__(self) -> int:
         return len(self.e)
@@ -164,6 +168,7 @@ def _cargar(directorio: Path) -> Payload:
         tarifas=dim["tarifas"], acts=dim.get("acts", []),
         causa_ctrl=dim["causa_ctrl"], causa_fam=dim["causa_fam"],
         b_muni=dim["b_muni"], b_zona=dim["b_zona"],
+        corrs=dim.get("corrs", []), b_corr=dim.get("b_corr", []),
         meses=meses, inicio_mes=inicio_mes,
         fecha_min=meta.get("fecha_min", ""), fecha_max=meta.get("fecha_max", ""),
         generado=meta.get("generated", ""),
