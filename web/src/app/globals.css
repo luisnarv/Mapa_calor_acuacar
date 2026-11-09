@@ -215,6 +215,41 @@ select.hd-proceso{width:auto;min-width:60px;flex:0 0 auto;padding:0 4px;
   border:1px solid var(--line2);border-radius:var(--r);box-shadow:var(--shadow);
   padding:5px;display:flex;flex-direction:column;gap:1px}
 .hd-pop:focus{outline:none}
+/* Filtro Ubicación: Zona › Municipio › Corregimiento › Barrio. Reutiliza la píldora
+   (.hd-pill) y las casillas de barrio (.sm-item); solo añade el panel de columnas. */
+.ub-pill{max-width:420px}
+.ub-pop{position:fixed;left:50%;right:auto;transform:translateX(-50%);width:980px;
+  max-width:calc(100vw - 24px);max-height:calc(100vh - 70px);min-width:0;padding:0;
+  overflow:hidden;display:block}
+.ub-buscar{display:flex;align-items:center;gap:8px;padding:8px 10px;
+  border-bottom:1px solid var(--line);color:var(--dim)}
+.ub-buscar input{flex:1 1 auto;min-width:0;border:0;background:transparent;color:var(--tx);
+  font:400 12px var(--ff)}
+.ub-buscar input:focus{outline:none}
+.ub-cols{display:grid;grid-template-rows:minmax(0,1fr);height:min(290px,calc(100vh - 190px))}
+.ub-col{display:flex;flex-direction:column;min-width:0;min-height:0;border-left:1px solid var(--line)}
+.ub-col:first-child{border-left:0}
+.ub-head{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;
+  padding:8px 10px 6px;font-size:9px;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--dim);font-weight:700}
+.ub-lista{flex:1 1 auto;min-height:0;overflow-y:auto;display:flex;flex-direction:column;
+  gap:2px;padding:0 6px 6px;scrollbar-width:none;-ms-overflow-style:none}
+.ub-lista::-webkit-scrollbar{display:none}
+.ub-fila{flex:0 0 auto;display:flex;align-items:center;gap:6px;width:100%;text-align:left;
+  padding:5px 7px;border-radius:var(--r-sm);border:1px solid transparent;background:transparent;
+  color:var(--mut);font:400 12px var(--ff);cursor:pointer;min-width:0}
+.ub-fila:hover{background:var(--elev)}
+.ub-fila.on{background:var(--accent-wash);border-color:var(--cu);color:var(--tx);font-weight:600}
+.ub-fila:focus-visible{outline:none;border-color:var(--cu2)}
+.ub-nombre{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ub-n{flex:0 0 auto;font-family:var(--ff-num);font-variant-numeric:tabular-nums;
+  font-size:11px;color:var(--dim);font-weight:400}
+.ub-vacio{font-size:11px;color:var(--dim);padding:6px 4px}
+.ub-pie{display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:8px 10px;border-top:1px solid var(--line);font-size:11px;color:var(--mut)}
+.ub-limpiar{background:none;border:0;padding:0;color:var(--cu2);font:600 11px var(--ff);
+  cursor:pointer}
+.ub-limpiar:hover{text-decoration:underline}
 /* `flex:0 0 auto` no es opcional: en una columna flex con altura máxima los
    hijos se encogen por debajo de su contenido y las opciones se solapan unas
    sobre otras en cuanto la lista es larga (22 municipios). */

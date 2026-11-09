@@ -14,7 +14,10 @@ from typing import Any
 import pandas as pd
 
 from .config import LAT0, LON0, MESES_ES, Settings
-from .geo import asignar_territorio, asignar_zona, link_barrios, load_municipios, load_zonas
+from .geo import (
+    CABECERA, asignar_corregimiento, asignar_territorio, asignar_zona, link_barrios,
+    load_municipios, load_zonas,
+)
 from .logging_conf import get_logger
 from .text import norm_dato
 
@@ -101,6 +104,7 @@ def _prepare(df: pd.DataFrame, settings: Settings) -> pd.DataFrame:
     if "_BARRIO_POLIGONO" not in d:
         d["_BARRIO_POLIGONO"] = False
     d = asignar_zona(d, settings.geo_zonas)
+    d = asignar_corregimiento(d, settings.geo_corregimientos)
     d["MUNICIPIO"] = d["MUNICIPIO"].fillna("SIN MUNICIPIO")
     d["LOCALIDAD/BARRIO"] = d["LOCALIDAD/BARRIO"].fillna("SIN BARRIO")
     d["ZONA"] = d["ZONA"].fillna("SIN ZONA")
@@ -113,6 +117,19 @@ def _prepare(df: pd.DataFrame, settings: Settings) -> pd.DataFrame:
     d["LOCALIDAD/BARRIO"] = unificar_barrios(d) + " (" + d["ZONA"] + ")"
     d["BKEY"] = d["MUNICIPIO"] + " | " + d["LOCALIDAD/BARRIO"]
     return d
+
+
+def corregimientos_por_barrio(d: pd.DataFrame, n_barrios: int) -> tuple[list[str], list[int]]:
+    """Catálogo de corregimientos y el de cada barrio (por moda, como zona y municipio).
+
+    Nulo o vacío cuenta como «Cabecera municipal».
+    """
+    corr = d["CORREGIMIENTO"].astype("string").str.strip()
+    corr = corr.mask(corr.isna() | (corr == ""), CABECERA).astype(str)
+    corrs = sorted(corr.unique().tolist())
+    idx = {n: i for i, n in enumerate(corrs)}
+    moda = corr.groupby(d["b"]).agg(_moda).to_dict()
+    return corrs, [idx[moda[i]] for i in range(n_barrios)]
 
 
 def build_and_write(df: pd.DataFrame, settings: Settings) -> dict[str, Any]:
@@ -155,6 +172,7 @@ def build_and_write(df: pd.DataFrame, settings: Settings) -> dict[str, Any]:
     b_zona_nombre = d.groupby("b")["ZONA"].agg(_moda).to_dict()
     b_muni = [muni_idx[b_muni_nombre[i]] for i in range(len(barrios))]
     b_zona = [zona_idx[b_zona_nombre[i]] for i in range(len(barrios))]
+    corrs, b_corr = corregimientos_por_barrio(d, len(barrios))
     bc = [[round(float(g["LATITUD"].median()), 5), round(float(g["LONGITUD"].median()), 5)]
           for _b, g in d.groupby("b")]
 
@@ -200,11 +218,11 @@ def build_and_write(df: pd.DataFrame, settings: Settings) -> dict[str, Any]:
         "dim": {
             "barrios": barrios, "tecs": tecs, "brigs": brigs, "tipos": tipos,
             "causas": causas, "subs": subs, "susps": susps, "tarifas": tarifas,
-            "acts": acts, "munis": munis, "zonas": zonas,
+            "acts": acts, "munis": munis, "zonas": zonas, "corrs": corrs,
             "estados": ["Efectiva", "Fallida", "Perdida"],  # índice 1 sin uso: no existe «Fallida»
             "causa_ctrl": [int(ctrl_por_causa.get(c, 1)) for c in causas],
             "causa_fam": [fam_por_causa.get(c, "otros") for c in causas],
-            "b_muni": b_muni, "b_zona": b_zona,
+            "b_muni": b_muni, "b_zona": b_zona, "b_corr": b_corr,
         },
         "geo": {"bc": bc, "bp": bpoly, "mp": mpoly, "zp": zpoly, "cp": cpoly, "vp": vpoly},
         "pts": _pts_dict(d_recent),
