@@ -28,7 +28,7 @@ python -m uvicorn app.main:app --reload --reload-dir app
 python -m pytest -q
 ```
 
-El tablero llama a `http://127.0.0.1:8000` (cámbialo con `NEXT_PUBLIC_API_URL`). Docs en
+El tablero llama a `http://127.0.0.1:8000` (cámbialo con `ACUACAR_API_URL`). Docs en
 `/docs`, salud en `/health`.
 
 ## Endpoints

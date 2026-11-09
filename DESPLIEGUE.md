@@ -186,10 +186,10 @@ Proyecto → **Settings → Environment Variables**:
 
 | Variable | Valor | Para qué |
 | --- | --- | --- |
-| `NEXT_PUBLIC_API_URL` | `/backend` | Obligatoria. Hace que el tablero use el puente |
+| `ACUACAR_API_URL` | `/backend` | Obligatoria. Hace que el tablero use el puente |
 | `BACKEND_URL` | `http://52.88.48.137/mapa-acuacar` | Opcional. Solo si cambia la dirección del servidor |
 
-`NEXT_PUBLIC_API_URL` queda fija al compilar: después de crearla o cambiarla hay
+`ACUACAR_API_URL` queda fija al compilar: después de crearla o cambiarla hay
 que **redesplegar** (Deployments → ⋯ → Redeploy).
 
 ### 2.3 Verificar
@@ -230,7 +230,7 @@ Si solo se hace uno de los dos, el mapa y el chat darán cifras distintas.
 | `curl 127.0.0.1:8020/health` falla justo después de arrancar | El servicio aún está iniciando | Esperar unos segundos y repetir |
 | Por la IP pública responde `{"detail":"Not Found"}` | El bloque de nginx no quita el prefijo | Revisar las barras finales del `location` y del `proxy_pass` (1.5) |
 | El chat saluda pero las preguntas con cifras dan 502 "Error inesperado al consultar el modelo." | El backend no encuentra los JSON | Subirlos a `web/public/scr/` (1.1) y reiniciar |
-| En Vercel el chat no conecta y la consola dice "Mixed Content" | Falta `NEXT_PUBLIC_API_URL=/backend` o no se redesplegó | Paso 2.2 |
+| En Vercel el chat no conecta y la consola dice "Mixed Content" | Falta `ACUACAR_API_URL=/backend` o no se redesplegó | Paso 2.2 |
 | WinSCP: "No puedo abrir el archivo ...\.next\dev\lock" | Se está subiendo la carpeta `web` entera | Abortar y subir solo `web/public/scr/` |
 
 Ver el registro del servicio (ocultando la clave):
@@ -252,5 +252,5 @@ sudo systemctl status mapa-acuacar
 - El endpoint del chat no tiene autenticación ni límite de uso: cualquiera que
   conozca la dirección puede gastar la clave de OpenAI.
 - El servidor no tiene dominio ni certificado HTTPS; por eso existe el puente de
-  Vercel. Con un dominio y certbot se podría apuntar `NEXT_PUBLIC_API_URL`
+  Vercel. Con un dominio y certbot se podría apuntar `ACUACAR_API_URL`
   directo al servidor.

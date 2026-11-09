@@ -15,14 +15,14 @@ RUN npm ci
 
 # 2) Compilación: next build con salida "standalone" (ver next.config.mjs).
 # public/maplibre no está en git: se vuelve a generar aquí.
-# NEXT_PUBLIC_API_URL queda escrita en el JavaScript del navegador al compilar
+# ACUACAR_API_URL queda escrita en el JavaScript del navegador al compilar
 # (es una dirección pública, no un secreto).
 FROM node:22-alpine AS build
 WORKDIR /app
-ARG NEXT_PUBLIC_API_URL
+ARG ACUACAR_API_URL
 ENV NEXT_TELEMETRY_DISABLED=1 \
     NEXT_OUTPUT=standalone \
-    NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
+    ACUACAR_API_URL=${ACUACAR_API_URL}
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 RUN node scripts/copiar-worker-maplibre.mjs && npm run build

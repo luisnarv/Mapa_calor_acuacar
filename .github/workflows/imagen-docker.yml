@@ -6,7 +6,7 @@ name: Imagen Docker del mapa de Acuacar
 #  - workflow_dispatch: botón "Run workflow" para repetirlo a mano.
 # Solo se dispara si cambia el código del mapa. Los JSON de cifras que genera el ETL
 # no van en la imagen, así que no la reconstruyen.
-# NEXT_PUBLIC_API_URL (dirección pública del backend del asistente) se lee de la
+# ACUACAR_API_URL (dirección pública del backend del asistente) se lee de la
 # variable del repositorio con el mismo nombre (Settings > Secrets and variables >
 # Actions > Variables). Si no existe, el mapa usa su valor por defecto.
 on:
@@ -65,7 +65,7 @@ jobs:
           load: true
           tags: mapa:prueba
           build-args: |
-            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+            ACUACAR_API_URL=${{ vars.ACUACAR_API_URL }}
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -98,7 +98,7 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
           build-args: |
-            NEXT_PUBLIC_API_URL=${{ vars.NEXT_PUBLIC_API_URL }}
+            ACUACAR_API_URL=${{ vars.ACUACAR_API_URL }}
           cache-from: type=gha
 
   # El servidor solo mira la etiqueta "produccion". Mover esa etiqueta es lo que

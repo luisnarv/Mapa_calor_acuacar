@@ -6,9 +6,13 @@ const nextConfig = {
   // El visor es estático: lee los JSON de `public/scr/`; el ETL es quien habla con
   // PostgreSQL.
   reactStrictMode: true,
+  // Dirección del backend del asistente, tal como la usa el navegador. Sin el
+  // prefijo NEXT_PUBLIC_ Next no la pasa al navegador por sí solo: se expone aquí
+  // y queda escrita en el JavaScript al compilar (es una dirección, no un secreto).
+  env: { ACUACAR_API_URL: process.env.ACUACAR_API_URL || "" },
   // Puente hacia el backend del asistente. El servidor solo habla HTTP y Vercel
   // sirve por HTTPS, así que el navegador bloquearía la llamada directa (contenido
-  // mixto). Con `NEXT_PUBLIC_API_URL=/backend` el navegador llama a su propio
+  // mixto). Con `ACUACAR_API_URL=/backend` el navegador llama a su propio
   // dominio y Next reenvía al servidor. `BACKEND_URL` cambia el destino.
   async rewrites() {
     const destino = (process.env.BACKEND_URL || "http://52.88.48.137/mapa-acuacar").replace(/\/+$/, "");

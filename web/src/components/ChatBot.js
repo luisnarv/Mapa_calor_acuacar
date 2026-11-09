@@ -24,7 +24,7 @@ const DRAG_SLOP = 4;
 // Debe coincidir con la animación `cb-out` de globals.css.
 const CLOSE_MS = 160; 
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const API_URL = process.env.ACUACAR_API_URL || "http://127.0.0.1:8000";
 const STREAM_ENDPOINT = `${API_URL}/api/v1/openai/chat/stream`;
 const HEALTH_ENDPOINT = `${API_URL}/health`;
 

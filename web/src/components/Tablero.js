@@ -1453,7 +1453,7 @@ export default function Tablero({ proceso }) {
   useEffect(() => {
     if (!cargue?.id) return;
 
-    const api = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+    const api = process.env.ACUACAR_API_URL || "http://127.0.0.1:8000";
     const controller = new AbortController();
     let cancelado = false;
 
