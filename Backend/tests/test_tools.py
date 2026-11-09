@@ -390,3 +390,42 @@ def test_el_ranking_por_barrio_une_las_zonas_de_un_mismo_barrio(runner):
     # La Boquilla está en C01 (3 órdenes) y C02 (3): una sola fila de 6, sin zona en el nombre.
     assert len(boquilla) == 1 and boquilla[0]["tot"] == 6
     assert boquilla[0]["nombre"] == "CARTAGENA DE INDIAS | LA BOQUILLA"
+
+
+def test_actividad_contratista_y_estados_de_la_pantalla_se_heredan(datos_dir):
+    ms = MetricsService(datos_dir)
+    act, _ = correr(ToolRunner(ms, VistaTablero(actividad="Reconexión Impagados", brigada="ISES")), "efectividad", mes="todo")
+    assert act["metricas"]["tot"] == 7
+    assert act["filtros_de_pantalla"] == {"contratista": "ISES", "actividad": "Reconexión Impagados"}
+
+    runner = ToolRunner(ms, VistaTablero(estados=["perdida"]))
+    perdidas, _ = correr(runner, "efectividad", mes="todo")
+    assert (perdidas["metricas"]["tot"], perdidas["metricas"]["ef"]) == (6, 0)
+    assert "solo están las órdenes perdidas" in perdidas["nota"]
+    todas, _ = correr(runner, "efectividad", mes="todo", sin_filtros_de_pantalla=True)
+    assert todas["metricas"]["tot"] == 16
+    # El filtro no se queda pegado para la siguiente consulta sin pantalla.
+    assert correr(ToolRunner(ms), "efectividad", mes="todo")[0]["metricas"]["tot"] == 16
+
+
+def test_el_tipo_de_orden_de_la_pantalla_llega_a_las_que_no_lo_reciben(datos_dir):
+    runner = ToolRunner(MetricsService(datos_dir), VistaTablero(tipo_os="Reconexión Impagados"))
+    comparado, _ = correr(runner, "comparar_periodos")
+    assert (comparado["total"]["tot_a"], comparado["total"]["tot_b"]) == (5, 2)
+    assert comparado["filtros_de_pantalla"]["tipo de orden"] == "Reconexión Impagados"
+    serie, _ = correr(runner, "serie_mensual")
+    assert [f["tot"] for f in serie["serie"]] == [5, 2]
+    visitas, _ = correr(runner, "ordenes_de_tecnico", tecnico="Carlos Rojas", mes="todo")
+    assert visitas["total"] == 4
+
+
+def test_ordenes_de_tecnico_hereda_la_zona_de_la_pantalla(datos_dir):
+    runner = ToolRunner(MetricsService(datos_dir), VistaTablero(zona="C01"))
+    visitas, _ = correr(runner, "ordenes_de_tecnico", tecnico="Carlos Rojas", mes="todo")
+    assert visitas["total"] == 3 and visitas["filtros_de_pantalla"]["zona"] == "C01"
+
+
+def test_ranking_por_tipo_de_orden_ignora_el_tipo_de_la_pantalla(datos_dir):
+    runner = ToolRunner(MetricsService(datos_dir), VistaTablero(tipo_os="Reconexión Impagados"))
+    resultado, _ = correr(runner, "ranking", dimension="tipo_os", mes="todo", min_ordenes=1)
+    assert len(resultado["filas"]) == 2

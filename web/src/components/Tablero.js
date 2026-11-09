@@ -1437,7 +1437,11 @@ export default function Tablero({ proceso }) {
       tipo_os: nombre(dim.tipos, st.tipo),
       actividad: dim.acts ? nombre(dim.acts, st.act) : null,
       proceso,
-      meses: (st.months || []).map((l) => porEtiqueta.get(l)).filter(Boolean)
+      meses: (st.months || []).map((l) => porEtiqueta.get(l)).filter(Boolean),
+      // Casillas de estado: vacío = todas. Si desmarca alguna, el chat cuenta solo las visibles.
+      estados: (st.est || []).every(Boolean)
+        ? []
+        : ["efectiva", "fallida", "perdida"].filter((_, i) => st.est[i]).concat(st.est.some(Boolean) ? [] : ["ninguna"])
     };
   };
 

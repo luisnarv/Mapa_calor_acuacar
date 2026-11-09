@@ -15,10 +15,12 @@ import logging
 import math
 import re
 import unicodedata
+from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
-from typing import Callable, Sequence
+from typing import Any, Callable, Iterator, Sequence
 
 from app.core.texto import norm, norm_dato
 from app.schemas.metrics import CandidatoBarrio, Efectividad, FilaCausa
@@ -47,6 +49,23 @@ def _sin_zona(barrio: str) -> str:
     barrios ya traen la comuna entre paréntesis: ambas cosas se quitan al comparar nombres.
     """
     return _PARENTESIS_FINALES.sub("", barrio)
+
+
+# Filtros de la pantalla del usuario que ninguna herramienta recibe como argumento (contratista,
+# actividad, estados visibles…) o que algunas no tienen (tipo de orden, zona). Viajan aparte,
+# por petición, y los aplican `_agrupar` y `visitas_tecnico` cuando la consulta no pidió otro.
+_PANTALLA: ContextVar[dict[str, Any] | None] = ContextVar("filtros_de_pantalla", default=None)
+ESTADOS = {"efectiva": 0, "fallida": 1, "perdida": 2}
+
+
+@contextmanager
+def con_pantalla(filtros: dict[str, Any] | None) -> Iterator[None]:
+    """Durante el bloque, las consultas parten también de estos filtros de la pantalla."""
+    token = _PANTALLA.set(filtros or None)
+    try:
+        yield
+    finally:
+        _PANTALLA.reset(token)
 
 
 DIMENSIONES = ("tecnico", "barrio", "zona", "corregimiento", "subaccion", "tarifa", "causa", "tipo_os")
@@ -321,8 +340,16 @@ class MetricsService:
         listar cientos de visitas al modelo no ayuda a nadie y el total sí hay que decirlo.
         """
         p = self.datos
+        pantalla = _PANTALLA.get() or {}
         f_tecs = set(tecnicos)
         f_barrios = self._indices_barrio(bkeys) if bkeys else None
+        # Lo que tiene filtrado en pantalla y esta consulta no recibe: mismos nombres del catálogo.
+        f_zona = None if bkeys else self._indices(p.zonas, pantalla.get("zona"))
+        f_corr = None if bkeys else self._indices(p.corrs, pantalla.get("corregimiento"))
+        f_tipo = self._indice_parcial(p.tipos, pantalla.get("tipo_os"))
+        f_brig = self._indice(p.brigs, pantalla.get("brigada"))
+        f_act = self._indice_parcial(p.acts, pantalla.get("actividad")) if p.acts else None
+        f_estados = pantalla.get("estados") if not estado else None
         f_muni = self._indice(p.munis, municipio)
         if municipio is not None and f_muni is None:
             raise FiltroNoResuelto("municipio", municipio, p.munis)
@@ -346,6 +373,18 @@ class MetricsService:
             if f_meses is not None and p.mes[i] not in f_meses:
                 continue
             if f_estado is not None and p.e[i] != f_estado:
+                continue
+            if f_zona is not None and p.b_zona[bi] not in f_zona:
+                continue
+            if f_corr is not None and p.b_corr[bi] not in f_corr:
+                continue
+            if f_tipo is not None and p.o[i] != f_tipo:
+                continue
+            if f_brig is not None and p.g[i] != f_brig:
+                continue
+            if f_act is not None and p.a[i] != f_act:
+                continue
+            if f_estados is not None and p.e[i] not in f_estados:
                 continue
             halladas.append(i)
             por_estado[nombres_estado[p.e[i]]] += 1
@@ -673,6 +712,12 @@ class MetricsService:
         # Cartagena es el único municipio del payload: filtrar por él no recorta nada, y
         # el nombre largo del catálogo («CARTAGENA DE INDIAS») no lo escribe nadie.
         municipio = None
+        # Lo que el usuario tiene filtrado en pantalla y la consulta no pidió de otra forma.
+        pantalla = _PANTALLA.get() or {}
+        tipo_os = tipo_os or pantalla.get("tipo_os")
+        brigada = brigada or pantalla.get("brigada")
+        actividad = actividad or pantalla.get("actividad")
+        f_estados = pantalla.get("estados")
         f_barrios = self._indices_barrio(bkeys) if bkeys else None
         f_muni = self._indice(p.munis, municipio)
         zona, corregimiento = zona or None, corregimiento or None
@@ -764,6 +809,8 @@ class MetricsService:
             if f_causa is not None and C[i] != f_causa:
                 continue
             if f_tecs is not None and T[i] not in f_tecs:
+                continue
+            if f_estados is not None and E[i] not in f_estados:
                 continue
             if visitar is not None:
                 visitar(i)  # quien necesita algo más que el conteo (el riesgo) lo lee de cada orden

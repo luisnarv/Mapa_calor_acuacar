@@ -36,6 +36,10 @@ class VistaTablero(BaseModel):
     tipo_os: str | None = None
     actividad: str | None = None
     meses: list[str] = Field(default_factory=list, description="Claves YYYY-MM")
+    estados: list[str] = Field(
+        default_factory=list,
+        description="Estados que el tablero muestra («efectiva», «perdida»). Vacío: todos.",
+    )
 
     def resumen(self) -> str:
         """Descripción legible para el prompt. Cadena vacía si no hay filtros."""
@@ -48,10 +52,11 @@ class VistaTablero(BaseModel):
                 ("municipio", self.municipio),
                 ("zona", self.zona),
                 ("corregimiento", self.corregimiento),
-                ("brigada", self.brigada),
+                ("contratista", self.brigada),
                 ("tipo de orden", self.tipo_os),
                 ("actividad", self.actividad),
                 ("meses", ", ".join(self.meses) if self.meses else None),
+                ("solo órdenes", ", ".join(self.estados) if self.estados else None),
             )
             if valor
         ]

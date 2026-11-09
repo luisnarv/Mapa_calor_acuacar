@@ -21,6 +21,8 @@ from app.core.texto import norm_dato
 from app.schemas.chat import VistaTablero
 from app.schemas.metrics import CandidatoBarrio, Efectividad, FiltroMapa
 from app.services.metrics_service import (
+    ESTADOS,
+    con_pantalla,
     CRITERIOS,
     DIMENSIONES,
     BarrioAmbiguo,
@@ -483,7 +485,9 @@ class ToolRunner:
                 return ambiguo.candidatos
             raise
 
-    def _con_filtros_de_pantalla(self, nombre: str, args: dict[str, Any]) -> tuple[dict[str, Any], dict[str, str]]:
+    def _con_filtros_de_pantalla(
+        self, nombre: str, args: dict[str, Any]
+    ) -> tuple[dict[str, Any], dict[str, str], dict[str, Any]]:
         """Completa la consulta con los filtros que el usuario tiene puestos y el modelo no pidió.
 
         Sin esto una pregunta general con la zona C15 puesta se contestaba sobre todo
@@ -493,15 +497,20 @@ class ToolRunner:
         * Entre los sitios gana el más específico: barrio, luego zona.
         * Si la consulta es por una dimensión (ranking por zona), el filtro de esa misma
           dimensión no se aplica: preguntan por todas, no por la que tienen elegida.
+
+        Devuelve los argumentos completados, lo que se aplicó (para decirlo) y los filtros que
+        la herramienta no recibe como argumento (contratista, actividad, estados visibles, y
+        el tipo de orden o el sitio donde no hay parámetro): esos van por `con_pantalla`.
         """
         v = self.vista
         if v is None or nombre not in _FILTRAN_CON_PANTALLA:
-            return args, {}
+            return args, {}, {}
         params = inspect.signature(getattr(self, f"_{nombre}")).parameters
         vacio = (None, "", [])
         pidio = lambda k: args.get(k) not in vacio  # noqa: E731
         por = {args.get("dimension")} - {None}
         nuevos, puestos = dict(args), {}
+        aparte: dict[str, Any] = {}
 
         def poner(param: str, valor: Any, etiqueta: str, dimension: str | None = None) -> None:
             if valor in vacio or param not in params or pidio(param) or dimension in por:
@@ -520,7 +529,29 @@ class ToolRunner:
         poner("tipo_os", v.tipo_os, "tipo de orden", "tipo_os")
         if nombre != "ordenes_de_tecnico":
             poner("tecnico", list(v.tecnicos), "técnicos", "tecnico")
-        return nuevos, puestos
+
+        def poner_aparte(clave: str, valor: Any, etiqueta: str) -> None:
+            if valor in vacio or etiqueta in puestos:
+                return
+            aparte[clave] = valor
+            puestos[etiqueta] = "; ".join(valor) if isinstance(valor, list) else str(valor)
+
+        # Herramientas sin ese parámetro (comparar periodos, la serie, las órdenes de un técnico).
+        if "tipo_os" not in params and "tipo_os" not in por:
+            poner_aparte("tipo_os", v.tipo_os, "tipo de orden")
+        if nombre == "ordenes_de_tecnico" and not pidio("barrio") and "barrio" not in puestos and "barrios" not in puestos:
+            poner_aparte("zona", v.zona, "zona")
+            poner_aparte("corregimiento", v.corregimiento, "corregimiento")
+        # Lo que el tablero filtra y ninguna herramienta recibe.
+        if "brigada" not in por:
+            poner_aparte("brigada", v.brigada, "contratista")
+        if "actividad" not in por:
+            poner_aparte("actividad", v.actividad, "actividad")
+        if v.estados:
+            visibles = [e for e in v.estados if e in ESTADOS]
+            aparte["estados"] = frozenset(ESTADOS[e] for e in visibles)
+            puestos["solo órdenes"] = ", ".join(f"{e}s" for e in visibles) or "ninguna"
+        return nuevos, puestos, aparte
 
     async def run(self, nombre: str, args: dict[str, Any]) -> tuple[dict[str, Any], FiltroMapa | None]:
         """Devuelve (resultado para el modelo, filtro para el mapa o None).
@@ -537,9 +568,11 @@ class ToolRunner:
         self._agrupados = {}
         try:
             aplicados: dict[str, str] = {}
+            aparte: dict[str, Any] = {}
             if not sin_pantalla:
-                args, aplicados = self._con_filtros_de_pantalla(nombre, args)
-            resultado, filtro = await getattr(self, f"_{nombre}")(**args)
+                args, aplicados, aparte = self._con_filtros_de_pantalla(nombre, args)
+            with con_pantalla(aparte):
+                resultado, filtro = await getattr(self, f"_{nombre}")(**args)
             if aplicados and isinstance(resultado, dict) and "error" not in resultado:
                 resultado["filtros_de_pantalla"] = aplicados
                 if isinstance(resultado.get("nota"), str):
@@ -549,6 +582,13 @@ class ToolRunner:
                         + "): di que la cifra es de ese recorte. Si pide todo Cartagena, repite la "
                         "consulta con `sin_filtros_de_pantalla: true`."
                     )
+                    if "solo órdenes" in aplicados:
+                        resultado["nota"] += (
+                            f" En su pantalla solo están las órdenes {aplicados['solo órdenes']}: los "
+                            "conteos son solo de esas, así que la efectividad de este recorte no dice "
+                            "nada (dilo en vez de dar un 0 % o un 100 %). Para la efectividad real, "
+                            "repite con `sin_filtros_de_pantalla: true` y avísalo."
+                        )
             if self._agrupados and isinstance(resultado, dict) and "error" not in resultado:
                 resultado["barrios_incluidos"] = self._agrupados
                 if isinstance(resultado.get("nota"), str):

@@ -328,8 +328,9 @@ class OpenAIService:
             )
         return (
             f"FILTROS ACTIVOS EN SU PANTALLA — {resumen}\n"
-            "El servidor ya los aplica a cada consulta cuando tú no pasas otro lugar, tipo de orden o "
-            "periodo: no hace falta repetirlos, y el resultado trae `filtros_de_pantalla` con lo que aplicó. "
+            "El servidor ya los aplica TODOS a cada consulta (lugar, técnicos, tipo de orden, actividad, "
+            "contratista, estados visibles y periodo) cuando tú no pasas otro: no hace falta repetirlos, y el resultado trae `filtros_de_pantalla` con lo que aplicó. "
+            "No preguntes qué recorte usar: responde con el de su pantalla y dilo. "
             "Si pide expresamente otro lugar, pásalo; si pide todo Cartagena o ignorar sus filtros, "
             "usa `sin_filtros_de_pantalla: true`. Si él dice «este barrio» o «aquí», se refiere a estos.\n"
             "Al dar una cifra, di siempre sobre qué recorte la calculaste; si por "
