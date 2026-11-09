@@ -1549,6 +1549,31 @@ export default function Tablero({ proceso }) {
         conBarrios = true;
       }
 
+      // Varias zonas o varios corregimientos: el tablero guarda UN solo valor en cada filtro,
+      // pero zona y corregimiento son atributos del barrio (dim.b_zona, dim.b_corr), así que
+      // elegir todos los barrios que cumplen filtra exactamente lo mismo. Un barrio elegido
+      // explícitamente manda. Si ningún nombre resuelve se deja el tablero como estaba.
+      if (!conBarrios && (accion.zonas?.length > 1 || accion.corregimientos?.length > 1)) {
+        const conjunto = (lista, nombres) => {
+          if (!nombres?.length || !lista) return null;
+          const s = new Set(nombres.map((n) => idxDe(lista, n)).filter((i) => i !== null).map(Number));
+          return s.size ? s : null;
+        };
+        const zs = conjunto(dim.zonas, accion.zonas?.length ? accion.zonas : [accion.zona]);
+        const cs = conjunto(dim.corrs, accion.corregimientos?.length ? accion.corregimientos : [accion.corregimiento]);
+        const lista = dim.barrios
+          .map((_, i) => i)
+          .filter((i) => (!zs || zs.has(dim.b_zona[i])) && (!cs || cs.has(dim.b_corr?.[i])));
+        if (lista.length) {
+          next.zona = "";
+          next.corr = "";
+          next.barrios = lista;
+          next.selBarrio = null;
+          next.jerBarrio = null;
+          next.tab = "barrio";
+        }
+      }
+
       // st.months guarda etiquetas ("Agosto de 2026"), no claves YYYY-MM.
       if (accion.meses?.length && data.meta.months) {
         const etiquetas = accion.meses

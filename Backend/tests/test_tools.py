@@ -272,3 +272,49 @@ def test_filtrar_mapa_rechaza_valores_fuera_de_rango(runner):
     assert filtro is None and "error" in resultado
     resultado, filtro = correr(runner, "filtrar_mapa", capas=["nave_espacial"])
     assert filtro is None and "error" in resultado
+
+
+def test_ranking_de_los_n_mejores_tecnicos_los_deja_elegidos_en_el_tablero(runner):
+    resultado, filtro = correr(runner, "ranking", dimension="tecnico", mes="todo", min_ordenes=1, limite=2)
+    assert [f["nombre"] for f in resultado["filas"]] == filtro.tecnicos
+    assert len(filtro.tecnicos) == 2
+    _, sin_limite = correr(runner, "ranking", dimension="tecnico", mes="todo", min_ordenes=1)
+    assert sin_limite is None or not sin_limite.tecnicos  # un listado general no marca a nadie
+
+
+def test_varias_zonas_se_suman_y_se_envian_como_lista(runner):
+    resultado, filtro = correr(runner, "efectividad", mes="todo", zona=["zona 15", "C08"])
+    assert resultado["metricas"]["tot"] == 10  # C15 (6) + C08 (4)
+    assert filtro.zonas == ["C15", "C08"] and filtro.zona is None
+    assert "zona C15, C08" in resultado["base"]
+
+
+def test_varios_corregimientos_y_zonas_se_cruzan(runner):
+    resultado, filtro = correr(runner, "efectividad", mes="todo", corregimiento=["La Boquilla", "Cabecera municipal"])
+    assert resultado["metricas"]["tot"] == 16
+    assert filtro.corregimientos == ["La Boquilla", "Cabecera municipal"]
+    cruce, _ = correr(runner, "efectividad", mes="todo", corregimiento=["La Boquilla"], zona=["C01", "C02"])
+    assert cruce["metricas"]["tot"] == 6
+
+
+def test_filtrar_mapa_con_varias_zonas_y_corregimientos(runner):
+    resultado, filtro = correr(runner, "filtrar_mapa", zona=["zona 1", "c2"], corregimiento="boquilla")
+    assert filtro.zonas == ["C01", "C02"] and filtro.zona is None
+    assert filtro.corregimiento == "La Boquilla" and filtro.corregimientos is None
+    assert resultado["aplicado"]["zonas"] == ["C01", "C02"]
+
+
+def test_ranking_de_las_n_peores_zonas_las_deja_elegidas(runner):
+    resultado, filtro = correr(runner, "ranking", dimension="zona", mes="todo", min_ordenes=1, limite=2)
+    assert filtro.zonas == [f["nombre"] for f in resultado["filas"]] and len(filtro.zonas) == 2
+    uno, f1 = correr(runner, "ranking", dimension="zona", mes="todo", min_ordenes=1, limite=1)
+    assert f1.zona == uno["filas"][0]["nombre"] and f1.zonas is None
+    _, corr = correr(runner, "ranking", dimension="corregimiento", mes="todo", min_ordenes=1, limite=2)
+    assert sorted(corr.corregimientos) == ["Cabecera municipal", "La Boquilla"]
+    _, tipo = correr(runner, "ranking", dimension="tipo_os", mes="todo", min_ordenes=1, limite=1)
+    assert tipo.tipo_os in ("Ordenes de suspensión", "Reconexión Impagados")
+
+
+def test_zona_inexistente_en_una_lista_vuelve_como_dato(runner):
+    resultado, filtro = correr(runner, "efectividad", mes="todo", zona=["C15", "C99"])
+    assert filtro is None and "zona" in str(resultado)

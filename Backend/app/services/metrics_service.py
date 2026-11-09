@@ -382,8 +382,8 @@ class MetricsService:
         *,
         bkeys: Sequence[str] | None = None,
         municipio: str | None = None,
-        zona: str | None = None,
-        corregimiento: str | None = None,
+        zona: str | Sequence[str] | None = None,
+        corregimiento: str | Sequence[str] | None = None,
         meses: Sequence[str] | None = None,
         tipo_os: str | None = None,
         brigada: str | None = None,
@@ -413,8 +413,8 @@ class MetricsService:
         dimension: str = "brigada",
         bkeys: Sequence[str] | None = None,
         municipio: str | None = None,
-        zona: str | None = None,
-        corregimiento: str | None = None,
+        zona: str | Sequence[str] | None = None,
+        corregimiento: str | Sequence[str] | None = None,
         meses: Sequence[str] | None = None,
         tipo_os: str | None = None,
         brigada: str | None = None,
@@ -487,8 +487,8 @@ class MetricsService:
         *,
         bkeys: Sequence[str] | None = None,
         municipio: str | None = None,
-        zona: str | None = None,
-        corregimiento: str | None = None,
+        zona: str | Sequence[str] | None = None,
+        corregimiento: str | Sequence[str] | None = None,
         meses: Sequence[str] | None = None,
         tipo_os: str | None = None,
         brigada: str | None = None,
@@ -528,7 +528,7 @@ class MetricsService:
 
     @staticmethod
     def _etiqueta(
-        bkeys: Sequence[str] | None, municipio: str | None, zona: str | None
+        bkeys: Sequence[str] | None, municipio: str | None, zona: str | Sequence[str] | None
     ) -> str:
         """Nombre legible del recorte, para que la cifra nunca viaje sin su alcance."""
         if bkeys:
@@ -565,6 +565,18 @@ class MetricsService:
             if norm_dato(nombre) == objetivo:
                 return i
         return None
+
+    def _indices(self, catalogo: list[str], valor: str | Sequence[str] | None) -> set[int] | None:
+        """Como `_indice`, pero admite varios nombres: el conjunto de sus índices.
+
+        None si no se pidió ninguno, o si alguno no existe (el llamador lo distingue con el
+        pedido original y lanza FiltroNoResuelto).
+        """
+        if not valor:
+            return None
+        nombres = [valor] if isinstance(valor, str) else list(valor)
+        hallados = {self._indice(catalogo, n) for n in nombres}
+        return None if None in hallados else hallados
 
     def _indice_parcial(self, catalogo: list[str], valor: str | None) -> int | None:
         """Como `_indice`, pero acepta el nombre a medias.
@@ -637,8 +649,8 @@ class MetricsService:
         *,
         bkeys: Sequence[str] | None = None,
         municipio: str | None = None,
-        zona: str | None = None,
-        corregimiento: str | None = None,
+        zona: str | Sequence[str] | None = None,
+        corregimiento: str | Sequence[str] | None = None,
         meses: Sequence[str] | None = None,
         tipo_os: str | None = None,
         brigada: str | None = None,
@@ -663,8 +675,9 @@ class MetricsService:
         municipio = None
         f_barrios = self._indices_barrio(bkeys) if bkeys else None
         f_muni = self._indice(p.munis, municipio)
-        f_zona = self._indice(p.zonas, zona)
-        f_corr = self._indice(p.corrs, corregimiento)
+        zona, corregimiento = zona or None, corregimiento or None
+        f_zona = self._indices(p.zonas, zona)
+        f_corr = self._indices(p.corrs, corregimiento)
         f_tipo = self._indice_parcial(p.tipos, tipo_os)
         f_brig = self._indice(p.brigs, brigada)
         # Parcial: nadie escribe «RESIDENCIAL | ESTRATO 3» ni «RED CHILENA/CONFIG.
@@ -731,9 +744,9 @@ class MetricsService:
                 continue
             if f_muni is not None and b_muni[bi] != f_muni:
                 continue
-            if f_zona is not None and b_zona[bi] != f_zona:
+            if f_zona is not None and b_zona[bi] not in f_zona:
                 continue
-            if f_corr is not None and b_corr[bi] != f_corr:
+            if f_corr is not None and b_corr[bi] not in f_corr:
                 continue
             if f_meses is not None and MES[i] not in f_meses:
                 continue

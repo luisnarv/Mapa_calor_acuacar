@@ -80,6 +80,12 @@ class FiltroMapa(BaseModel):
     brigada: str | None = None
     actividad: str | None = None
     tipo_os: str | None = None
+    zonas: list[str] | None = Field(
+        default=None, description="Varias zonas a la vez (con una sola se usa `zona`)."
+    )
+    corregimientos: list[str] | None = Field(
+        default=None, description="Varios corregimientos a la vez (con uno solo se usa `corregimiento`)."
+    )
     capas: list[Capa] | None = Field(
         default=None, description="Capas del mapa que se encienden."
     )

@@ -59,17 +59,19 @@ _MES = {
     ),
 }
 _ZONA = {
-    "type": "string",
+    "anyOf": [{"type": "string"}, {"type": "array", "items": {"type": "string"}}],
     "description": (
-        "Zona operativa de Cartagena: 'C01', 'C02', ... 'C22' (también vale «zona 11»). "
+        "Zona operativa de Cartagena: 'C01', 'C02', ... 'C22' (también vale «zona 11»). Varias: "
+        "pasa una LISTA y se filtran todas. "
         "'SIN ZONA' son las órdenes cuyo GPS cae fuera de todo polígono. Úsala solo si el "
         "usuario nombra una."
     ),
 }
 _CORREGIMIENTO = {
-    "type": "string",
+    "anyOf": [{"type": "string"}, {"type": "array", "items": {"type": "string"}}],
     "description": (
         "Corregimiento, según el GPS de cada orden (p. ej. «La Boquilla», «Pasacaballos»). "
+        "Varios: pasa una LISTA. "
         "«Cabecera municipal» es la zona urbana: todo lo que cae fuera de un corregimiento. "
         "Úsalo solo si el usuario lo nombra; puede combinarse con una zona."
     ),
@@ -165,8 +167,8 @@ TOOLS: list[dict[str, Any]] = [
             "limite": {
                 "type": "integer",
                 "description": (
-                    "Filas a devolver (10 por defecto). Con dimension=tecnico pasa 1 si preguntan "
-                    "por UN técnico («¿cuál es el mejor?»): así queda elegido en el tablero."
+                    "Filas a devolver (10 por defecto). Con dimension=tecnico pasa siempre el número que pidieron "
+                    "(«los 2 mejores» → 2): esos técnicos quedan elegidos en el tablero."
                 ),
             },
             "sin_filtros_de_pantalla": _SIN_PANTALLA,
@@ -364,12 +366,29 @@ def etiqueta_periodo(meses: list[str] | None) -> str:
     return ", ".join(meses)
 
 
-def _zona(texto: str | None) -> str | None:
-    """«zona 11», «c11» y «C011» son la zona C11; lo demás se deja como vino."""
+def _zona(texto: "str | list[str] | None") -> "str | list[str] | None":
+    """«zona 11», «c11» y «C011» son la zona C11; lo demás se deja como vino.
+
+    Admite una o varias: con una devuelve el texto, con varias la lista sin repetidos.
+    """
     if not texto:
-        return texto
+        return None
+    if not isinstance(texto, str):
+        unicas = list(dict.fromkeys(_zona(t) for t in texto if t))
+        return unicas[0] if len(unicas) == 1 else (unicas or None)
     coincide = _ZONA_ESCRITA.match(texto.strip())
     return f"C{int(coincide[1]):02d}" if coincide else texto
+
+
+def _rotulo(valor: "str | list[str]") -> str:
+    return valor if isinstance(valor, str) else ", ".join(valor)
+
+
+def _campos(singular: str, valor: "str | list[str] | None") -> dict:
+    """Al filtro del mapa: un valor va en el campo singular, varios en el plural."""
+    if not valor:
+        return {}
+    return {singular: valor} if isinstance(valor, str) else {singular + "s": list(valor)}
 
 
 class ToolRunner:
@@ -559,20 +578,26 @@ class ToolRunner:
             logger.warning("Argumentos inválidos para %s: %s", nombre, exc)
             return {"error": f"Argumentos inválidos para {nombre}: {exc}"}, None
 
-    def _corr(self, texto: str | None) -> str | None:
+    def _corr(self, texto: "str | list[str] | None") -> "str | list[str] | None":
         """Nombre canónico del corregimiento (tolera tildes, mayúsculas y nombre a medias).
 
-        Lanza FiltroNoResuelto si no existe, o si el payload es anterior a la columna.
+        Admite uno o varios. Lanza FiltroNoResuelto si alguno no existe, o si el payload es
+        anterior a la columna.
         """
         if not texto:
             return None
         p = self.metrics.datos
-        i = self.metrics._indice(p.corrs, texto)
-        if i is None:
-            i = self.metrics._indice_parcial(p.corrs, texto)
-        if i is None:
-            raise FiltroNoResuelto("corregimiento", texto, p.corrs)
-        return p.corrs[i]
+        nombres = [texto] if isinstance(texto, str) else list(texto)
+        canonicos = []
+        for nombre in nombres:
+            i = self.metrics._indice(p.corrs, nombre)
+            if i is None:
+                i = self.metrics._indice_parcial(p.corrs, nombre)
+            if i is None:
+                raise FiltroNoResuelto("corregimiento", nombre, p.corrs)
+            canonicos.append(p.corrs[i])
+        canonicos = list(dict.fromkeys(canonicos))
+        return canonicos[0] if len(canonicos) == 1 else canonicos
 
     async def _recorte(
         self,
@@ -617,7 +642,8 @@ class ToolRunner:
         elif bkeys:
             donde = f"{len(bkeys)} zonas del barrio {nombres[0]}"
         else:
-            sitio = [f"zona {zona}" if zona else None, f"corregimiento {corregimiento}" if corregimiento else None]
+            sitio = [f"zona {_rotulo(zona)}" if zona else None,
+                     f"corregimiento {_rotulo(corregimiento)}" if corregimiento else None]
             donde = " · ".join(s for s in sitio if s) or "todo Cartagena"
 
         partes = [donde, etiqueta_periodo(meses)]
@@ -633,8 +659,7 @@ class ToolRunner:
         filtro = FiltroMapa(
             barrio=bkeys[0] if bkeys and len(bkeys) == 1 else None,
             barrios=bkeys if bkeys and len(bkeys) > 1 else None,
-            zona=None if bkeys else zona,
-            corregimiento=None if bkeys else corregimiento,
+            **({} if bkeys else {**_campos("zona", zona), **_campos("corregimiento", corregimiento)}),
             tipo_os=tipo_canonico,
             meses=meses,
         )
@@ -800,10 +825,19 @@ class ToolRunner:
                                "todo polígono de corregimiento). Preséntala como tal.")
         if not filas:
             salida["nota"] = f"Sin resultados en {base} con el mínimo de {min_ordenes} órdenes pedido."
-        elif dimension == "tecnico" and not nombres_tec and limite == 1 and not filtra_aparte:
-            # «¿Quién es el mejor?» deja a ese técnico elegido en el tablero. Con más filas es
-            # un listado: elegir al primero sería marcar a alguien que nadie pidió.
-            filtro = (filtro or FiltroMapa()).model_copy(update={"tecnicos": [filas[0].nombre]})
+        elif dimension == "tecnico" and not nombres_tec and limite and 1 <= len(filas) <= 10 and not filtra_aparte:
+            # Los técnicos que se nombran en la respuesta («los 2 mejores») quedan elegidos en el
+            # tablero. Sin `limite` es un listado general: no se marca a nadie.
+            filtro = (filtro or FiltroMapa()).model_copy(update={"tecnicos": [f.nombre for f in filas]})
+        elif dimension in ("zona", "corregimiento") and limite and 1 <= len(filas) <= 10 and not filtra_aparte:
+            # Las zonas o corregimientos nombrados en la respuesta quedan elegidos (uno o varios).
+            nombres = [f.nombre for f in filas]
+            filtro = (filtro or FiltroMapa()).model_copy(update={
+                "zona": None, "zonas": None, "corregimiento": None, "corregimientos": None,
+                **_campos(dimension, nombres[0] if len(nombres) == 1 else nombres),
+            })
+        elif dimension == "tipo_os" and limite == 1 and len(filas) == 1 and not filtra_aparte:
+            filtro = (filtro or FiltroMapa()).model_copy(update={"tipo_os": filas[0].nombre})
         elif dimension == "barrio" and limite and 1 <= len(filas) <= 10 and not filtra_aparte:
             # Los barrios que se nombran en la respuesta quedan marcados, con su clave completa.
             claves = [f.nombre for f in filas]
@@ -812,6 +846,8 @@ class ToolRunner:
                 "barrios": claves if len(claves) > 1 else None,
                 "zona": None,
                 "corregimiento": None,
+                "zonas": None,
+                "corregimientos": None,
             })
         return salida, filtro
 
@@ -869,8 +905,9 @@ class ToolRunner:
     async def _filtrar_mapa(self, **kwargs: Any) -> tuple[dict[str, Any], FiltroMapa | None]:
         if kwargs.get("tecnico"):
             kwargs["tecnicos"] = self._tecnicos(kwargs["tecnico"])[1]
-        kwargs["zona"] = _zona(kwargs.get("zona"))
-        kwargs["corregimiento"] = self._corr(kwargs.get("corregimiento"))
+        for campo, valor in (("zona", _zona(kwargs.pop("zona", None))),
+                             ("corregimiento", self._corr(kwargs.pop("corregimiento", None)))):
+            kwargs.update(_campos(campo, valor))
         barrio = kwargs.get("barrio")
         nombres = [barrio] if isinstance(barrio, str) else [n for n in (barrio or []) if n]
         if nombres:
@@ -997,8 +1034,8 @@ class ToolRunner:
             "periodos." + self._avisos(meses=meses_b)
         )
         contexto = [self._rotulo_tecnicos(nombres_tec)] if nombres_tec else []
-        sitio = [f"zona {_zona(zona)}" if zona else None,
-                 f"corregimiento {self._corr(corregimiento)}" if corregimiento else None]
+        sitio = [f"zona {_rotulo(_zona(zona))}" if zona else None,
+                 f"corregimiento {_rotulo(self._corr(corregimiento))}" if corregimiento else None]
         salida["base"] = " · ".join([*contexto, *(s for s in sitio if s)] or [*contexto, "todo Cartagena"])
         salida["datos_hasta"] = self.metrics.datos.fecha_max
         return salida, None
