@@ -1515,11 +1515,28 @@ export default function Tablero({ proceso }) {
       }
 
       // Capas que el asistente pide ver (puntos GPS al listar visitas, calor, aproximadas).
-      if (accion.capas?.length) {
-        const clave = { gps: "gps", calor: "heat", aproximadas: "approx" };
+      if (accion.capas?.length || accion.capas_apagar?.length) {
+        const clave = {
+          gps: "gps", calor: "heat", aproximadas: "approx", marcadores: "markers",
+          sin_nic: "sinNic", poligonos_barrios: "bpoly", poligonos_municipios: "mpoly",
+          poligonos_corregimientos: "cpoly", poligonos_veredas: "vpoly", poligonos_zonas: "zpoly"
+        };
         next.layers = { ...prev.layers };
-        for (const c of accion.capas) if (clave[c]) next.layers[clave[c]] = true;
+        for (const c of accion.capas || []) if (clave[c]) next.layers[clave[c]] = true;
+        for (const c of accion.capas_apagar || []) if (clave[c]) next.layers[clave[c]] = false;
       }
+
+      // Estado de las órdenes: st.est es [efectiva, fallida, perdida]. La posición 1
+      // («fallida») no existe en Acuacar y no se toca.
+      if (accion.estados?.length) {
+        next.est = [accion.estados.includes("efectiva"), prev.est[1], accion.estados.includes("perdida")];
+      }
+
+      // Controles de la cola de riesgo (RiskSpine), con los mismos límites de sus controles.
+      const entre = (v, min, max) => Math.min(max, Math.max(min, Math.round(+v)));
+      if (accion.minimo_ordenes != null) next.minOrders = entre(accion.minimo_ordenes, 1, 500);
+      if (accion.umbral_hotspot != null) next.hotspot = entre(accion.umbral_hotspot, 10, 95);
+      if (typeof accion.ajustada === "boolean") next.adjusted = accion.ajustada;
 
       // El barrio llega como BKEY ("MUNICIPIO | BARRIO"), igual que en dim.barrios.
       const b = idxDe(dim.barrios, accion.barrio);

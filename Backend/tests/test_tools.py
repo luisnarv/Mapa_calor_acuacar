@@ -254,3 +254,21 @@ def test_filtrar_mapa_con_corregimiento(runner):
 def test_la_vista_con_corregimiento_se_hereda():
     vista = VistaTablero(corregimiento="La Boquilla")
     assert "corregimiento: La Boquilla" in vista.resumen()
+
+
+def test_filtrar_mapa_con_estado_umbrales_y_capas(runner):
+    resultado, filtro = correr(
+        runner, "filtrar_mapa", estados=["perdida"], minimo_ordenes=5, umbral_hotspot=80,
+        ajustada=False, capas=["calor", "poligonos_zonas"], capas_apagar=["marcadores"],
+    )
+    assert filtro.estados == ["perdida"]
+    assert (filtro.minimo_ordenes, filtro.umbral_hotspot, filtro.ajustada) == (5, 80, False)
+    assert filtro.capas == ["calor", "poligonos_zonas"] and filtro.capas_apagar == ["marcadores"]
+    assert resultado["aplicado"]["ajustada"] is False  # false cuenta como valor, no como vacío
+
+
+def test_filtrar_mapa_rechaza_valores_fuera_de_rango(runner):
+    resultado, filtro = correr(runner, "filtrar_mapa", umbral_hotspot=500)
+    assert filtro is None and "error" in resultado
+    resultado, filtro = correr(runner, "filtrar_mapa", capas=["nave_espacial"])
+    assert filtro is None and "error" in resultado

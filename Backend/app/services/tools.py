@@ -204,8 +204,41 @@ TOOLS: list[dict[str, Any]] = [
             "meses": {"type": "array", "items": {"type": "string"}},
             "capas": {
                 "type": "array",
-                "items": {"type": "string", "enum": ["gps", "calor", "aproximadas"]},
-                "description": "Capas que se encienden: «gps» (un punto por orden) o «calor» (mapa de calor).",
+                "items": {"type": "string", "enum": ["gps", "calor", "aproximadas", "marcadores", "sin_nic", "poligonos_barrios",
+                         "poligonos_municipios", "poligonos_corregimientos", "poligonos_veredas",
+                         "poligonos_zonas"]},
+                "description": (
+                    "Capas que se encienden: «gps» (un punto por orden), «calor» (mapa de calor), "
+                    "«aproximadas», «marcadores», «sin_nic» o los polígonos de barrios, municipios, "
+                    "corregimientos, veredas o zonas."
+                ),
+            },
+            "capas_apagar": {
+                "type": "array",
+                "items": {"type": "string", "enum": ["gps", "calor", "aproximadas", "marcadores", "sin_nic", "poligonos_barrios",
+                         "poligonos_municipios", "poligonos_corregimientos", "poligonos_veredas",
+                         "poligonos_zonas"]},
+                "description": "Capas que se apagan («quita el mapa de calor»). Mismos valores que `capas`.",
+            },
+            "estados": {
+                "type": "array",
+                "items": {"type": "string", "enum": ["efectiva", "perdida"]},
+                "description": (
+                    "Qué órdenes se muestran: [«perdida»] deja solo las perdidas, [«efectiva»] solo las "
+                    "efectivas, ambas las vuelve a mostrar todas."
+                ),
+            },
+            "minimo_ordenes": {
+                "type": "integer",
+                "description": "Mínimo de órdenes para que un barrio entre a la cola de riesgo (1 a 500).",
+            },
+            "umbral_hotspot": {
+                "type": "integer",
+                "description": "Riesgo desde el cual un barrio se marca crítico (10 a 95; 60 por defecto).",
+            },
+            "ajustada": {
+                "type": "boolean",
+                "description": "true: el riesgo se calcula sobre pérdidas controlables; false: sobre todas.",
             },
         },
     ),

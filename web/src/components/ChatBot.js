@@ -135,6 +135,12 @@ function resumirFiltro(accion) {
     accion.corregimiento,
     accion.brigada,
     accion.tipo_os,
+    accion.estados?.length ? `solo ${accion.estados.map((e) => `${e}s`).join(" y ")}` : null,
+    accion.minimo_ordenes != null ? `mín. ${accion.minimo_ordenes} órdenes` : null,
+    accion.umbral_hotspot != null ? `hotspot ${accion.umbral_hotspot}` : null,
+    typeof accion.ajustada === "boolean" ? (accion.ajustada ? "riesgo controlable" : "riesgo total") : null,
+    accion.capas?.length ? `capas: ${accion.capas.join(", ")}` : null,
+    accion.capas_apagar?.length ? `sin: ${accion.capas_apagar.join(", ")}` : null,
     accion.meses?.join(", ")
   ].filter(Boolean);
   return partes.length ? partes.join(" · ") : null;

@@ -51,6 +51,13 @@ class CandidatoBarrio(BaseModel):
     tot: int
 
 
+Capa = Literal[
+    "gps", "calor", "aproximadas", "marcadores", "sin_nic",
+    "poligonos_barrios", "poligonos_municipios", "poligonos_corregimientos",
+    "poligonos_veredas", "poligonos_zonas",
+]
+
+
 class FiltroMapa(BaseModel):
     """Filtro que el frontend aplica al tablero.
 
@@ -73,8 +80,23 @@ class FiltroMapa(BaseModel):
     brigada: str | None = None
     actividad: str | None = None
     tipo_os: str | None = None
-    capas: list[Literal["gps", "calor", "aproximadas"]] | None = Field(
+    capas: list[Capa] | None = Field(
+        default=None, description="Capas del mapa que se encienden."
+    )
+    capas_apagar: list[Capa] | None = Field(
+        default=None, description="Capas del mapa que se apagan."
+    )
+    estados: list[Literal["efectiva", "perdida"]] | None = Field(
         default=None,
-        description="Capas del mapa que se encienden: puntos GPS, mapa de calor o ubicaciones aproximadas.",
+        description="Estados de orden que se muestran. Solo «efectiva»: oculta las perdidas, y al revés.",
+    )
+    minimo_ordenes: int | None = Field(
+        default=None, ge=1, le=500, description="Mínimo de órdenes para que un barrio entre a la cola de riesgo."
+    )
+    umbral_hotspot: int | None = Field(
+        default=None, ge=10, le=95, description="Riesgo desde el cual un barrio se marca como crítico."
+    )
+    ajustada: bool | None = Field(
+        default=None, description="true: riesgo sobre pérdidas controlables; false: sobre todas."
     )
     meses: list[str] | None = Field(default=None, description="Claves YYYY-MM")

@@ -88,6 +88,7 @@ La **causa** es la agrupación; el **tipo de imposibilidad** (`subaccion`) es la
 ## EL MAPA
 
 - `filtrar_mapa` mueve el tablero. Úsala cuando pidan ver, marcar o resaltar algo, o cuando tu respuesta destaque UN resultado concreto (el peor barrio, el mejor técnico). Para una lista o una respuesta general, no la uses: mover la vista sin que lo pidan molesta.
+  Con `filtrar_mapa` puedes mover todo lo que el usuario mueve a mano: sitio (zona, corregimiento, barrio), brigada, tipo de orden, técnicos, meses, `estados` («solo las perdidas»), `minimo_ordenes`, `umbral_hotspot`, `ajustada` (riesgo sobre pérdidas controlables o sobre todas) y las capas (`capas` para encender, `capas_apagar` para apagar: GPS, calor, aproximadas, marcadores, sin NIC y polígonos de barrios, municipios, corregimientos, veredas y zonas). Un pedido como «muéstrame solo las perdidas de La Boquilla con el calor» es UNA llamada con varios campos.
 - Muchas herramientas de consulta ya dejan el recorte marcado en el mapa. Su resultado dice cuándo no lo hicieron: en ese caso no digas «ya te lo marqué».
 - Si el usuario tiene filtros puestos en su pantalla, el servidor los aplica a cada consulta y el resultado trae `filtros_de_pantalla`. Si pide expresamente otro lugar, pásalo; si pide todo Cartagena o ignorar sus filtros, usa `sin_filtros_de_pantalla: true`.
 
