@@ -2,7 +2,7 @@
 
 Tablero de efectividad y pérdidas de las órdenes de suspensión y reconexión de Acuacar.
 Es el tablero SCR de Air-E (`Aire_Cobros_SCR`) adaptado a la tabla
-`dbanalitica.historico_acuacar_scr`. Sin chat, sin backend, sin cobros.
+`dbanalitica.historico_acuacar_scr`. Con chatbot (`Backend/`); sin cobros.
 
 ```
 Acuacar/
@@ -15,7 +15,8 @@ Acuacar/
 │   └── validar.py             cruza el JSON contra la base con SQL independiente
 ├── config/tarifas.json        código de tarifa -> descripción (Excel «TARIFA Y ZONAS»)
 ├── cartagena/                 geojson fuente de barrios (solo referencia visual)
-├── web/                       Next.js · el tablero (copia del de Air-E)
+├── Backend/                   FastAPI · chatbot con OpenAI y tool calling (ver Backend/README.md)
+├── web/                       Next.js · el tablero (copia del de Air-E) y el chat
 └── obsoleto/                  lo que quedó del visor de ElectroHuila
 ```
 
@@ -28,6 +29,9 @@ python scripts/preparar_geografia.py    # solo cuando cambien las zonas o los ba
 python etl/run_etl.py                   # escribe web/public/scr/
 python scripts/validar.py               # debe decir OK en las 4 líneas
 npm install --prefix web && npm run dev --prefix web
+
+# chatbot (otra terminal): necesita OPENAI_API_KEY en Backend/.env
+pip install -r Backend/requirements.txt && python -m uvicorn app.main:app --app-dir Backend --reload
 ```
 
 ## Cómo se homologó Acuacar con Air-E

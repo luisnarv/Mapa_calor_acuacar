@@ -12,6 +12,7 @@ import Topbar from "@/components/Topbar";
 import RiskSpine from "@/components/RiskSpine";
 import DetailsPanel from "@/components/DetailsPanel";
 import Dock from "@/components/Dock";
+import ChatBot from "@/components/ChatBot";
 import { useTheme, riskColor, usarRampaCobros } from "@/lib/theme";
 import { cacheGet, cachePut, cacheClear } from "@/lib/monthCache";
 
@@ -2129,6 +2130,8 @@ export default function Tablero({ proceso }) {
           {/* Right Active Panel */}
           {rightPanelContent}
         </main>
+
+        <ChatBot onAccion={handleAccionChat} vista={vistaParaChat} onToggle={(abierto) => abierto && setLayersCollapsed(true)} />
       </div>
     );
   }
@@ -2478,6 +2481,8 @@ export default function Tablero({ proceso }) {
           V={V}
         />
       </main>
+
+      <ChatBot onAccion={handleAccionChat} vista={vistaParaChat} onToggle={(abierto) => abierto && setLayersCollapsed(true)} />
     </div>
   );
 }
